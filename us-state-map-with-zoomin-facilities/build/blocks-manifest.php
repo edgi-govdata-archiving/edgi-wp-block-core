@@ -1,0 +1,25 @@
+<?php
+// This file is generated. Do not modify it manually.
+return array(
+	'us-state-map-with-zoomin-facilities' => array(
+		'$schema' => 'https://schemas.wp.org/trunk/block.json',
+		'apiVersion' => 3,
+		'name' => 'create-block/us-state-map-with-zoomin-facilities',
+		'version' => '0.1.0',
+		'title' => 'Us State Map With Zoomin Facilities',
+		'category' => 'widgets',
+		'icon' => 'smiley',
+		'description' => 'Example block scaffolded with Create Block tool.',
+		'example' => array(
+			
+		),
+		'supports' => array(
+			'html' => false
+		),
+		'textdomain' => 'us-state-map-with-zoomin-facilities',
+		'editorScript' => 'file:./index.js',
+		'editorStyle' => 'file:./index.css',
+		'style' => 'file:./style-index.css',
+		'viewScript' => 'file:./view.js'
+	)
+);
