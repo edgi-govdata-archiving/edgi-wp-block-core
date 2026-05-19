@@ -1,0 +1,28 @@
+# Dependency Directories
+node_modules/
+
+# Build Artifacts (Compiled Code)
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# System & OS Files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# IDEs and Editors
+.idea/
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Local Server/WordPress Debug Logs
+wp-config.php
+*.log

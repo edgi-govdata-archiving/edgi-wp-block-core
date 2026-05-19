@@ -1,0 +1,22 @@
+{
+  "name": "edgi-wp-block-core",
+  "version": "1.0.0",
+  "description": "Custom blocks for environmental data visualization.",
+  "main": "index.js",
+  "scripts": {
+    "start": "wp-scripts start",
+    "build": "wp-scripts build"
+  },
+  "keywords": [
+    "wordpress",
+    "gutenberg",
+    "block",
+    "maps",
+    "d3"
+  ],
+  "author": "Environmental Data and Governance Initiative (EDGI)",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "@wordpress/scripts": "^30.8.0"
+  }
+}
