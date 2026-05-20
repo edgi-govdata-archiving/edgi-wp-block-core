@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "edgi/us-state-map-with-zoomin-facilities",
+  "title": "US State Map with Zoom-in Facilities",
+  "category": "widgets",
+  "icon": "location-alt",
+  "description": "Interactive D3 state map with county-level zoom and custom data marker overlays.",
+  "attributes": {
+    "csvUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "fipsCol": {
+      "type": "string",
+      "default": ""
+    },
+    "valueCol": {
+      "type": "string",
+      "default": ""
+    },
+    "labelCol": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "editorScript": "file:./index.js",
+  "viewScript": "file:./view.js",
+  "style": "file:./style.scss"
+}

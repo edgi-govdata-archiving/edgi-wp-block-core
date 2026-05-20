@@ -2,7 +2,9 @@
 node_modules/
 
 # Build Artifacts (Compiled Code)
-build/
+# Comment build/ out if we manually upload website zip file (which we do) on website updates
+# Leave it in if EDGI transitions to a CI/CD pipeline for deploying website changes
+# build/
 
 # Logs
 npm-debug.log*
