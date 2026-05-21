@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "wp-scripts start",
-    "build": "wp-scripts build"
+    "build": "wp-scripts build",
+    "serve": "node bin/serve.js"
   },
   "keywords": [
     "wordpress",
@@ -18,5 +19,9 @@
   "license": "GPL-3.0-or-later",
   "devDependencies": {
     "@wordpress/scripts": "^30.8.0"
+  },
+  "dependencies": {
+    "d3": "^7.9.0",
+    "topojson-client": "^3.1.0"
   }
 }
