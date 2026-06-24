@@ -130,3 +130,8 @@ Object.entries(abbrToName).forEach(([abbr, name]) => {
 // Overrides for territories in TopoJSON state name conventions
 nameToAbbr["Commonwealth of the Northern Mariana Islands"] = "MP";
 nameToAbbr["United States Virgin Islands"] = "VI";
+
+
+export function getNameToAbbr(name) {
+    return nameToAbbr[name]
+}

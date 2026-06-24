@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
-import { convert } from "./utilities/convert.js"
+import { getNameToAbbr } from "./utilities/convert.js"
 
 
 const smallStates = [
@@ -27,10 +27,10 @@ document.addEventListener("DOMContentLoaded", () => {
   dashboards.forEach((dashboard) => {
     const csvUrl = dashboard.getAttribute("data-csv-url");
     const statesJsonUrl = dashboard.getAttribute("data-states-json-url");
-    const districtsJsonUrl = dashboard.getAttribute("data-districts-json-url");
+    //const stateEmissionsUrl = dashboard.getAttribute("data-states-emissions-url");
 
-    if (!csvUrl || !statesJsonUrl || !districtsJsonUrl) {
-      console.error("EDGI Map Dashboard: Missing required data attributes!");
+    if (!csvUrl || !statesJsonUrl) { // || !stateEmissionsUrl
+      console.error("CDP Map Dashboard: Missing required data attributes!");
       return;
     }
 
@@ -63,39 +63,13 @@ document.addEventListener("DOMContentLoaded", () => {
     Promise.all([
       d3.csv(csvUrl),
       d3.json(statesJsonUrl),
-      d3.json(districtsJsonUrl),
+      //d3.json(stateEmissionsUrl),
     ])
-      .then(([csvData, statesTopo, districtsTopo]) => {
+      .then(([csvData, statesTopo]) => {
         canvasContainer.innerHTML = "";
 
         // 1. Process data for fast lookup
         const stateData = {};
-        const districtData = {};
-
-        csvData.forEach((row) => {
-          const trimmedFips = String(row.fips).trim();
-          if (trimmedFips.length <= 2) {
-            // State-level row
-            const fips = trimmedFips.padStart(2, "0");
-            stateData[row.state_code] = {
-              name: row.name,
-              senator_1: row.senator_1,
-              senator_1_party: row.senator_1_party,
-              senator_2: row.senator_2,
-              senator_2_party: row.senator_2_party,
-              report_link: row.report_link,
-            };
-          } else {
-            // District-level row
-            const fips = trimmedFips.padStart(4, "0");
-            districtData[fips] = {
-              name: row.name,
-              representative: row.representative,
-              representative_party: row.representative_party,
-              report_link: row.report_link,
-            };
-          }
-        });
 
         // 2. Setup D3 canvas dimensions
         const width = 960;
@@ -122,21 +96,15 @@ document.addEventListener("DOMContentLoaded", () => {
           statesTopo,
           statesTopo.objects.states,
         ).features;
-        const districtsFeatures = topojson.feature(
-          districtsTopo,
-          districtsTopo.objects.cb_2025_us_cd119_5m,
-        ).features;
+
 
         // Base map group
         const mapGroup = svg.append("g").attr("class", "map-group");
-        const statesGroup = mapGroup.append("g").attr("class", "states-group");
-        const districtsGroup = mapGroup
-          .append("g")
-          .attr("class", "districts-group");
-        const labelsGroup = mapGroup.append("g").attr("class", "labels-group");
+         const statesGroup = mapGroup.append("g").attr("class", "states-group");
+         const labelsGroup = mapGroup.append("g").attr("class", "labels-group");
 
         // Callouts group (rendered outside mapGroup so it doesn't scale/zoom)
-        const calloutsGroup = svg.append("g").attr("class", "callouts-group");
+          const calloutsGroup = svg.append("g").attr("class", "callouts-group");
 
         let activeState = null;
 
@@ -150,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .attr("d", path)
           .on("click", (event, d) => {
             event.stopPropagation();
-            const abbr = convert.nameToAbbr[d.properties.name];
+            const abbr = getNameToAbbr(d.properties.name);
             if (abbr) zoomToState(d, abbr);
           });
 
@@ -164,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .attr("transform", (d) => {
             const centroid = path.centroid(d);
             if (!centroid) return "";
-            const abbr = convert.nameToAbbr[d.properties.name];
+              const abbr = getNameToAbbr(d.properties.name);
             let x = centroid[0];
             let y = centroid[1];
             // Adjustments for better label alignment on islands/peninsulas
@@ -180,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return `translate(${x}, ${y})`;
           })
           .text((d) => {
-            const abbr = convert.nameToAbbr[d.properties.name];
+              const abbr = getNameToAbbr(d.properties.name);
             // Skip small states to prevent label overlap/clutter
             return abbr && !smallStates.includes(abbr) ? abbr : "";
           });
@@ -200,7 +168,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         calloutsData.forEach((callout) => {
           const feature = statesFeatures.find(
-            (f) => convert.nameToAbbr[f.properties.name] === callout.abbr,
+              (f) => getNameToAbbr(f.properties.name) === callout.abbr,
           );
           if (!feature) return;
 
@@ -229,7 +197,7 @@ document.addEventListener("DOMContentLoaded", () => {
             .on("mouseover", () => {
               statesGroup
                 .selectAll(".state-boundary")
-                .filter((f) => convert.nameToAbbr[f.properties.name] === callout.abbr)
+                  .filter((f) => getNameToAbbr(f.properties.name) === callout.abbr)
                 .classed("hover", true);
             })
             .on("mouseout", () => {
@@ -303,13 +271,13 @@ document.addEventListener("DOMContentLoaded", () => {
             .transition()
             .duration(400)
             .style("opacity", (d) =>
-              convert.nameToAbbr[d.properties.name] === stateAbbr ? 1 : 0.4,
+                getNameToAbbr(d.properties.name) === stateAbbr ? 1 : 0.4,
             )
             .attr(
               "class",
               (d) =>
                 `state-boundary${
-                  convert.nameToAbbr[d.properties.name] === stateAbbr ? " active" : ""
+                  getNameToAbbr(d.properties.name) === stateAbbr ? " active" : ""
                 }`,
             );
 
@@ -326,229 +294,9 @@ document.addEventListener("DOMContentLoaded", () => {
           // Show Reset Button
           resetBtn.style.display = "flex";
 
-          // 2. Load Districts for Zoomed State
-          renderDistrictsForState(stateAbbr, scale);
 
           // 3. Update Details Panel header & senators
           updateDetailsPanel(stateAbbr);
-        }
-
-        // Render Districts for selected state
-        function renderDistrictsForState(stateAbbr, scale) {
-          const stateFips = convert.stateToFips[stateAbbr];
-
-          // Clear previous districts
-          districtsGroup.selectAll(".district-boundary").remove();
-          districtsGroup.selectAll(".district-tooltip-line").remove();
-          districtsGroup.style("opacity", 0);
-
-          if (helperContainer) {
-            helperContainer.innerHTML = "";
-            helperContainer.style.display = "none";
-          }
-
-          if (!stateFips) return;
-
-          const stateDistricts = districtsFeatures.filter(
-            (d) => d.properties.STATEFP === stateFips,
-          );
-
-          // Draw district boundaries
-          const districtPaths = districtsGroup
-            .selectAll(".district-boundary")
-            .data(stateDistricts)
-            .enter()
-            .append("path")
-            .attr("class", (d) => {
-              const geoid = d.properties.GEOID;
-              const distInfo = districtData[geoid] || {};
-              const partyClass = distInfo.representative_party
-                ? ` party-${distInfo.representative_party.toLowerCase()}`
-                : "";
-              return `district-boundary${partyClass}`;
-            })
-            .attr("d", path)
-            .style("stroke-width", `${0.6 / scale}px`)
-            .on("mouseover", (event, d) => {
-              const geoid = d.properties.GEOID;
-              const distCode = d.properties.CD119FP;
-              const distInfo = districtData[geoid] || {
-                name: d.properties.NAMELSAD,
-                representative: "Vacant",
-                representative_party: "",
-              };
-              const partySuffix = distInfo.representative_party
-                ? ` (${distInfo.representative_party[0]})`
-                : "";
-
-              tooltip.innerHTML = `
-							<div class="tooltip-title">${distInfo.name}</div>
-							<div class="tooltip-rep">Rep: ${distInfo.representative}${partySuffix}</div>
-							<div class="tooltip-cta">Click to open report card (PDF)</div>
-						`;
-              tooltip.style.display = "block";
-
-              // Draw dotted line from centroid to the right in SVG space
-              const centroid = path.centroid(d);
-              if (centroid && !isNaN(centroid[0]) && !isNaN(centroid[1])) {
-                districtsGroup.selectAll(".district-tooltip-line").remove();
-                districtsGroup
-                  .append("line")
-                  .attr("class", "district-tooltip-line")
-                  .attr("x1", centroid[0])
-                  .attr("y1", centroid[1])
-                  .attr("x2", centroid[0] + 80 / scale)
-                  .attr("y2", centroid[1])
-                  .style("stroke-width", `${1.5 / scale}px`)
-                  .style("stroke-dasharray", `${3 / scale}, ${3 / scale}`);
-
-                // Position tooltip at the end of the dotted line
-                const svgEl = svg.node();
-                const pt = svgEl.createSVGPoint();
-                pt.x = centroid[0] + 80 / scale;
-                pt.y = centroid[1];
-                const screenPt = pt.matrixTransform(
-                  event.currentTarget.getScreenCTM(),
-                );
-
-                tooltip.style.left = `${screenPt.x + window.scrollX + 8}px`;
-                tooltip.style.top = `${screenPt.y + window.scrollY - 20}px`;
-              }
-            })
-            .on("mouseout", () => {
-              tooltip.style.display = "none";
-              districtsGroup.selectAll(".district-tooltip-line").remove();
-            })
-            .on("click", (event, d) => {
-              event.stopPropagation();
-              const geoid = d.properties.GEOID;
-              const distInfo = districtData[geoid];
-              if (distInfo && distInfo.report_link) {
-                window.open(distInfo.report_link, "_blank");
-              }
-            });
-
-          // 2.5 Render helper buttons/checklist for tiny districts (area < 250 px)
-          const smallDistricts = stateDistricts.filter((d) => {
-            const area = path.area(d);
-            return area < 250;
-          });
-
-          // Sort small districts numerically by district number
-          smallDistricts.sort((a, b) => {
-            const numA = parseInt(a.properties.CD119FP, 10);
-            const numB = parseInt(b.properties.CD119FP, 10);
-            return numA - numB;
-          });
-
-          if (helperContainer && smallDistricts.length > 0) {
-            helperContainer.style.display = "flex";
-
-            const titleEl = document.createElement("div");
-            titleEl.className = "edgi-helper-title";
-            titleEl.textContent = "Choose your congressional district:";
-            helperContainer.appendChild(titleEl);
-
-            const listEl = document.createElement("div");
-            listEl.className = "edgi-helper-pills-list";
-
-            // Translate vertical wheel scroll to horizontal scroll
-            listEl.addEventListener("wheel", (event) => {
-              if (event.deltaY !== 0) {
-                event.preventDefault();
-                listEl.scrollLeft += event.deltaY;
-              }
-            });
-
-            smallDistricts.forEach((d) => {
-              const geoid = d.properties.GEOID;
-              const distNum = d.properties.CD119FP;
-              const pillLabel =
-                distNum === "00" ? "At-Large" : String(parseInt(distNum, 10));
-
-              const distInfo = districtData[geoid] || {
-                name: d.properties.NAMELSAD,
-                representative: "Vacant",
-                representative_party: "",
-              };
-              const partySuffix = distInfo.representative_party
-                ? ` (${distInfo.representative_party[0]})`
-                : "";
-
-              const pill = document.createElement("button");
-              pill.className = `edgi-helper-pill${
-                distInfo.representative_party
-                  ? ` party-${distInfo.representative_party.toLowerCase()}`
-                  : ""
-              }`;
-              pill.textContent = pillLabel;
-
-              // Highlight matching map district and position tooltip on centroid
-              pill.addEventListener("mouseover", () => {
-                const targetPath = districtsGroup
-                  .selectAll(".district-boundary")
-                  .filter((f) => f.properties.GEOID === geoid);
-
-                targetPath.classed("hover", true);
-
-                const pathNode = targetPath.node();
-                if (pathNode) {
-                  const centroid = path.centroid(d);
-                  if (centroid && !isNaN(centroid[0]) && !isNaN(centroid[1])) {
-                    districtsGroup.selectAll(".district-tooltip-line").remove();
-                    districtsGroup
-                      .append("line")
-                      .attr("class", "district-tooltip-line")
-                      .attr("x1", centroid[0])
-                      .attr("y1", centroid[1])
-                      .attr("x2", centroid[0] + 80 / scale)
-                      .attr("y2", centroid[1])
-                      .style("stroke-width", `${1.5 / scale}px`)
-                      .style("stroke-dasharray", `${3 / scale}, ${3 / scale}`);
-
-                    // Position tooltip at the end of the dotted line
-                    const svgEl = svg.node();
-                    const pt = svgEl.createSVGPoint();
-                    pt.x = centroid[0] + 80 / scale;
-                    pt.y = centroid[1];
-                    const screenPt = pt.matrixTransform(
-                      pathNode.getScreenCTM(),
-                    );
-
-                    tooltip.innerHTML = `
-                      <div class="tooltip-title">${distInfo.name}</div>
-                      <div class="tooltip-rep">Rep: ${distInfo.representative}${partySuffix}</div>
-                      <div class="tooltip-cta">Click to open report card (PDF)</div>
-                    `;
-                    tooltip.style.display = "block";
-                    tooltip.style.left = `${screenPt.x + window.scrollX + 8}px`;
-                    tooltip.style.top = `${screenPt.y + window.scrollY - 20}px`;
-                  }
-                }
-              });
-
-              pill.addEventListener("mouseout", () => {
-                districtsGroup
-                  .selectAll(".district-boundary")
-                  .classed("hover", false);
-                districtsGroup.selectAll(".district-tooltip-line").remove();
-                tooltip.style.display = "none";
-              });
-
-              pill.addEventListener("click", () => {
-                if (distInfo.report_link) {
-                  window.open(distInfo.report_link, "_blank");
-                }
-              });
-
-              listEl.appendChild(pill);
-            });
-
-            helperContainer.appendChild(listEl);
-          }
-
-          // Fade districts in
-          districtsGroup.transition().duration(400).style("opacity", 1);
         }
 
         // Reset Map function
