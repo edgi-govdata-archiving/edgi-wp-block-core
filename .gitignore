@@ -4,7 +4,8 @@ node_modules/
 # Build Artifacts (Compiled Code)
 # Comment build/ out if we manually upload website zip file (which we do) on website updates
 # Leave it in if EDGI transitions to a CI/CD pipeline for deploying website changes
-# build/
+build/
+FileContentIndex/
 
 # Logs
 npm-debug.log*
@@ -30,5 +31,5 @@ wp-config.php
 *.log
 
 # Gitignored local sandbox files
-sandbox/
+sandboxx
 
