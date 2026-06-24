@@ -1,0 +1,535 @@
+@import url('https://fonts.googleapis.com/css2?family=Mona+Sans:wght@300;400;500;600;700&display=swap');
+
+.wp-block-edgi-congressional-report-cards {
+	margin: 2.5rem auto;
+	max-width: 1200px;
+	font-family: 'Mona Sans', sans-serif;
+}
+
+.edgi-visualization-dashboard {
+	font-family: 'Mona Sans', sans-serif;
+	background: #ffffff;
+	color: #2d3748;
+	border-radius: 16px;
+	padding: 24px;
+	border: 1px solid #e2e8f0;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+	position: relative;
+	overflow: hidden;
+
+	.edgi-map-container {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+	}
+
+	.edgi-map-header {
+		text-align: center;
+		border-bottom: 1px solid #edf2f7;
+		padding-bottom: 20px;
+
+		.edgi-map-title {
+			font-size: 26px;
+			font-weight: 600;
+			margin: 0 0 8px 0;
+			color: #1a202c;
+			letter-spacing: -0.5px;
+		}
+
+		.edgi-map-subtitle {
+			font-size: 15px;
+			font-weight: 300;
+			margin: 0;
+			color: #718096;
+		}
+	}
+
+	.edgi-map-layout {
+		display: flex;
+		gap: 24px;
+
+		@media (max-width: 992px) {
+			flex-direction: column;
+		}
+	}
+
+	.edgi-map-canvas-wrapper {
+		flex: 3;
+		position: relative;
+		background: #ffffff;
+		border-radius: 12px;
+		border: none;
+		overflow: hidden;
+		min-height: 680px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.edgi-map-controls {
+		position: absolute;
+		top: 16px;
+		left: 16px;
+		z-index: 10;
+	}
+
+	.edgi-btn {
+		background: #edf2f7;
+		color: #4a5568;
+		border: 1px solid #cbd5e0;
+		padding: 8px 16px;
+		border-radius: 8px;
+		font-family: 'Mona Sans', sans-serif;
+		font-size: 14px;
+		font-weight: 500;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		display: flex;
+		align-items: center;
+		gap: 8px;
+
+		&:hover {
+			background: #e2e8f0;
+			color: #2d3748;
+			border-color: #cbd5e0;
+		}
+	}
+
+	.edgi-map-canvas {
+		width: 100%;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-bottom: 76px;
+		box-sizing: border-box;
+
+		svg {
+			width: 100%;
+			height: auto;
+			max-height: 520px;
+		}
+	}
+
+	/* Map Elements styling */
+	.state-boundary {
+		fill: #edf2f7;
+		stroke: #131913;
+		stroke-width: 0.5px;
+		vector-effect: non-scaling-stroke;
+		transition: fill 0.2s ease, stroke-width 0.2s ease;
+
+		&:hover, &.hover {
+			fill: #cbd5e0;
+			stroke-width: 1.5px;
+			cursor: pointer;
+		}
+
+		&.active {
+			fill: none !important;
+			stroke: oklch(49.369% 0.01594 145.492) !important;
+			stroke-width: 1px !important;
+		}
+	}
+
+	.state-label {
+		font-family: 'Mona Sans', sans-serif;
+		font-size: 10px;
+		font-weight: 600;
+		fill: #4a5568;
+		text-anchor: middle;
+		dominant-baseline: middle;
+		pointer-events: none;
+		letter-spacing: -0.2px;
+	}
+
+	.district-boundary {
+		fill: #f7fafc;
+		stroke: #131913;
+		stroke-width: 0.5px;
+		transition: all 0.2s ease;
+
+		&:hover, &.hover {
+			fill: rgba(49, 130, 206, 0.15);
+			stroke: #3182ce;
+			stroke-width: 1.5px;
+			cursor: pointer;
+		}
+
+		&.party-democrat {
+			fill: rgba(66, 153, 225, 0.5);
+			stroke: rgba(66, 153, 225, 0.9);
+
+			&:hover, &.hover {
+				fill: rgba(66, 153, 225, 0.25);
+				stroke: #3182ce;
+				stroke-width: 1.5px;
+			}
+		}
+
+		&.party-republican {
+			fill: rgba(245, 101, 101, 0.5);
+			stroke: rgba(245, 101, 101, 0.9);
+
+			&:hover, &.hover {
+				fill: rgba(245, 101, 101, 0.25);
+				stroke: #e53e3e;
+				stroke-width: 1.5px;
+			}
+		}
+
+		&.party-independent {
+			fill: rgba(236, 201, 75, 0.15);
+			stroke: rgba(236, 201, 75, 0.3);
+
+			&:hover, &.hover {
+				fill: rgba(236, 201, 75, 0.3);
+				stroke: #d69e2e;
+				stroke-width: 1.5px;
+			}
+		}
+	}
+
+	/* SVG Callout Styling */
+	.state-callout-line {
+		stroke: #a0aec0;
+		stroke-width: 1px;
+		stroke-dasharray: 2, 2;
+		pointer-events: none;
+	}
+
+	.district-tooltip-line {
+		stroke: #a0aec0;
+		pointer-events: none;
+	}
+
+	.state-callout-pill {
+		transition: transform 0.2s ease;
+		cursor: pointer;
+
+		.state-callout-bg {
+			fill: #ffffff;
+			stroke: #cbd5e0;
+			stroke-width: 1px;
+			transition: all 0.2s ease;
+		}
+
+		.state-callout-text {
+			font-family: 'Mona Sans', sans-serif;
+			font-size: 10px;
+			font-weight: 700;
+			fill: #4a5568;
+			pointer-events: none;
+		}
+
+		&:hover, &.active {
+			.state-callout-bg {
+				fill: #319795;
+				stroke: #319795;
+			}
+
+			.state-callout-text {
+				fill: #ffffff;
+			}
+		}
+	}
+
+	/* Details Panel styling */
+	.edgi-details-panel {
+		background: #f8fafc;
+		border: 1px solid #e2e8f0;
+		border-radius: 12px;
+		padding: 24px;
+		min-height: 180px;
+
+		.edgi-details-placeholder {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 120px;
+			color: #718096;
+			font-weight: 300;
+			font-size: 15px;
+			text-align: center;
+		}
+
+		.edgi-details-header {
+			margin-bottom: 20px;
+			border-bottom: 1px solid #edf2f7;
+			padding-bottom: 12px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.edgi-details-state-name {
+				font-size: 22px;
+				font-weight: 600;
+				color: #1a202c;
+				margin: 0;
+			}
+
+			.edgi-details-label {
+				font-size: 12px;
+				font-weight: 600;
+				text-transform: uppercase;
+				background: #edf2f7;
+				color: #4a5568;
+				padding: 4px 10px;
+				border-radius: 6px;
+			}
+		}
+
+		.edgi-cards-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 20px;
+
+			@media (max-width: 576px) {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.edgi-card {
+			background: #ffffff;
+			border: 1px solid #e2e8f0;
+			border-radius: 10px;
+			padding: 20px;
+			display: flex;
+			flex-direction: column;
+			gap: 14px;
+			transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+			&:hover {
+				transform: translateY(-2px);
+				border-color: #cbd5e0;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+			}
+
+			.edgi-card-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+			}
+
+			.edgi-card-title {
+				font-size: 13px;
+				font-weight: 600;
+				color: #718096;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+			}
+
+			.edgi-card-badge {
+				font-size: 11px;
+				font-weight: 600;
+				padding: 2px 8px;
+				border-radius: 4px;
+				text-transform: uppercase;
+
+				&.badge-democrat {
+					background: #ebf8ff;
+					color: #2b6cb0;
+					border: 1px solid #bee3f8;
+				}
+
+				&.badge-republican {
+					background: #fff5f5;
+					color: #c53030;
+					border: 1px solid #fed7d7;
+				}
+
+				&.badge-independent {
+					background: #fefcbf;
+					color: #975a16;
+					border: 1px solid #fef08a;
+				}
+			}
+
+			.edgi-card-name {
+				font-size: 18px;
+				font-weight: 500;
+				color: #1a202c;
+				margin: 0;
+			}
+
+			.edgi-card-link-btn {
+				margin-top: auto;
+				background: #edf2f7;
+				color: #2d3748;
+				border: 1px solid #cbd5e0;
+				padding: 10px 14px;
+				border-radius: 6px;
+				font-family: 'Mona Sans', sans-serif;
+				font-size: 13px;
+				font-weight: 600;
+				text-decoration: none;
+				text-align: center;
+				cursor: pointer;
+				transition: all 0.2s ease;
+
+				&:hover {
+					background: #3182ce;
+					color: #ffffff;
+					border-color: #3182ce;
+				}
+			}
+		}
+	}
+}
+
+/* Tooltip styling */
+.edgi-map-tooltip {
+	position: absolute;
+	pointer-events: none;
+	background: #ffffff;
+	border: 1px solid #cbd5e0;
+	border-radius: 8px;
+	padding: 12px;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+	color: #2d3748;
+	font-family: 'Mona Sans', sans-serif;
+	font-size: 13px;
+	z-index: 1000;
+	display: none;
+	min-width: 180px;
+
+	.tooltip-title {
+		font-weight: 600;
+		color: #1a202c;
+		margin-bottom: 4px;
+	}
+
+	.tooltip-rep {
+		font-size: 14px;
+		margin-bottom: 8px;
+		font-weight: 500;
+		color: #4a5568;
+	}
+
+	.tooltip-cta {
+		font-size: 11px;
+		color: #3182ce;
+		border-top: 1px solid #edf2f7;
+		padding-top: 6px;
+		margin: 0;
+	}
+}
+
+/* Small Districts Helper Panel */
+.edgi-small-districts-helper {
+	position: absolute;
+	bottom: 16px;
+	left: 16px;
+	right: 16px;
+	background: rgba(255, 255, 255, 0.95);
+	border: 1px solid #cbd5e0;
+	border-radius: 10px;
+	padding: 10px 16px;
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+	display: none;
+	align-items: center;
+	gap: 16px;
+	z-index: 10;
+	backdrop-filter: blur(8px);
+	flex-wrap: nowrap;
+	overflow: hidden;
+
+	@media (max-width: 768px) {
+		position: relative;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin: 12px 0 0 0;
+		background: #ffffff;
+	}
+
+	.edgi-helper-title {
+		font-size: 11px;
+		font-weight: 700;
+		color: #718096;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		white-space: nowrap;
+	}
+
+	.edgi-helper-pills-list {
+		display: flex;
+		flex-wrap: nowrap;
+		gap: 8px;
+		flex: 1;
+		overflow-x: auto;
+		padding: 4px 0;
+
+		&::-webkit-scrollbar {
+			height: 4px;
+		}
+		&::-webkit-scrollbar-track {
+			background: rgba(0, 0, 0, 0.05);
+			border-radius: 2px;
+		}
+		&::-webkit-scrollbar-thumb {
+			background: rgba(0, 0, 0, 0.15);
+			border-radius: 2px;
+			&:hover {
+				background: rgba(0, 0, 0, 0.3);
+			}
+		}
+	}
+
+	.edgi-helper-pill {
+		font-family: 'Mona Sans', sans-serif;
+		font-size: 12px;
+		font-weight: 600;
+		padding: 6px 12px;
+		border-radius: 6px;
+		border: 1px solid #cbd5e0;
+		background: #ffffff;
+		color: #4a5568;
+		cursor: pointer;
+		transition: all 0.2s ease;
+
+		&:hover {
+			background: #edf2f7;
+			color: #2d3748;
+			border-color: #a0aec0;
+			transform: translateY(-1px);
+		}
+
+		&.party-democrat {
+			background: #ebf8ff;
+			color: #2b6cb0;
+			border-color: #bee3f8;
+
+			&:hover {
+				background: #3182ce;
+				color: #ffffff;
+				border-color: #3182ce;
+			}
+		}
+
+		&.party-republican {
+			background: #fff5f5;
+			color: #c53030;
+			border-color: #fed7d7;
+
+			&:hover {
+				background: #e53e3e;
+				color: #ffffff;
+				border-color: #e53e3e;
+			}
+		}
+
+		&.party-independent {
+			background: #fefcbf;
+			color: #975a16;
+			border-color: #fef08a;
+
+			&:hover {
+				background: #d69e2e;
+				color: #ffffff;
+				border-color: #d69e2e;
+			}
+		}
+	}
+}
+
