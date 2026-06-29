@@ -1,0 +1,30 @@
+.timeline {
+    p,
+    label {
+ 
+    }
+
+  input {
+    margin: 0.4rem;
+  }
+
+  datalist {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    writing-mode: horizontal-lr;
+  }
+
+  option {
+    padding: 0;
+  }
+
+  input[type="range"] {
+    width: 400px;
+    margin: 0;
+  }
+
+  #yearslider {
+  width: 300px;
+}
+}

@@ -1,13 +1,11 @@
 {
   "ExpandedNodes": [
     "",
-    "\\assets\\maps",
-    "\\sandbox",
     "\\src",
     "\\src\\cdp-emissions-map",
+    "\\src\\cdp-emissions-map\\components",
     "\\src\\cdp-emissions-map\\utilities",
     "\\src\\congressional-report-cards"
   ],
-  "SelectedNode": "\\src\\congressional-report-cards\\view.js",
   "PreviewInSolutionExplorer": false
 }

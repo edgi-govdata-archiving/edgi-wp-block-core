@@ -1,7 +1,9 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
+
 import { getNameToAbbr } from "./utilities/convert.js"
+import timeline from './components/timeline.js';
 
 
 const smallStates = [
@@ -28,7 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const csvUrl = dashboard.getAttribute("data-csv-url");
       const statesJsonUrl = dashboard.getAttribute("data-states-json-url");
       const stateGHGUrl = dashboard.getAttribute("data-states-ghg-json-url"); 
-    //const stateEmissionsUrl = dashboard.getAttribute("data-states-emissions-url");
+      const stateEmissionsUrl = dashboard.getAttribute("data-states-emissions-url");
 
       if (!csvUrl || !statesJsonUrl || !stateGHGUrl) { // || !stateEmissionsUrl
       console.error("CDP Map Dashboard: Missing required data attributes!");
@@ -48,6 +50,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const detailsPanel = dashboard.querySelector(".edgi-details-panel");
     const resetBtn = dashboard.querySelector(".edgi-btn-reset");
     const wrapper = dashboard.querySelector(".edgi-map-canvas-wrapper");
+    
+    let timelineDiv = document.createElement("div");
+    timelineDiv.innerHTML = timeline;
+    document.body.appendChild(timelineDiv);
+      
+
     let helperContainer = dashboard.querySelector(
       ".edgi-small-districts-helper",
     );
@@ -60,6 +68,7 @@ document.addEventListener("DOMContentLoaded", () => {
     canvasContainer.innerHTML =
       '<div style="padding: 20px; font-weight:300; color:#afe0d7;">Loading environmental data and maps...</div>';
 
+      //timeline.innerHTML = timelineHTML;
     // Load resources
     Promise.all([
       d3.csv(csvUrl),
@@ -87,8 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     emissions: source.emissions
                 }
                 
-               
-               
             }
             console.log(stateData)
 
