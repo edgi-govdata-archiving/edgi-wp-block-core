@@ -20,11 +20,12 @@
   }
 
   input[type="range"] {
-    width: 400px;
+    display: flex;
     margin: 0;
   }
 
   #yearslider {
-  width: 300px;
-}
+    display: flex;
+    width: 100%;
+  }
 }

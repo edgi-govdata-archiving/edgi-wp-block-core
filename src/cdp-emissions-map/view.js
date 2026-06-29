@@ -9,6 +9,10 @@ import infoPanel from './components/info-panel.js';
 
 var infoPanelContainer;
 var currentStateLabel;
+var currentEmissionsLabel;
+var currentYear = 2010;
+var currentStateAbbr = "";
+const stateData = {};
 
 
 const smallStates = [
@@ -27,6 +31,38 @@ const smallStates = [
   "GU",
   "PR",
 ];
+
+function updateYear(year){
+  currentYear = year;
+
+  if (currentStateAbbr != ""){
+    updateDetailsPanel(currentStateAbbr, currentYear)
+  }
+}
+
+function updateDetailsPanel(stateAbbr, year) {
+  console.log(stateData)
+  console.log("updating: " + stateAbbr)
+
+  currentStateAbbr = stateAbbr;
+  const currentState = stateData[stateAbbr];
+
+  if (!currentState) {
+    return;
+  }
+  else {
+    console.log(currentState)
+  }
+
+  const emissions = currentState["emissions"][year]["total_direct"];
+  const stateName = currentState.name;
+
+  //infoPanel.test = stateName;
+  currentStateLabel.innerHTML = stateName
+  currentEmissionsLabel.innerHTML = "Direct emissions: " + emissions;
+
+}
+
 
 document.addEventListener("DOMContentLoaded", () => {
   const dashboards = document.querySelectorAll(".edgi-visualization-dashboard");
@@ -62,13 +98,19 @@ document.addEventListener("DOMContentLoaded", () => {
     infoPanelContainer.innerHTML = infoPanel;
     wrapper.appendChild(infoPanelContainer);
     currentStateLabel = infoPanelContainer.querySelector("#currentState")
+    currentEmissionsLabel = infoPanelContainer.querySelector("#stateEmissions")
     //currentStateLabel.value = 'Hello there!';
 
       
     
-    // let timelineContainer = document.createElement("div");
-    // timelineContainer.innerHTML = timeline;
-    // dashboard.appendChild(timelineContainer);
+    let timelineContainer = document.createElement("div");
+    timelineContainer.innerHTML = timeline;
+    dashboard.appendChild(timelineContainer);
+
+    document.querySelector("#yearslider").addEventListener("change", function() {
+      console.log(this.value)
+      updateYear(this.value)
+    });
 
 
     let helperContainer = dashboard.querySelector(
@@ -95,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
         canvasContainer.innerHTML = "";
 
         // 1. Process data for fast lookup
-            const stateData = {};
+            
 
             const stateDataArray = stateGHGUrl["objects"]["data"]["geometries"];
             //console.log(stateDataArray)
@@ -339,7 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
           // 3. Update Details Panel header & senators
-          updateDetailsPanel(stateAbbr);
+          updateDetailsPanel(stateAbbr, currentYear);
         }
 
         // Reset Map function
@@ -386,43 +428,6 @@ document.addEventListener("DOMContentLoaded", () => {
           resetBtn.style.display = "none";
           tooltip.style.display = "none";
 
-          // Reset details panel to placeholder
-          detailsPanel.innerHTML = `
-					<div class="edgi-details-placeholder">
-						Select a state or district to view congressional representatives and reports.
-					</div>
-				`;
-        }
-
-        // Update details panel with Senators
-           function updateDetailsPanel(stateAbbr) {
-           console.log(stateData)
-           console.log("updating: " + stateAbbr)
-           
-            const currentState = stateData[stateAbbr];
-
-           if (!currentState) {
-                return;
-            }
-            else {
-               console.log(currentState)
-            }
-
-               const emissions = currentState["emissions"]["2010"]["total_direct"];
-               const stateName = currentState.name;
-
-               //infoPanel.test = stateName;
-               currentStateLabel.innerHTML = stateName
-
-
-
-          detailsPanel.innerHTML = `
-					<div class="edgi-details-header">
-						<h4 class="edgi-details-state-name">${stateName} </h4>
-						<span class="edgi-details-label">State Code: ${stateAbbr}</span>
-                        <span class="edgi-details-label">Direct Emissions 2010: ${emissions}</span>
-					</div>
-				`;
         }
       })
       .catch((err) => {
