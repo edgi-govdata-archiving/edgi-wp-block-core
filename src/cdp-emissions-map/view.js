@@ -26,10 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   dashboards.forEach((dashboard) => {
     const csvUrl = dashboard.getAttribute("data-csv-url");
-    const statesJsonUrl = dashboard.getAttribute("data-states-json-url");
+      const statesJsonUrl = dashboard.getAttribute("data-states-json-url");
+      const stateGHGUrl = dashboard.getAttribute("data-states-ghg-json-url"); 
     //const stateEmissionsUrl = dashboard.getAttribute("data-states-emissions-url");
 
-    if (!csvUrl || !statesJsonUrl) { // || !stateEmissionsUrl
+      if (!csvUrl || !statesJsonUrl || !stateGHGUrl) { // || !stateEmissionsUrl
       console.error("CDP Map Dashboard: Missing required data attributes!");
       return;
     }
@@ -63,13 +64,33 @@ document.addEventListener("DOMContentLoaded", () => {
     Promise.all([
       d3.csv(csvUrl),
       d3.json(statesJsonUrl),
-      //d3.json(stateEmissionsUrl),
+      d3.json(stateGHGUrl),
+              //d3.json(stateEmissionsUrl),
     ])
-      .then(([csvData, statesTopo]) => {
+        .then(([csvData, statesTopo, stateGHGUrl]) => {
         canvasContainer.innerHTML = "";
 
         // 1. Process data for fast lookup
-        const stateData = {};
+            const stateData = {};
+
+            const stateDataArray = stateGHGUrl["objects"]["data"]["geometries"];
+            //console.log(stateDataArray)
+
+            for (var stateKey in stateDataArray) {
+                var source = stateDataArray[stateKey]["properties"]
+               //console.log(source)
+
+                stateData[source.state_abbr] = {
+
+                    name: source.state_name,
+                    abbr: source.state_abbr,
+                    emissions: source.emissions
+                }
+                
+               
+               
+            }
+            console.log(stateData)
 
         // 2. Setup D3 canvas dimensions
         const width = 960;
@@ -332,16 +353,6 @@ document.addEventListener("DOMContentLoaded", () => {
           // Restore state labels
           stateLabels.transition().delay(400).duration(400).style("opacity", 1);
 
-          // Fade out and remove districts
-          districtsGroup
-            .transition()
-            .duration(300)
-            .style("opacity", 0)
-            .end()
-            .then(() => {
-              districtsGroup.selectAll(".district-boundary").remove();
-              districtsGroup.selectAll(".district-tooltip-line").remove();
-            });
 
           // Hide helper buttons container
           if (helperContainer) {
@@ -362,62 +373,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Update details panel with Senators
-        function updateDetailsPanel(stateAbbr) {
-          const info = stateData[stateAbbr];
-          if (!info) return;
+           function updateDetailsPanel(stateAbbr) {
+           console.log(stateData)
+           console.log("updating: " + stateAbbr)
+           
+            const currentState = stateData[stateAbbr];
 
-          const stateName = abbrToName[stateAbbr] || stateAbbr;
+           if (!currentState) {
+                return;
+            }
+            else {
+               console.log(currentState)
+            }
 
-          // Color badges helper
-          const getPartyBadgeClass = (party) => {
-            if (!party) return "";
-            if (party.includes("Democrat")) return "badge-democrat";
-            if (party.includes("Republican")) return "badge-republican";
-            return "badge-independent";
-          };
+               const emissions = currentState["emissions"]["2010"]["total_direct"];
+               const stateName = currentState.name;
 
-          const sen1PartyClass = getPartyBadgeClass(info.senator_1_party);
-          const sen2PartyClass = getPartyBadgeClass(info.senator_2_party);
+
+
 
           detailsPanel.innerHTML = `
 					<div class="edgi-details-header">
-						<h4 class="edgi-details-state-name">${stateName} Representatives</h4>
+						<h4 class="edgi-details-state-name">${stateName} </h4>
 						<span class="edgi-details-label">State Code: ${stateAbbr}</span>
-					</div>
-					<div class="edgi-cards-grid">
-						<div class="edgi-card">
-							<div class="edgi-card-header">
-								<span class="edgi-card-title">U.S. Senator</span>
-								${
-                  info.senator_1
-                    ? `<span class="edgi-card-badge ${sen1PartyClass}">${info.senator_1_party}</span>`
-                    : ""
-                }
-							</div>
-							<h5 class="edgi-card-name">${info.senator_1 || "Vacant"}</h5>
-							${
-                info.report_link
-                  ? `<a href="${info.report_link}" target="_blank" class="edgi-card-link-btn">Download State Report (PDF)</a>`
-                  : ""
-              }
-						</div>
-						
-						<div class="edgi-card">
-							<div class="edgi-card-header">
-								<span class="edgi-card-title">U.S. Senator</span>
-								${
-                  info.senator_2
-                    ? `<span class="edgi-card-badge ${sen2PartyClass}">${info.senator_2_party}</span>`
-                    : ""
-                }
-							</div>
-							<h5 class="edgi-card-name">${info.senator_2 || "Vacant"}</h5>
-							${
-                info.report_link
-                  ? `<a href="${info.report_link}" target="_blank" class="edgi-card-link-btn">Download State Report (PDF)</a>`
-                  : ""
-              }
-						</div>
+                        <span class="edgi-details-label">Direct Emissions 2010: ${emissions}</span>
 					</div>
 				`;
         }

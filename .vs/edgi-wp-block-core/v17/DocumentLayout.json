@@ -3,52 +3,44 @@
   "WorkspaceRootPath": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\view.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\cdp-emissions-map\\view.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\sandbox\\sandbox.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:sandbox\\sandbox.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\assets\\page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\page.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\view.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\congressional-report-cards\\view.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\assets\\maps\\cb_2025_us_cd119_5m.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\maps\\cb_2025_us_cd119_5m.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\assets\\maps\\us-states.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:assets\\maps\\us-states.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\edit.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\congressional-report-cards\\edit.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\utils.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\utils.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\style.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\congressional-report-cards\\style.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\utilities\\convert.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\cdp-emissions-map\\utilities\\convert.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\save.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\congressional-report-cards\\save.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\style.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\cdp-emissions-map\\style.scss||{181FE41B-5A5D-479F-9F8F-BF665F4EBC2A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\congressional-report-cards\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\block.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\cdp-emissions-map\\block.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\block.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\congressional-report-cards\\block.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\edit.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\cdp-emissions-map\\edit.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\save.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\cdp-emissions-map\\save.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:src\\cdp-emissions-map\\index.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     }
   ],
   "DocumentGroupContainers": [
@@ -58,162 +50,138 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "sandbox.html",
               "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\sandbox\\sandbox.html",
               "RelativeDocumentMoniker": "sandbox\\sandbox.html",
               "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\sandbox\\sandbox.html",
               "RelativeToolTip": "sandbox\\sandbox.html",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAuAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2026-05-22T00:50:17.591Z",
+              "WhenOpened": "2026-06-24T17:22:25.199Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": ".gitignore",
-              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\.gitignore",
-              "RelativeDocumentMoniker": ".gitignore",
-              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\.gitignore",
-              "RelativeToolTip": ".gitignore",
-              "ViewState": "AgIAABAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2026-05-22T00:49:04.997Z",
+              "DocumentIndex": 0,
+              "Title": "view.js",
+              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\view.js",
+              "RelativeDocumentMoniker": "src\\cdp-emissions-map\\view.js",
+              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\view.js",
+              "RelativeToolTip": "src\\cdp-emissions-map\\view.js",
+              "ViewState": "AgIAAE4AAAAAAAAAAIAhwGwAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-06-24T17:34:49.942Z",
+              "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "page.html",
-              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\assets\\page.html",
-              "RelativeDocumentMoniker": "assets\\page.html",
-              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\assets\\page.html",
-              "RelativeToolTip": "assets\\page.html",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
-              "WhenOpened": "2026-05-21T22:49:05.522Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "cb_2025_us_cd119_5m.json",
-              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\assets\\maps\\cb_2025_us_cd119_5m.json",
-              "RelativeDocumentMoniker": "assets\\maps\\cb_2025_us_cd119_5m.json",
-              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\assets\\maps\\cb_2025_us_cd119_5m.json",
-              "RelativeToolTip": "assets\\maps\\cb_2025_us_cd119_5m.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-05-21T22:49:00.498Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "us-states.json",
-              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\assets\\maps\\us-states.json",
-              "RelativeDocumentMoniker": "assets\\maps\\us-states.json",
-              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\assets\\maps\\us-states.json",
-              "RelativeToolTip": "assets\\maps\\us-states.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-05-21T22:48:58.397Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "utils.js",
-              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\utils.js",
-              "RelativeDocumentMoniker": "src\\utils.js",
-              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\utils.js",
-              "RelativeToolTip": "src\\utils.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-05-21T22:36:33.799Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
               "Title": "view.js",
               "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\view.js",
               "RelativeDocumentMoniker": "src\\congressional-report-cards\\view.js",
               "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\view.js",
               "RelativeToolTip": "src\\congressional-report-cards\\view.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAALAAAAAAAAAA==",
+              "ViewState": "AgIAAAQBAAAAAAAAAAAawBgBAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-05-21T22:32:41.549Z",
+              "WhenOpened": "2026-06-24T20:00:17.119Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "utils.js",
+              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\utils.js",
+              "RelativeDocumentMoniker": "src\\utils.js",
+              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\utils.js",
+              "RelativeToolTip": "src\\utils.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-06-24T18:23:10.889Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "convert.js",
+              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\utilities\\convert.js",
+              "RelativeDocumentMoniker": "src\\cdp-emissions-map\\utilities\\convert.js",
+              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\utilities\\convert.js",
+              "RelativeToolTip": "src\\cdp-emissions-map\\utilities\\convert.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-06-24T17:51:06.516Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "style.scss",
+              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\style.scss",
+              "RelativeDocumentMoniker": "src\\cdp-emissions-map\\style.scss",
+              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\style.scss",
+              "RelativeToolTip": "src\\cdp-emissions-map\\style.scss",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
+              "WhenOpened": "2026-06-24T17:34:38.859Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
-              "Title": "style.scss",
-              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\style.scss",
-              "RelativeDocumentMoniker": "src\\congressional-report-cards\\style.scss",
-              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\style.scss",
-              "RelativeToolTip": "src\\congressional-report-cards\\style.scss",
-              "ViewState": "AgIAAPsBAAAAAAAAAAAAAKwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002663|",
-              "WhenOpened": "2026-05-21T22:30:47.684Z",
+              "Title": "save.js",
+              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\save.js",
+              "RelativeDocumentMoniker": "src\\cdp-emissions-map\\save.js",
+              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\save.js",
+              "RelativeToolTip": "src\\cdp-emissions-map\\save.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
+              "WhenOpened": "2026-06-24T17:34:37.564Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 9,
-              "Title": "save.js",
-              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\save.js",
-              "RelativeDocumentMoniker": "src\\congressional-report-cards\\save.js",
-              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\save.js",
-              "RelativeToolTip": "src\\congressional-report-cards\\save.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "index.js",
+              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\index.js",
+              "RelativeDocumentMoniker": "src\\cdp-emissions-map\\index.js",
+              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\index.js",
+              "RelativeToolTip": "src\\cdp-emissions-map\\index.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-05-21T22:30:42.535Z",
+              "WhenOpened": "2026-06-24T17:34:35.659Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "index.js",
-              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\index.js",
-              "RelativeDocumentMoniker": "src\\congressional-report-cards\\index.js",
-              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\index.js",
-              "RelativeToolTip": "src\\congressional-report-cards\\index.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "edit.js",
+              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\edit.js",
+              "RelativeDocumentMoniker": "src\\cdp-emissions-map\\edit.js",
+              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\edit.js",
+              "RelativeToolTip": "src\\cdp-emissions-map\\edit.js",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-05-21T22:30:38.661Z",
+              "WhenOpened": "2026-06-24T17:34:30.643Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 6,
-              "Title": "edit.js",
-              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\edit.js",
-              "RelativeDocumentMoniker": "src\\congressional-report-cards\\edit.js",
-              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\edit.js",
-              "RelativeToolTip": "src\\congressional-report-cards\\edit.js",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAA6AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-05-21T22:30:30.276Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
               "Title": "block.json",
-              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\block.json",
-              "RelativeDocumentMoniker": "src\\congressional-report-cards\\block.json",
-              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\congressional-report-cards\\block.json",
-              "RelativeToolTip": "src\\congressional-report-cards\\block.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "DocumentMoniker": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\block.json",
+              "RelativeDocumentMoniker": "src\\cdp-emissions-map\\block.json",
+              "ToolTip": "C:\\Users\\carly\\Local Sites\\edgi-dev-latest\\app\\public\\wp-content\\plugins\\edgi-wp-block-core\\src\\cdp-emissions-map\\block.json",
+              "RelativeToolTip": "src\\cdp-emissions-map\\block.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2026-05-21T22:30:19.743Z",
+              "WhenOpened": "2026-06-24T17:33:16.6Z",
               "EditorCaption": ""
             }
           ]
