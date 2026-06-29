@@ -3,7 +3,12 @@ import * as topojson from "topojson-client";
 
 
 import { getNameToAbbr } from "./utilities/convert.js"
+
 import timeline from './components/timeline.js';
+import infoPanel from './components/info-panel.js';
+
+var infoPanelContainer;
+var currentStateLabel;
 
 
 const smallStates = [
@@ -46,15 +51,25 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Containers
+    const mapContainer = dashboard.querySelector(".edgi-map-layout");
+
     const canvasContainer = dashboard.querySelector(".edgi-map-canvas");
-    const detailsPanel = dashboard.querySelector(".edgi-details-panel");
+    const detailsPanel = dashboard.querySelector(".details-panel");
     const resetBtn = dashboard.querySelector(".edgi-btn-reset");
     const wrapper = dashboard.querySelector(".edgi-map-canvas-wrapper");
-    
-    let timelineDiv = document.createElement("div");
-    timelineDiv.innerHTML = timeline;
-    document.body.appendChild(timelineDiv);
+
+    infoPanelContainer = document.createElement("div");
+    infoPanelContainer.innerHTML = infoPanel;
+    wrapper.appendChild(infoPanelContainer);
+    currentStateLabel = infoPanelContainer.querySelector("#currentState")
+    //currentStateLabel.value = 'Hello there!';
+
       
+    
+    // let timelineContainer = document.createElement("div");
+    // timelineContainer.innerHTML = timeline;
+    // dashboard.appendChild(timelineContainer);
+
 
     let helperContainer = dashboard.querySelector(
       ".edgi-small-districts-helper",
@@ -396,6 +411,8 @@ document.addEventListener("DOMContentLoaded", () => {
                const emissions = currentState["emissions"]["2010"]["total_direct"];
                const stateName = currentState.name;
 
+               //infoPanel.test = stateName;
+               currentStateLabel.innerHTML = stateName
 
 
 
