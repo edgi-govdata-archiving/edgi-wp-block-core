@@ -25,11 +25,12 @@ ehthumbs.db
 *.njsproj
 *.sln
 *.swp
+.vs
 
 # Local Server/WordPress Debug Logs
 wp-config.php
 *.log
 
 # Gitignored local sandbox files
-sandboxx
+sandbox
 
