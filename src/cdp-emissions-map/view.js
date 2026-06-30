@@ -6,13 +6,15 @@ import { getNameToAbbr } from "./utilities/convert.js"
 
 import timeline from './components/timeline.js';
 import infoPanel from './components/info-panel.js';
+import toggle from './components/toggle.js';
 
 var infoPanelContainer;
 var currentStateLabel;
 var currentEmissionsLabel;
 var currentYear = 2010;
 var currentStateAbbr = "";
-const stateData = {};
+var emissionType = "total_direct" //or "total_supplier"
+var stateData = {};
 
 
 const smallStates = [
@@ -54,13 +56,36 @@ function updateDetailsPanel(stateAbbr, year) {
     console.log(currentState)
   }
 
-  const emissions = currentState["emissions"][year]["total_direct"];
+  const emissions = currentState["emissions"][year][emissionType];
   const stateName = currentState.name;
 
   //infoPanel.test = stateName;
   currentStateLabel.innerHTML = stateName
-  currentEmissionsLabel.innerHTML = "Direct emissions: " + emissions;
 
+  if (emissionType == "total_direct"){
+    currentEmissionsLabel.innerHTML = "Direct emissions: " + emissions;
+  }
+  else{
+    currentEmissionsLabel.innerHTML = "Supplier emissions: " + emissions;
+  }
+
+}
+
+function resetState() {
+  currentStateAbbr = "";
+  currentStateLabel.innerHTML = "Select state..."
+  currentEmissionsLabel.innerHTML = ""
+}
+
+function toggleEmissionsType(){
+  if (emissionType == "total_direct"){
+    emissionType = "total_supplier";
+  }
+  else{
+    emissionType = "total_direct";
+  }
+
+  updateDetailsPanel(currentStateAbbr, currentYear);
 }
 
 
@@ -110,6 +135,16 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#yearslider").addEventListener("change", function() {
       console.log(this.value)
       updateYear(this.value)
+    });
+
+
+    let toggleContainer = document.createElement("div");
+    toggleContainer.innerHTML = toggle;
+    dashboard.appendChild(toggleContainer);
+
+    document.querySelector("#toggle").addEventListener("change", function() {
+      console.log("toggled!")
+      toggleEmissionsType();
     });
 
 
@@ -386,6 +421,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Reset Map function
         function resetMap() {
+          resetState();
           activeState = null;
 
           // Clear active state callout highlights
