@@ -3,6 +3,11 @@ import * as topojson from "topojson-client";
 
 
 import { getNameToAbbr } from "./utilities/convert.js"
+import SMALL_STATES from "./utilities/special-states.js"
+const smallStates = SMALL_STATES["SMALL_STATES"];
+
+import IRREGULAR_STATES from "./utilities/special-states.js"
+const irregularStates = IRREGULAR_STATES["IRREGULAR_STATES"];
 
 import timeline from './components/timeline.js';
 import infoPanel from './components/info-panel.js';
@@ -16,23 +21,6 @@ var currentStateAbbr = "";
 var emissionType = "total_direct" //or "total_supplier"
 var stateData = {};
 
-
-const smallStates = [
-  "RI",
-  "DE",
-  "DC",
-  "MD",
-  "NJ",
-  "CT",
-  "MA",
-  "VT",
-  "NH",
-  "VI",
-  "MP",
-  "AS",
-  "GU",
-  "PR",
-];
 
 function updateYear(year){
   currentYear = year;
@@ -255,45 +243,34 @@ document.addEventListener("DOMContentLoaded", () => {
               const abbr = getNameToAbbr(d.properties.name);
             let x = centroid[0];
             let y = centroid[1];
+            
             // Adjustments for better label alignment on islands/peninsulas
-            if (abbr === "MI") {
-              x += 18;
-              y += 24;
-            } else if (abbr === "FL") {
-              x += 14;
-            } else if (abbr === "LA") {
-              x -= 10;
-              y += 10;
+            if (abbr in irregularStates){
+              x += irregularStates[abbr].centroidX;
+              y += irregularStates[abbr].centroidY;
             }
             return `translate(${x}, ${y})`;
           })
           .text((d) => {
               const abbr = getNameToAbbr(d.properties.name);
             // Skip small states to prevent label overlap/clutter
-            return abbr && !smallStates.includes(abbr) ? abbr : "";
+            return abbr && !smallStates[abbr] ? abbr : "";
           });
 
         // 4. Render SVG Line Callouts for Small States
-        const calloutsData = [
-          { abbr: "VT", x: 915, y: 135 },
-          { abbr: "NH", x: 900, y: 165 },
-          { abbr: "MA", x: 915, y: 190 },
-          { abbr: "RI", x: 915, y: 215 },
-          { abbr: "CT", x: 885, y: 240 },
-          { abbr: "NJ", x: 900, y: 265 },
-          { abbr: "DE", x: 880, y: 290 },
-          { abbr: "MD", x: 880, y: 315 },
-          { abbr: "DC", x: 870, y: 340 },
-        ];
 
-        calloutsData.forEach((callout) => {
+        for (const [key, value] of Object.entries(smallStates)){ 
+          console.log(value)
           const feature = statesFeatures.find(
-              (f) => getNameToAbbr(f.properties.name) === callout.abbr,
+              (f) => getNameToAbbr(f.properties.name) === key,
           );
           if (!feature) return;
 
           const centroid = path.centroid(feature);
           if (!centroid) return;
+
+          var pillX = value.pillX;
+          var pillY = value.pillY;
 
           // Draw connecting line
           calloutsGroup
@@ -301,23 +278,23 @@ document.addEventListener("DOMContentLoaded", () => {
             .attr("class", "state-callout-line")
             .attr("x1", centroid[0])
             .attr("y1", centroid[1])
-            .attr("x2", callout.x - 18)
-            .attr("y2", callout.y);
+            .attr("x2", pillX - 18)
+            .attr("y2", pillY );
 
           // Draw interactive pill group
           const pill = calloutsGroup
             .append("g")
-            .datum(callout)
+            .datum(value)
             .attr("class", "state-callout-pill")
-            .attr("transform", `translate(${callout.x}, ${callout.y})`)
+            .attr("transform", `translate(${pillX}, ${pillY})`)
             .on("click", (event) => {
               event.stopPropagation();
-              zoomToState(feature, callout.abbr);
+              zoomToState(feature, key);
             })
             .on("mouseover", () => {
               statesGroup
                 .selectAll(".state-boundary")
-                  .filter((f) => getNameToAbbr(f.properties.name) === callout.abbr)
+                  .filter((f) => getNameToAbbr(f.properties.name) === key)
                 .classed("hover", true);
             })
             .on("mouseout", () => {
@@ -336,11 +313,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
           pill
             .append("text")
-            .text(callout.abbr)
+            .text(key)
             .attr("text-anchor", "middle")
             .attr("dy", "4")
             .attr("class", "state-callout-text");
-        });
+        };
 
         // Reset Zoom action
         resetBtn.addEventListener("click", () => {
