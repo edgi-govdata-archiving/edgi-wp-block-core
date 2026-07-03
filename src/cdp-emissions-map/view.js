@@ -3,7 +3,7 @@ import * as topojson from "topojson-client";
 
 
 import { getNameToAbbr } from "./utilities/convert.js"
-import { getScaledColor, getDirectColor } from "./utilities/colors.js"
+import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
 import SMALL_STATES from "./utilities/special-states.js"
 const smallStates = SMALL_STATES["SMALL_STATES"];
 
@@ -15,6 +15,7 @@ import infoPanel from './components/info-panel.js';
 import toggle from './components/toggle.js';
 
 var infoPanelContainer;
+var statePaths;
 var currentStateLabel;
 var currentEmissionsLabel;
 var currentYear = 2010;
@@ -28,13 +29,18 @@ console.log("testColor: " + testColor);
 function getStateColor(name){
   var abbr = getNameToAbbr(name);
   const currentStateData = stateData[abbr];
-  //console.log(currentStateData, currentYear.toString())
-  var emissionsData = currentStateData["emissions"]["2010"];
+  var yearString = currentYear.toString()
+  var emissionsData = currentStateData["emissions"][yearString];
 
   if (emissionsData){
-    var emissions = emissionsData["total_direct"];
-    console.log(emissions);
-    return getDirectColor(emissions, [0, 500000000])
+    var emissions = emissionsData[emissionType];
+
+    if (emissionType == "total_direct"){
+      return getDirectColor(emissions, [0, 500000000])
+    }
+    else{
+      return getSupplierColor(emissions, [0, 500000000])
+    }
   }
   else{
     return "#ffffff"
@@ -52,6 +58,8 @@ function updateYear(year){
   if (currentStateAbbr != ""){
     updateDetailsPanel(currentStateAbbr, currentYear)
   }
+
+  updateChoropleth();
 }
 
 function updateDetailsPanel(stateAbbr, year) {
@@ -80,7 +88,13 @@ function updateDetailsPanel(stateAbbr, year) {
   else{
     currentEmissionsLabel.innerHTML = "Supplier emissions: " + emissions;
   }
+}
 
+function updateChoropleth(){
+   statePaths.style("fill", (d) => {
+              const abbr = getNameToAbbr(d.properties.name);
+              return getStateColor(d.properties.name)
+          });
 }
 
 function resetState() {
@@ -98,6 +112,7 @@ function toggleEmissionsType(){
   }
 
   updateDetailsPanel(currentStateAbbr, currentYear);
+  updateChoropleth();
 }
 
 
@@ -240,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let activeState = null;
 
         // 3. Render States
-        const statePaths = statesGroup
+        statePaths = statesGroup
           .selectAll(".state-boundary")
           .data(statesFeatures)
           .enter()

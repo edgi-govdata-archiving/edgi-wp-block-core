@@ -1,8 +1,8 @@
 
 import * as d3 from "d3";
 
-const directColorsRange = ["#ff0000", "#000000"]
-const supplierColorsRange = ["#ffffff", "#000000"]
+const directColorsRange = ["#e8eff5", "#0a283f"] //#19649f
+const supplierColorsRange = ["#f9f1e6", "#503103"] //#c97c08
 
 //returns scaled color given range of values and colors
 //value: number to be mappped
@@ -16,5 +16,9 @@ export function getScaledColor(value, valueRange, colorRange){ //value, valueRan
 }
 
 export function getDirectColor(value, valueRange){
+	return getScaledColor(value, valueRange, directColorsRange)
+}
+
+export function getSupplierColor(value, valueRange){
 	return getScaledColor(value, valueRange, supplierColorsRange)
 }
