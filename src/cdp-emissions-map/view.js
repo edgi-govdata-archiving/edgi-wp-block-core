@@ -3,6 +3,7 @@ import * as topojson from "topojson-client";
 
 
 import { getNameToAbbr } from "./utilities/convert.js"
+import { getScaledColor, getDirectColor } from "./utilities/colors.js"
 import SMALL_STATES from "./utilities/special-states.js"
 const smallStates = SMALL_STATES["SMALL_STATES"];
 
@@ -21,6 +22,29 @@ var currentStateAbbr = "";
 var emissionType = "total_direct" //or "total_supplier"
 var stateData = {};
 
+var testColor = getDirectColor(5, [0, 10]);
+console.log("testColor: " + testColor);
+
+function getStateColor(name){
+  var abbr = getNameToAbbr(name);
+  const currentStateData = stateData[abbr];
+  //console.log(currentStateData, currentYear.toString())
+  var emissionsData = currentStateData["emissions"]["2010"];
+
+  if (emissionsData){
+    var emissions = emissionsData["total_direct"];
+    console.log(emissions);
+    return getDirectColor(emissions, [0, 500000000])
+  }
+  else{
+    return "#ffffff"
+  }
+
+  //const emissions = currentStateData["emissions"]["2010"][emissionType];
+
+
+  
+}
 
 function updateYear(year){
   currentYear = year;
@@ -31,7 +55,7 @@ function updateYear(year){
 }
 
 function updateDetailsPanel(stateAbbr, year) {
-  console.log(stateData)
+  //console.log(stateData)
   console.log("updating: " + stateAbbr)
 
   currentStateAbbr = stateAbbr;
@@ -177,7 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 
             }
-            console.log(stateData)
 
         // 2. Setup D3 canvas dimensions
         const width = 960;
@@ -224,11 +247,19 @@ document.addEventListener("DOMContentLoaded", () => {
           .append("path")
           .attr("class", "state-boundary")
           .attr("d", path)
+          .style("fill", (d) => {
+              const abbr = getNameToAbbr(d.properties.name);
+              console.log(d.properties.name)
+
+              return getStateColor(d.properties.name)
+          })
           .on("click", (event, d) => {
             event.stopPropagation();
             const abbr = getNameToAbbr(d.properties.name);
             if (abbr) zoomToState(d, abbr);
           });
+
+        console.log(statePaths)
 
         // Render state abbreviation labels
         const stateLabels = labelsGroup
@@ -260,7 +291,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // 4. Render SVG Line Callouts for Small States
 
         for (const [key, value] of Object.entries(smallStates)){ 
-          console.log(value)
           const feature = statesFeatures.find(
               (f) => getNameToAbbr(f.properties.name) === key,
           );
