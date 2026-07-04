@@ -1,0 +1,45 @@
+/* SVG Callout Styling */
+
+.state-callout-line {
+	stroke: #a0aec0;
+	stroke-width: 3px;
+	stroke-dasharray: 2, 2;
+	pointer-events: none;
+}
+
+.district-tooltip-line {
+	stroke: #a0aec0;
+	pointer-events: none;
+}
+
+.state-callout-pill {
+	transition: transform 0.2s ease;
+	cursor: pointer;
+	border: solid magenta 1px;
+
+	.state-callout-bg {
+		fill: #ffffff;
+		stroke: #cbd5e0;
+		stroke-width: 3px;
+		transition: all 0.2s ease;
+	}
+
+	.state-callout-text {
+		font-family: 'Mona Sans', sans-serif;
+		font-size: 10px;
+		font-weight: 700;
+		fill: #4a5568;
+		pointer-events: none;
+	}
+
+	&:hover, &.active {
+		.state-callout-bg {
+			fill: #319795;
+			stroke: #319795;
+		}
+
+		.state-callout-text {
+			fill: #ffffff;
+		}
+	}
+}

@@ -13,6 +13,8 @@ const irregularStates = IRREGULAR_STATES["IRREGULAR_STATES"];
 import timeline from './components/timeline.js';
 import infoPanel from './components/info-panel.js';
 import toggle from './components/toggle.js';
+import callout from './components/callout.js';
+import { initializeCallout } from './components/callout.js';
 
 var infoPanelContainer;
 var statePaths;
@@ -199,8 +201,6 @@ document.addEventListener("DOMContentLoaded", () => {
         canvasContainer.innerHTML = "";
 
         // 1. Process data for fast lookup
-            
-
             const stateDataArray = stateGHGUrl["objects"]["data"]["geometries"];
             //console.log(stateDataArray)
 
@@ -250,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
          const labelsGroup = mapGroup.append("g").attr("class", "labels-group");
 
         // Callouts group (rendered outside mapGroup so it doesn't scale/zoom)
-          const calloutsGroup = svg.append("g").attr("class", "callouts-group");
+        const calloutsGroup = svg.append("g").attr("class", "callouts-group");
 
         let activeState = null;
 
@@ -264,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .attr("d", path)
           .style("fill", (d) => {
               const abbr = getNameToAbbr(d.properties.name);
-              console.log(d.properties.name)
+              //console.log(d.properties.name)
 
               return getStateColor(d.properties.name)
           })
@@ -274,7 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (abbr) zoomToState(d, abbr);
           });
 
-        console.log(statePaths)
+        //console.log(statePaths)
 
         // Render state abbreviation labels
         const stateLabels = labelsGroup
@@ -305,63 +305,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 4. Render SVG Line Callouts for Small States
 
-        for (const [key, value] of Object.entries(smallStates)){ 
+        for (const [smallAbbr, smallData] of Object.entries(smallStates)){ 
           const feature = statesFeatures.find(
-              (f) => getNameToAbbr(f.properties.name) === key,
+              (f) => getNameToAbbr(f.properties.name) === smallAbbr,
           );
           if (!feature) return;
 
           const centroid = path.centroid(feature);
           if (!centroid) return;
 
-          var pillX = value.pillX;
-          var pillY = value.pillY;
 
-          // Draw connecting line
-          calloutsGroup
-            .append("line")
-            .attr("class", "state-callout-line")
-            .attr("x1", centroid[0])
-            .attr("y1", centroid[1])
-            .attr("x2", pillX - 18)
-            .attr("y2", pillY );
+          let pill = initializeCallout(calloutsGroup, smallData, smallAbbr, centroid);
 
-          // Draw interactive pill group
-          const pill = calloutsGroup
-            .append("g")
-            .datum(value)
-            .attr("class", "state-callout-pill")
-            .attr("transform", `translate(${pillX}, ${pillY})`)
-            .on("click", (event) => {
+          pill.on("click", (event) => {
               event.stopPropagation();
-              zoomToState(feature, key);
+              zoomToState(feature, smallAbbr);
             })
             .on("mouseover", () => {
               statesGroup
                 .selectAll(".state-boundary")
-                  .filter((f) => getNameToAbbr(f.properties.name) === key)
+                  .filter((f) => getNameToAbbr(f.properties.name) === smallAbbr)
                 .classed("hover", true);
             })
             .on("mouseout", () => {
               statesGroup.selectAll(".state-boundary").classed("hover", false);
             });
-
-          pill
-            .append("rect")
-            .attr("rx", 8)
-            .attr("ry", 8)
-            .attr("x", -18)
-            .attr("y", -10)
-            .attr("width", 36)
-            .attr("height", 20)
-            .attr("class", "state-callout-bg");
-
-          pill
-            .append("text")
-            .text(key)
-            .attr("text-anchor", "middle")
-            .attr("dy", "4")
-            .attr("class", "state-callout-text");
         };
 
         // Reset Zoom action
