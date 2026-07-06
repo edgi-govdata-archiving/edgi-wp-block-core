@@ -1,4 +1,4 @@
-export function initializeCallout(calloutsGroup, data, abbr, centroid){
+export function setupCallouts(calloutsGroup, data, abbr, centroid){
 	calloutsGroup.append("line")
 	.attr("class", "state-callout-line")
 	.attr("x1", centroid[0])

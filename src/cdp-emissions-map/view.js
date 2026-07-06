@@ -14,8 +14,9 @@ import timeline from './components/timeline.js';
 import infoPanel from './components/info-panel.js';
 import toggle from './components/toggle.js';
 import callout from './components/callout.js';
-import { initializeCallout } from './components/callout.js';
+import { setupStatePaths } from './components/state-paths.js';
 import { setupStateLabels } from './components/state-labels.js';
+import { setupCallouts } from './components/callout.js';
 
 var infoPanelContainer;
 var statePaths;
@@ -256,13 +257,10 @@ document.addEventListener("DOMContentLoaded", () => {
         let activeState = null;
 
         // 3. Render States
-        statePaths = statesGroup
-          .selectAll(".state-boundary")
-          .data(statesFeatures)
-          .enter()
-          .append("path")
-          .attr("class", "state-boundary")
-          .attr("d", path)
+
+        statePaths = setupStatePaths(statesGroup, statesFeatures, path);
+        
+        statePaths
           .style("fill", (d) => {
               const abbr = getNameToAbbr(d.properties.name);
               //console.log(d.properties.name)
@@ -288,7 +286,7 @@ document.addEventListener("DOMContentLoaded", () => {
           if (!centroid) return;
 
 
-          let pill = initializeCallout(calloutsGroup, smallData, smallAbbr, centroid);
+          let pill = setupCallouts(calloutsGroup, smallData, smallAbbr, centroid);
 
           pill.on("click", (event) => {
               event.stopPropagation();

@@ -2,8 +2,9 @@
 @import url("./components/timeline.scss");
 @import url("./components/info-panel.scss");
 @import url("./components/toggle.scss");
-@import url("./components/callout.scss");
+@import url("./components/state-paths.scss");
 @import url("./components/state-labels.scss");
+@import url("./components/callout.scss");
 
 .wp-block-edgi-congressional-report-cards {
 	margin: 2.5rem auto;
@@ -117,26 +118,6 @@
 		}
 	}
 
-	/* Map Elements styling */
-	.state-boundary {
-		fill: #edf2f7;
-		stroke: #131913;
-		stroke-width: 0.5px;
-		vector-effect: non-scaling-stroke;
-		transition: fill 0.2s ease, stroke-width 0.2s ease;
-
-		&:hover, &.hover {
-			fill: #cbd5e0;
-			stroke-width: 1.5px;
-			cursor: pointer;
-		}
-
-		&.active {
-			fill: none !important;
-			stroke: oklch(49.369% 0.01594 145.492) !important;
-			stroke-width: 1px !important;
-		}
-	}
 
 	.district-boundary {
 		fill: #f7fafc;
