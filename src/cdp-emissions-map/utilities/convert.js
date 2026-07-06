@@ -135,3 +135,7 @@ nameToAbbr["United States Virgin Islands"] = "VI";
 export function getNameToAbbr(name) {
     return nameToAbbr[name]
 }
+
+export function getStateToFips(name) {
+    return stateToFips[name];
+}

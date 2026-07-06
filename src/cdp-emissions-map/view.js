@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
 
-import { getNameToAbbr } from "./utilities/convert.js"
+import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
 import SMALL_STATES from "./utilities/special-states.js"
 const smallStates = SMALL_STATES["SMALL_STATES"];
@@ -27,6 +27,53 @@ var currentYear = 2010;
 var currentStateAbbr = "";
 var emissionType = "total_direct" //or "total_supplier"
 var stateData = {};
+
+var countiesFeatures = {}
+var countiesGroup;
+
+var path;
+
+
+function renderCountiesForState(stateAbbr, scale) {
+  const stateFips = getStateToFips(stateAbbr);
+
+  // Clear previous counties
+  countiesGroup.selectAll(".county-boundary").remove();
+  countiesGroup.selectAll(".county-tooltip-line").remove();
+  countiesGroup.transition()
+            .duration(200)
+            .style("opacity", 0)
+
+  if (!stateFips) return;
+
+  console.log("state FIPS: " + stateFips);
+
+  const stateCounties = countiesFeatures.filter(
+    (d) => {
+      if (d.id){ 
+        return d.id.substring(0,2) == stateFips
+      }
+      return false;
+      }
+    )
+
+    console.log(stateCounties);
+
+  // Draw county boundaries
+  const countyPaths = countiesGroup
+    .selectAll(".county-boundary")
+    .data(stateCounties)
+    .enter()
+    .append("path")
+    .attr("d", path)
+    .attr("class", "county-boundary")
+    .style("stroke-width", `${0.6 / scale}px`)
+
+  countiesGroup.transition()
+            .duration(200)
+            .style("opacity", 1)
+
+  }
 
 //returns color fill of state based on currrent type of emissions + year
 function getStateColor(name){
@@ -120,6 +167,7 @@ document.addEventListener("DOMContentLoaded", () => {
   dashboards.forEach((dashboard) => {
     const csvUrl = dashboard.getAttribute("data-csv-url");
       const statesJsonUrl = dashboard.getAttribute("data-states-json-url");
+      const countiesJsonUrl = dashboard.getAttribute("data-counties-json-url");
       const stateGHGUrl = dashboard.getAttribute("data-states-ghg-json-url"); 
       const stateEmissionsUrl = dashboard.getAttribute("data-states-emissions-url");
 
@@ -186,10 +234,11 @@ document.addEventListener("DOMContentLoaded", () => {
     Promise.all([
       d3.csv(csvUrl),
       d3.json(statesJsonUrl),
+      d3.json(countiesJsonUrl),
       d3.json(stateGHGUrl),
               //d3.json(stateEmissionsUrl),
     ])
-        .then(([csvData, statesTopo, stateGHGUrl]) => {
+        .then(([csvData, statesTopo, countiesTopo, stateGHGUrl]) => {
         canvasContainer.innerHTML = "";
 
         // 1. Process data for fast lookup
@@ -225,7 +274,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .translate([width / 2, height / 2])
           .scale(1150);
 
-        const path = d3.geoPath().projection(projection);
+        path = d3.geoPath().projection(projection);
 
         // Extract GeoJSON features
         const statesFeatures = topojson.feature(
@@ -233,10 +282,18 @@ document.addEventListener("DOMContentLoaded", () => {
           statesTopo.objects.states,
         ).features;
 
+        countiesFeatures = topojson.feature(
+          countiesTopo,
+          countiesTopo.objects.counties,
+        ).features;
+
+
+
 
         // Base map group
         const mapGroup = svg.append("g").attr("class", "map-group");
-         const statesGroup = mapGroup.append("g").attr("class", "states-group");
+        const statesGroup = mapGroup.append("g").attr("class", "states-group");
+        countiesGroup = mapGroup.append("g").attr("class", "counties-group");
          const labelsGroup = mapGroup.append("g").attr("class", "labels-group");
 
         // Callouts group (rendered outside mapGroup so it doesn't scale/zoom)
@@ -363,9 +420,14 @@ document.addEventListener("DOMContentLoaded", () => {
           // Show Reset Button
           resetBtn.style.display = "flex";
 
+          // 2. Load Counties for Zoomed State
+          renderCountiesForState(stateAbbr, scale);
+
 
           // 3. Update info panel
           updateInfoPanel(stateAbbr, currentYear);
+
+
         }
 
         // Reset Map function

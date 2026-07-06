@@ -119,10 +119,10 @@
 	}
 
 
-	.district-boundary {
+	.county-boundary {
 		fill: #f7fafc;
 		stroke: #131913;
-		stroke-width: 0.5px;
+		stroke-width: 2px;
 		transition: all 0.2s ease;
 
 		&:hover, &.hover {
@@ -130,39 +130,6 @@
 			stroke: #3182ce;
 			stroke-width: 1.5px;
 			cursor: pointer;
-		}
-
-		&.party-democrat {
-			fill: rgba(66, 153, 225, 0.5);
-			stroke: rgba(66, 153, 225, 0.9);
-
-			&:hover, &.hover {
-				fill: rgba(66, 153, 225, 0.25);
-				stroke: #3182ce;
-				stroke-width: 1.5px;
-			}
-		}
-
-		&.party-republican {
-			fill: rgba(245, 101, 101, 0.5);
-			stroke: rgba(245, 101, 101, 0.9);
-
-			&:hover, &.hover {
-				fill: rgba(245, 101, 101, 0.25);
-				stroke: #e53e3e;
-				stroke-width: 1.5px;
-			}
-		}
-
-		&.party-independent {
-			fill: rgba(236, 201, 75, 0.15);
-			stroke: rgba(236, 201, 75, 0.3);
-
-			&:hover, &.hover {
-				fill: rgba(236, 201, 75, 0.3);
-				stroke: #d69e2e;
-				stroke-width: 1.5px;
-			}
 		}
 	}
 }
@@ -285,41 +252,6 @@
 			transform: translateY(-1px);
 		}
 
-		&.party-democrat {
-			background: #ebf8ff;
-			color: #2b6cb0;
-			border-color: #bee3f8;
-
-			&:hover {
-				background: #3182ce;
-				color: #ffffff;
-				border-color: #3182ce;
-			}
-		}
-
-		&.party-republican {
-			background: #fff5f5;
-			color: #c53030;
-			border-color: #fed7d7;
-
-			&:hover {
-				background: #e53e3e;
-				color: #ffffff;
-				border-color: #e53e3e;
-			}
-		}
-
-		&.party-independent {
-			background: #fefcbf;
-			color: #975a16;
-			border-color: #fef08a;
-
-			&:hover {
-				background: #d69e2e;
-				color: #ffffff;
-				border-color: #d69e2e;
-			}
-		}
 	}
 }
 
