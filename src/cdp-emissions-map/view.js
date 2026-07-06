@@ -15,6 +15,7 @@ import infoPanel from './components/info-panel.js';
 import toggle from './components/toggle.js';
 import callout from './components/callout.js';
 import { setupStatePaths } from './components/state-paths.js';
+
 import { setupStateLabels } from './components/state-labels.js';
 import { setupCallouts } from './components/callout.js';
 
@@ -27,9 +28,7 @@ var currentStateAbbr = "";
 var emissionType = "total_direct" //or "total_supplier"
 var stateData = {};
 
-var testColor = getDirectColor(5, [0, 10]);
-console.log("testColor: " + testColor);
-
+//returns color fill of state based on currrent type of emissions + year
 function getStateColor(name){
   var abbr = getNameToAbbr(name);
   const currentStateData = stateData[abbr];
@@ -49,25 +48,21 @@ function getStateColor(name){
   else{
     return "#ffffff"
   }
-
-  //const emissions = currentStateData["emissions"]["2010"][emissionType];
-
-
   
 }
 
+//updates current year of data
 function updateYear(year){
   currentYear = year;
 
   if (currentStateAbbr != ""){
-    updateDetailsPanel(currentStateAbbr, currentYear)
+    updateInfoPanel(currentStateAbbr, currentYear)
   }
 
   updateChoropleth();
 }
 
-function updateDetailsPanel(stateAbbr, year) {
-  //console.log(stateData)
+function updateInfoPanel(stateAbbr, year) {
   console.log("updating: " + stateAbbr)
 
   currentStateAbbr = stateAbbr;
@@ -83,7 +78,6 @@ function updateDetailsPanel(stateAbbr, year) {
   const emissions = currentState["emissions"][year][emissionType];
   const stateName = currentState.name;
 
-  //infoPanel.test = stateName;
   currentStateLabel.innerHTML = stateName
 
   if (emissionType == "total_direct"){
@@ -115,7 +109,7 @@ function toggleEmissionsType(){
     emissionType = "total_direct";
   }
 
-  updateDetailsPanel(currentStateAbbr, currentYear);
+  updateInfoPanel(currentStateAbbr, currentYear);
   updateChoropleth();
 }
 
@@ -146,7 +140,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const mapContainer = dashboard.querySelector(".edgi-map-layout");
 
     const canvasContainer = dashboard.querySelector(".edgi-map-canvas");
-    const detailsPanel = dashboard.querySelector(".details-panel");
     const resetBtn = dashboard.querySelector(".edgi-btn-reset");
     const wrapper = dashboard.querySelector(".edgi-map-canvas-wrapper");
 
@@ -155,9 +148,6 @@ document.addEventListener("DOMContentLoaded", () => {
     wrapper.appendChild(infoPanelContainer);
     currentStateLabel = infoPanelContainer.querySelector("#currentState")
     currentEmissionsLabel = infoPanelContainer.querySelector("#stateEmissions")
-    //currentStateLabel.value = 'Hello there!';
-
-      
     
     let timelineContainer = document.createElement("div");
     timelineContainer.innerHTML = timeline;
@@ -211,12 +201,10 @@ document.addEventListener("DOMContentLoaded", () => {
                //console.log(source)
 
                 stateData[source.state_abbr] = {
-
                     name: source.state_name,
                     abbr: source.state_abbr,
                     emissions: source.emissions
                 }
-                
             }
 
         // 2. Setup D3 canvas dimensions
@@ -376,8 +364,8 @@ document.addEventListener("DOMContentLoaded", () => {
           resetBtn.style.display = "flex";
 
 
-          // 3. Update Details Panel header & senators
-          updateDetailsPanel(stateAbbr, currentYear);
+          // 3. Update info panel
+          updateInfoPanel(stateAbbr, currentYear);
         }
 
         // Reset Map function

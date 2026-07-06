@@ -9,3 +9,8 @@ export function setupStatePaths(statesGroup, stateData, path){
 
 	return statePaths;
 }
+
+
+export function testFunction(){
+	console.log("working!")
+}
