@@ -27,9 +27,11 @@ var currentYear = 2010;
 var currentStateAbbr = "";
 var emissionType = "total_direct" //or "total_supplier"
 var stateData = {};
+var countyData = {};
 
 var countiesFeatures = {}
 var countiesGroup;
+var countyPaths;
 
 var path;
 
@@ -60,7 +62,7 @@ function renderCountiesForState(stateAbbr, scale) {
     console.log(stateCounties);
 
   // Draw county boundaries
-  const countyPaths = countiesGroup
+  countyPaths = countiesGroup
     .selectAll(".county-boundary")
     .data(stateCounties)
     .enter()
@@ -72,6 +74,9 @@ function renderCountiesForState(stateAbbr, scale) {
   countiesGroup.transition()
             .duration(200)
             .style("opacity", 1)
+
+
+  updateCountyChoropleth();
 
   }
 
@@ -95,7 +100,29 @@ function getStateColor(name){
   else{
     return "#ffffff"
   }
-  
+}
+
+//returns color fill of county based on currrent type of emissions + year
+function getCountyColor(countyFips){
+  console.log(countyFips)
+  //var abbr = getNameToAbbr(name);
+  const currentCountyData = countyData[countyFips];
+  var yearString = currentYear.toString()
+  var emissionsData = currentCountyData["emissions"][yearString];
+
+  if (emissionsData){
+    var emissions = emissionsData[emissionType];
+
+    if (emissionType == "total_direct"){
+      return getDirectColor(emissions, [0, 10000000])
+    }
+    else{
+      return getSupplierColor(emissions, [0, 10000000])
+    }
+  }
+  else{
+    return "#ffffff"
+  }
 }
 
 //updates current year of data
@@ -142,6 +169,15 @@ function updateChoropleth(){
           });
 }
 
+function updateCountyChoropleth(){
+   //countyPaths.style("fill", "magenta");
+   countyPaths.style("fill", (d) => {
+              console.log("county path data: " + d.id);
+              return getCountyColor(d.id)
+                
+          });
+}
+
 function resetState() {
   currentStateAbbr = "";
   currentStateLabel.innerHTML = "Select state..."
@@ -169,9 +205,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const statesJsonUrl = dashboard.getAttribute("data-states-json-url");
       const countiesJsonUrl = dashboard.getAttribute("data-counties-json-url");
       const stateGHGUrl = dashboard.getAttribute("data-states-ghg-json-url"); 
-      const stateEmissionsUrl = dashboard.getAttribute("data-states-emissions-url");
+      const countyGHGUrl = dashboard.getAttribute("data-counties-ghg-url");
 
-      if (!csvUrl || !statesJsonUrl || !stateGHGUrl) { // || !stateEmissionsUrl
+      if (!csvUrl || !statesJsonUrl || !countiesJsonUrl || !stateGHGUrl || !countyGHGUrl) {
       console.error("CDP Map Dashboard: Missing required data attributes!");
       return;
     }
@@ -236,25 +272,43 @@ document.addEventListener("DOMContentLoaded", () => {
       d3.json(statesJsonUrl),
       d3.json(countiesJsonUrl),
       d3.json(stateGHGUrl),
-              //d3.json(stateEmissionsUrl),
+      d3.json(countyGHGUrl),
     ])
-        .then(([csvData, statesTopo, countiesTopo, stateGHGUrl]) => {
+        .then(([csvData, statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl]) => {
         canvasContainer.innerHTML = "";
 
         // 1. Process data for fast lookup
-            const stateDataArray = stateGHGUrl["objects"]["data"]["geometries"];
-            //console.log(stateDataArray)
+        const stateDataArray = stateGHGUrl["objects"]["data"]["geometries"];
+        //console.log(stateDataArray)
 
-            for (var stateKey in stateDataArray) {
-                var source = stateDataArray[stateKey]["properties"]
-               //console.log(source)
+        for (var stateKey in stateDataArray) {
+            var source = stateDataArray[stateKey]["properties"]
+           //console.log(source)
 
-                stateData[source.state_abbr] = {
-                    name: source.state_name,
-                    abbr: source.state_abbr,
-                    emissions: source.emissions
-                }
+            stateData[source.state_abbr] = {
+                name: source.state_name,
+                abbr: source.state_abbr,
+                emissions: source.emissions
             }
+        }
+
+        const countyDataArray = countyGHGUrl["objects"]["data"]["geometries"];
+        //console.log(stateDataArray)
+
+        for (var countyKey in countyDataArray) {
+           var source = countyDataArray[countyKey]["properties"]
+           //console.log(source)
+
+            countyData[source.county_fips] = {
+                county_name: source.county_name,
+                county_fips: source.county_fips,
+                state_abbr: source.state,
+                emissions: source.emissions
+            }
+        }
+
+        console.log(countyData);
+
 
         // 2. Setup D3 canvas dimensions
         const width = 960;
@@ -286,9 +340,6 @@ document.addEventListener("DOMContentLoaded", () => {
           countiesTopo,
           countiesTopo.objects.counties,
         ).features;
-
-
-
 
         // Base map group
         const mapGroup = svg.append("g").attr("class", "map-group");
@@ -453,6 +504,10 @@ document.addEventListener("DOMContentLoaded", () => {
             .style("stroke-width", "1px")
             .style("opacity", 1)
             .attr("class", "state-boundary");
+
+          countiesGroup.transition()
+            .duration(200)
+            .style("opacity", 0)
 
           // Restore callouts group visibility
           calloutsGroup
