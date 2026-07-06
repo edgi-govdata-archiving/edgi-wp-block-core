@@ -3,6 +3,7 @@
 @import url("./components/info-panel.scss");
 @import url("./components/toggle.scss");
 @import url("./components/callout.scss");
+@import url("./components/state-labels.scss");
 
 .wp-block-edgi-congressional-report-cards {
 	margin: 2.5rem auto;
@@ -135,17 +136,6 @@
 			stroke: oklch(49.369% 0.01594 145.492) !important;
 			stroke-width: 1px !important;
 		}
-	}
-
-	.state-label {
-		font-family: 'Mona Sans', sans-serif;
-		font-size: 10px;
-		font-weight: 600;
-		fill: #4a5568;
-		text-anchor: middle;
-		dominant-baseline: middle;
-		pointer-events: none;
-		letter-spacing: -0.2px;
 	}
 
 	.district-boundary {

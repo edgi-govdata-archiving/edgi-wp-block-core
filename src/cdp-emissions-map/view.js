@@ -15,6 +15,7 @@ import infoPanel from './components/info-panel.js';
 import toggle from './components/toggle.js';
 import callout from './components/callout.js';
 import { initializeCallout } from './components/callout.js';
+import { setupStateLabels } from './components/state-labels.js';
 
 var infoPanelContainer;
 var statePaths;
@@ -275,35 +276,7 @@ document.addEventListener("DOMContentLoaded", () => {
           });
 
         //console.log(statePaths)
-
-        // Render state abbreviation labels
-        const stateLabels = labelsGroup
-          .selectAll(".state-label")
-          .data(statesFeatures)
-          .enter()
-          .append("text")
-          .attr("class", "state-label")
-          .attr("transform", (d) => {
-            const centroid = path.centroid(d);
-            if (!centroid) return "";
-              const abbr = getNameToAbbr(d.properties.name);
-            let x = centroid[0];
-            let y = centroid[1];
-            
-            // Adjustments for better label alignment on islands/peninsulas
-            if (abbr in irregularStates){
-              x += irregularStates[abbr].centroidX;
-              y += irregularStates[abbr].centroidY;
-            }
-            return `translate(${x}, ${y})`;
-          })
-          .text((d) => {
-              const abbr = getNameToAbbr(d.properties.name);
-            // Skip small states to prevent label overlap/clutter
-            return abbr && !smallStates[abbr] ? abbr : "";
-          });
-
-        // 4. Render SVG Line Callouts for Small States
+        const stateLabels = setupStateLabels(labelsGroup, statesFeatures, path)
 
         for (const [smallAbbr, smallData] of Object.entries(smallStates)){ 
           const feature = statesFeatures.find(
