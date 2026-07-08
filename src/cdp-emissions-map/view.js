@@ -50,8 +50,6 @@ function renderCountiesForState(stateAbbr, scale) {
 
   if (!stateFips) return;
 
-  console.log("state FIPS: " + stateFips);
-
   const stateCounties = countiesFeatures.filter(
     (d) => {
       if (d.id){ 
@@ -60,8 +58,6 @@ function renderCountiesForState(stateAbbr, scale) {
       return false;
       }
     )
-
-    console.log(stateCounties);
 
   // Draw county boundaries
   countyPaths = countiesGroup
@@ -79,7 +75,6 @@ function renderCountiesForState(stateAbbr, scale) {
 
 
   updateCountyChoropleth();
-
   }
 
 //returns color fill of state based on currrent type of emissions + year
@@ -106,8 +101,6 @@ function getStateColor(name){
 
 //returns color fill of county based on currrent type of emissions + year
 function getCountyColor(countyFips){
-  console.log(countyFips)
-  //var abbr = getNameToAbbr(name);
   const currentCountyData = countyData[countyFips];
   var yearString = currentYear.toString()
   var emissionsData = currentCountyData["emissions"][yearString];
@@ -144,16 +137,11 @@ function updateYear(year){
 }
 
 function updateInfoPanel(stateAbbr, year) {
-  console.log("updating: " + stateAbbr)
-
   currentStateAbbr = stateAbbr;
   const currentState = stateData[stateAbbr];
 
   if (!currentState) {
     return;
-  }
-  else {
-    console.log(currentState)
   }
 
   const emissions = currentState["emissions"][year][emissionType];
@@ -171,18 +159,15 @@ function updateInfoPanel(stateAbbr, year) {
 
 function updateChoropleth(){
    statePaths.style("fill", (d) => {
-              const abbr = getNameToAbbr(d.properties.name);
-              return getStateColor(d.properties.name)
-          });
+          const abbr = getNameToAbbr(d.properties.name);
+          return getStateColor(d.properties.name)
+      });
 }
 
 function updateCountyChoropleth(){
-   //countyPaths.style("fill", "magenta");
    countyPaths.style("fill", (d) => {
-              console.log("county path data: " + d.id);
-              return getCountyColor(d.id)
-                
-          });
+          return getCountyColor(d.id)   
+      });
 }
 
 function resetState() {
@@ -242,6 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
     infoPanelContainer = document.createElement("div");
     infoPanelContainer.innerHTML = infoPanel;
     wrapper.appendChild(infoPanelContainer);
+
     currentStateLabel = infoPanelContainer.querySelector("#currentState")
     currentEmissionsLabel = infoPanelContainer.querySelector("#stateEmissions")
     
@@ -250,7 +236,6 @@ document.addEventListener("DOMContentLoaded", () => {
     dashboard.appendChild(timelineContainer);
 
     document.querySelector("#yearslider").addEventListener("change", function() {
-      console.log(this.value)
       updateYear(this.value)
     });
 
@@ -260,19 +245,8 @@ document.addEventListener("DOMContentLoaded", () => {
     dashboard.appendChild(toggleContainer);
 
     document.querySelector("#toggle").addEventListener("change", function() {
-      console.log("toggled!")
       toggleEmissionsType();
     });
-
-
-    let helperContainer = dashboard.querySelector(
-      ".edgi-small-districts-helper",
-    );
-    if (!helperContainer && wrapper) {
-      helperContainer = document.createElement("div");
-      helperContainer.className = "edgi-small-districts-helper";
-      wrapper.appendChild(helperContainer);
-    }
 
     canvasContainer.innerHTML =
       '<div style="padding: 20px; font-weight:300; color:#afe0d7;">Loading environmental data and maps...</div>';
@@ -291,11 +265,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 1. Process data for fast lookup
         const stateDataArray = stateGHGUrl["objects"]["data"]["geometries"];
-        //console.log(stateDataArray)
 
         for (var stateKey in stateDataArray) {
             var source = stateDataArray[stateKey]["properties"]
-           //console.log(source)
 
             stateData[source.state_abbr] = {
                 name: source.state_name,
@@ -305,11 +277,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         const countyDataArray = countyGHGUrl["objects"]["data"]["geometries"];
-        //console.log(stateDataArray)
 
         for (var countyKey in countyDataArray) {
            var source = countyDataArray[countyKey]["properties"]
-           //console.log(source)
 
             countyData[source.county_fips] = {
                 county_name: source.county_name,
@@ -318,9 +288,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 emissions: source.emissions
             }
         }
-
-        console.log(countyData);
-
 
         // 2. Setup D3 canvas dimensions
         const width = 960;
@@ -357,7 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const mapGroup = svg.append("g").attr("class", "map-group");
         const statesGroup = mapGroup.append("g").attr("class", "states-group");
         countiesGroup = mapGroup.append("g").attr("class", "counties-group");
-         const labelsGroup = mapGroup.append("g").attr("class", "labels-group");
+        const labelsGroup = mapGroup.append("g").attr("class", "labels-group");
 
         // Callouts group (rendered outside mapGroup so it doesn't scale/zoom)
         const calloutsGroup = svg.append("g").attr("class", "callouts-group");
@@ -365,13 +332,11 @@ document.addEventListener("DOMContentLoaded", () => {
         let activeState = null;
 
         // 3. Render States
-
         statePaths = setupStatePaths(statesGroup, statesFeatures, path);
         
         statePaths
           .style("fill", (d) => {
               const abbr = getNameToAbbr(d.properties.name);
-              //console.log(d.properties.name)
 
               return getStateColor(d.properties.name)
           })
@@ -381,7 +346,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (abbr) zoomToState(d, abbr);
           });
 
-        //console.log(statePaths)
         const stateLabels = setupStateLabels(labelsGroup, statesFeatures, path)
 
         for (const [smallAbbr, smallData] of Object.entries(smallStates)){ 
@@ -438,10 +402,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const y = (bounds[0][1] + bounds[1][1]) / 2;
 
           // Standard padding scale
-          const scale = Math.max(
-            1,
-            Math.min(8, 0.85 / Math.max(dx / width, dy / height)),
-          );
+          const scale = Math.max(1, Math.min(8, 0.85 / Math.max(dx / width, dy / height)));
           const translate = [width / 2 - scale * x, height / 2 - scale * y];
 
           // 1. Zoom Transition
@@ -487,11 +448,8 @@ document.addEventListener("DOMContentLoaded", () => {
           // 2. Load Counties for Zoomed State
           renderCountiesForState(stateAbbr, scale);
 
-
           // 3. Update info panel
           updateInfoPanel(stateAbbr, currentYear);
-
-
         }
 
         // Reset Map function
@@ -533,13 +491,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
           // Restore state labels
           stateLabels.transition().delay(400).duration(400).style("opacity", 1);
-
-
-          // Hide helper buttons container
-          if (helperContainer) {
-            helperContainer.innerHTML = "";
-            helperContainer.style.display = "none";
-          }
 
           // Hide Reset Button
           resetBtn.style.display = "none";
