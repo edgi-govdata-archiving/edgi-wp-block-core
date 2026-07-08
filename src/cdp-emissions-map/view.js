@@ -35,6 +35,8 @@ var countyPaths;
 
 var path;
 
+var zoomed = false;
+
 
 function renderCountiesForState(stateAbbr, scale) {
   const stateFips = getStateToFips(stateAbbr);
@@ -133,7 +135,12 @@ function updateYear(year){
     updateInfoPanel(currentStateAbbr, currentYear)
   }
 
-  updateChoropleth();
+  if (zoomed){
+     updateCountyChoropleth();
+  }
+  else{
+     updateChoropleth();
+  }
 }
 
 function updateInfoPanel(stateAbbr, year) {
@@ -193,7 +200,12 @@ function toggleEmissionsType(){
   }
 
   updateInfoPanel(currentStateAbbr, currentYear);
-  updateChoropleth();
+  if (zoomed){
+     updateCountyChoropleth();
+  }
+  else{
+     updateChoropleth();
+  }
 }
 
 
@@ -410,6 +422,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Zoom to State implementation
         function zoomToState(feature, stateAbbr) {
+          zoomed = true;
           activeState = stateAbbr;
 
           // Highlight callout pill if active
@@ -485,6 +498,8 @@ document.addEventListener("DOMContentLoaded", () => {
         function resetMap() {
           resetState();
           activeState = null;
+          zoomed = false;
+          updateChoropleth();
 
           // Clear active state callout highlights
           calloutsGroup
