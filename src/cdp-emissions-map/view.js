@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
-
+import { processStateData, processCountyData } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
 import SMALL_STATES from "./utilities/special-states.js"
@@ -264,30 +264,8 @@ document.addEventListener("DOMContentLoaded", () => {
         canvasContainer.innerHTML = "";
 
         // 1. Process data for fast lookup
-        const stateDataArray = stateGHGUrl["objects"]["data"]["geometries"];
-
-        for (var stateKey in stateDataArray) {
-            var source = stateDataArray[stateKey]["properties"]
-
-            stateData[source.state_abbr] = {
-                name: source.state_name,
-                abbr: source.state_abbr,
-                emissions: source.emissions
-            }
-        }
-
-        const countyDataArray = countyGHGUrl["objects"]["data"]["geometries"];
-
-        for (var countyKey in countyDataArray) {
-           var source = countyDataArray[countyKey]["properties"]
-
-            countyData[source.county_fips] = {
-                county_name: source.county_name,
-                county_fips: source.county_fips,
-                state_abbr: source.state,
-                emissions: source.emissions
-            }
-        }
+        stateData = processStateData(stateGHGUrl);
+        countyData = processCountyData(countyGHGUrl);
 
         // 2. Setup D3 canvas dimensions
         const width = 960;
