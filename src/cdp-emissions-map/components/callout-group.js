@@ -32,3 +32,25 @@ export function setupCallouts(calloutsGroup, data, abbr, centroid){
 	return pill; 
 }
 
+export function showCallouts(calloutsGroup){
+	calloutsGroup
+		.transition()
+		.duration(400)
+		.style("opacity", 1)
+		.style("pointer-events", "auto");
+
+}
+
+export function hideCallouts(calloutsGroup){
+	calloutsGroup
+		.transition()
+		.duration(200)
+		.style("opacity", 0)
+		.style("pointer-events", "none");
+}
+
+export function resetCallouts(calloutsGroup){
+	calloutsGroup
+		.selectAll(".state-callout-pill")
+		.classed("active", false);
+}

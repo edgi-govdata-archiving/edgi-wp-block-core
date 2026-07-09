@@ -13,17 +13,17 @@ const irregularStates = IRREGULAR_STATES["IRREGULAR_STATES"];
 import timeline from './components/timeline.js';
 import infoPanel from './components/info-panel.js';
 import toggle from './components/toggle.js';
-import callout from './components/callout.js';
-import { setupStatePaths } from './components/state-paths.js';
+import callout from './components/callout-group.js';
+import { setupStatePaths, hover, exitHover, zoomInStates, zoomOutStates} from './components/state-paths.js';
 
 import { setupStateLabels } from './components/state-labels.js';
-import { setupCallouts } from './components/callout.js';
+import { setupCallouts, showCallouts, hideCallouts, resetCallouts } from './components/callout-group.js';
 
 var infoPanelContainer;
 var statePaths;
 var currentStateLabel;
 var currentEmissionsLabel;
-var currentYear = 2010;
+var currentYear = 2016;
 var currentStateAbbr = "";
 var emissionType = "total_direct" //or "total_supplier"
 var stateData = {};
@@ -343,13 +343,10 @@ document.addEventListener("DOMContentLoaded", () => {
               zoomToState(feature, smallAbbr);
             })
             .on("mouseover", () => {
-              statesGroup
-                .selectAll(".state-boundary")
-                  .filter((f) => getNameToAbbr(f.properties.name) === smallAbbr)
-                .classed("hover", true);
+                hover(statesGroup, smallAbbr)
             })
             .on("mouseout", () => {
-              statesGroup.selectAll(".state-boundary").classed("hover", false);
+               exitHover(statesGroup);
             });
         };
 
@@ -389,36 +386,13 @@ document.addEventListener("DOMContentLoaded", () => {
             .duration(800)
             .attr("transform", `translate(${translate})scale(${scale})`);
 
-          // Thin outline stroke when zoomed in
-          statePaths
-            .transition()
-            .duration(800)
-            .style("stroke-width", `${1.5 / scale}px`);
-
-          // Fade out other states
-          statePaths
-            .transition()
-            .duration(400)
-            .style("opacity", (d) =>
-                getNameToAbbr(d.properties.name) === stateAbbr ? 1 : 0.4,
-            )
-            .attr(
-              "class",
-              (d) =>
-                `state-boundary${
-                  getNameToAbbr(d.properties.name) === stateAbbr ? " active" : ""
-                }`,
-            );
+          zoomInStates(statePaths, scale, stateAbbr)
 
           // Hide state labels
           stateLabels.transition().duration(200).style("opacity", 0);
 
           // Hide callouts group
-          calloutsGroup
-            .transition()
-            .duration(200)
-            .style("opacity", 0)
-            .style("pointer-events", "none");
+          hideCallouts(calloutsGroup);
 
           // Show Reset Button
           resetBtn.style.display = "flex";
@@ -438,9 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
           updateChoropleth();
 
           // Clear active state callout highlights
-          calloutsGroup
-            .selectAll(".state-callout-pill")
-            .classed("active", false);
+          resetCallouts(calloutsGroup);
 
           // Reset zoom transformation
           mapGroup
@@ -448,24 +420,14 @@ document.addEventListener("DOMContentLoaded", () => {
             .duration(800)
             .attr("transform", "translate(0,0)scale(1)");
 
-          // Restore state outline stroke width and opacity
-          statePaths
-            .transition()
-            .duration(800)
-            .style("stroke-width", "1px")
-            .style("opacity", 1)
-            .attr("class", "state-boundary");
+          zoomOutStates(statePaths);
 
           countiesGroup.transition()
             .duration(200)
             .style("opacity", 0)
 
           // Restore callouts group visibility
-          calloutsGroup
-            .transition()
-            .duration(400)
-            .style("opacity", 1)
-            .style("pointer-events", "auto");
+          showCallouts(calloutsGroup);
 
           // Restore state labels
           stateLabels.transition().delay(400).duration(400).style("opacity", 1);
