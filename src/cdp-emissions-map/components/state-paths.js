@@ -13,6 +13,7 @@ export function setupStatePaths(statesGroup, stateData, path, getStateColor, zoo
 			return getStateColor(d.properties.name)
 		})
 		.on("click", (event, d) => {
+			console.log(d);
 			event.stopPropagation();
 			const abbr = getNameToAbbr(d.properties.name);
 			if (abbr) zoomToState(d, abbr);
@@ -33,7 +34,7 @@ export function exitStateHover(statesGroup){
 }
 
 
-export function zoomInStates(statePaths, scale, selectedAbbr){
+export function selectState(statePaths, scale, selectedAbbr){
 	// Thin outline stroke when zoomed in
 	statePaths
 		.transition()
@@ -52,7 +53,7 @@ export function zoomInStates(statePaths, scale, selectedAbbr){
 	);
 }
 
-export function zoomOutStates(statePaths){
+export function deselectState(statePaths){
 	// Restore state outline stroke width and opacity
 	statePaths
 		.transition()

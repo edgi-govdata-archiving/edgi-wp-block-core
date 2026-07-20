@@ -36,3 +36,16 @@ export function setupStateLabels(labelsGroup, stateData, statePath){
 
           return stateLabels;
 }
+
+export function hideStateLabels(stateLabels){
+  stateLabels.transition()
+            .duration(200)
+            .style("opacity", 0);
+}
+
+export function showStateLabels(stateLabels){
+  stateLabels.transition()
+            .delay(400)
+            .duration(400)
+            .style("opacity", 1);
+}

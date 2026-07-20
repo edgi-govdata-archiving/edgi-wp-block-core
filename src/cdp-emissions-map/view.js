@@ -14,10 +14,14 @@ import timeline from './components/timeline.js';
 import { setupCountryInfo, setupStateInfo } from './components/info-panel.js';
 import toggle from './components/toggle.js';
 import callout from './components/callout-group.js';
-import { setupStatePaths, stateHover, exitStateHover, zoomInStates, zoomOutStates} from './components/state-paths.js';
+import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState} from './components/state-paths.js';
+import { setupCountyPaths, resetCountyPaths, selectCounty, deselectCounty} from './components/county-paths.js';
+import { zoomToFeature, resetZoom} from './components/map-zoom.js';
 
-import { setupStateLabels } from './components/state-labels.js';
+import { setupStateLabels, showStateLabels, hideStateLabels } from './components/state-labels.js';
 import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetCallouts } from './components/callout-group.js';
+
+import Locale from "./utilities/locale.js"
 
 var infoPanelContainer;
 var statePaths;
@@ -33,20 +37,38 @@ var countiesFeatures = {}
 var countiesGroup;
 var countyPaths;
 
+var mapGroup;
+var statesGroup;
+var labelsGroup;
+var stateLabels;
+var calloutsGroup;
+var resetBtn;
+
 var path;
 
+var zoomLevels = ["country", "state", "county", "facility"];
+var currentZoomLevel = 0;
+var currentZoomLabel = zoomLevels[currentZoomLevel]; 
 var zoomed = false;
+
+//D3 canvas dimensions
+const width = 960;
+const height = 600;
+
+var scale = 1;
+
+var currentState = {
+  "abbr" : "",
+  "id" : "",
+  "path" : "",
+}
+var currentCounty = null;
 
 
 function renderCountiesForState(stateAbbr, scale) {
   const stateFips = getStateToFips(stateAbbr);
 
-  // Clear previous counties
-  countiesGroup.selectAll(".county-boundary").remove();
-  countiesGroup.selectAll(".county-tooltip-line").remove();
-  countiesGroup.transition()
-            .duration(200)
-            .style("opacity", 0)
+  resetCountyPaths(countiesGroup);
 
   if (!stateFips) return;
 
@@ -59,20 +81,7 @@ function renderCountiesForState(stateAbbr, scale) {
       }
     )
 
-  // Draw county boundaries
-  countyPaths = countiesGroup
-    .selectAll(".county-boundary")
-    .data(stateCounties)
-    .enter()
-    .append("path")
-    .attr("d", path)
-    .attr("class", "county-boundary")
-    .style("stroke-width", `${0.6 / scale}px`)
-
-  countiesGroup.transition()
-            .duration(200)
-            .style("opacity", 1)
-
+  countyPaths = setupCountyPaths(countiesGroup, path, stateCounties, countyData, scale, setCurrentCounty)
 
   updateCountyChoropleth();
   }
@@ -138,14 +147,14 @@ function updateYear(year){
 
 function updateInfoPanel(stateAbbr, year) {
   currentStateAbbr = stateAbbr;
-  const currentState = stateData[stateAbbr];
+  const currentStateInfo = stateData[stateAbbr];
 
-  if (!currentState) {
+  if (!currentStateInfo) {
     return;
   }
 
-  const emissions = currentState["emissions"][year][emissionType];
-  const stateName = currentState.name;
+  const emissions = currentStateInfo["emissions"][year][emissionType];
+  const stateName = currentStateInfo.name;
 
   infoPanelContainer.innerHTML = setupStateInfo();
   //currentStateLabel.innerHTML = stateName
@@ -196,6 +205,96 @@ function toggleEmissionsType(){
   }
 }
 
+function setCurrentState(feature, stateAbbr){
+  currentState = new Locale(feature.id);
+  currentState.abbr = stateAbbr;
+  currentState.feature = feature;
+
+  zoomToState();
+}
+
+function setCurrentCounty(feature, countyId){
+  currentCounty = new Locale(countyId)
+  currentCounty.feature = feature;
+
+  zoomToCounty();
+}
+
+// Zoom to State implementation
+function zoomToState() {
+  currentZoomLevel = 1;
+
+  // Highlight callout pill if active
+  calloutsGroup
+    .selectAll(".state-callout-pill")
+    .classed("active", (d) => d.abbr === currentState.abbr);
+
+  scale = zoomToFeature(mapGroup, path, width, height, currentState.feature);
+
+  selectState(statePaths, scale, currentState.abbr)
+  hideStateLabels(stateLabels);
+  hideCallouts(calloutsGroup);
+  renderCountiesForState(currentState.abbr, scale);
+  updateInfoPanel(currentState.abbr, currentYear);
+
+  // Show Reset Button
+  resetBtn.style.display = "flex";
+  currentZoomLevel = 1;
+}
+
+
+function zoomToCounty() {
+  console.log("county feature: " + currentCounty.feature);
+  scale = zoomToFeature(mapGroup, path, width, height, currentCounty.feature);
+
+  //selectState(statePaths, scale, stateAbbr)
+  //hideStateLabels(stateLabels);
+  //hideCallouts(calloutsGroup);
+  //renderCountiesForState(stateAbbr, scale);
+  
+  //updateInfoPanel(stateAbbr, currentYear);
+
+  // Show Reset Button
+  resetBtn.style.display = "flex";
+  currentZoomLevel = 2;
+}
+
+function zoomOutState() {
+  resetState();
+  currentState = null;
+  zoomed = false;
+  updateChoropleth();
+
+  // Clear active state callout highlights
+  resetCallouts(calloutsGroup);
+  resetZoom(mapGroup);
+  deselectState(statePaths);
+
+  countiesGroup.transition()
+    .duration(200)
+    .style("opacity", 0)
+
+  showCallouts(calloutsGroup);
+  showStateLabels(stateLabels)
+
+  // Hide Reset Button
+  resetBtn.style.display = "none";
+  tooltip.style.display = "none";
+}
+
+function zoomOutCounty() {
+  //resetState();
+  //currentState = null;
+  //zoomed = false;
+  updateCountyChoropleth();
+
+  deselectCounty(countyPaths);
+  zoomToState()
+
+  // countiesGroup.transition()
+  //   .duration(200)
+  //   .style("opacity", 0)
+}
 
 document.addEventListener("DOMContentLoaded", () => {
   const dashboards = document.querySelectorAll(".edgi-visualization-dashboard");
@@ -224,7 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const mapContainer = dashboard.querySelector(".edgi-map-layout");
 
     const canvasContainer = dashboard.querySelector(".edgi-map-canvas");
-    const resetBtn = dashboard.querySelector(".edgi-btn-reset");
+    resetBtn = dashboard.querySelector(".edgi-btn-reset");
     const wrapper = dashboard.querySelector(".edgi-map-canvas-wrapper");
 
     infoPanelContainer = document.createElement("div");
@@ -270,10 +369,6 @@ document.addEventListener("DOMContentLoaded", () => {
         stateData = processStateData(stateGHGUrl);
         countyData = processCountyData(countyGHGUrl);
 
-        // 2. Setup D3 canvas dimensions
-        const width = 960;
-        const height = 600;
-
         const svg = d3
           .create("svg")
           .attr("viewBox", `0 0 ${width} ${height}`)
@@ -302,20 +397,18 @@ document.addEventListener("DOMContentLoaded", () => {
         ).features;
 
         // Base map group
-        const mapGroup = svg.append("g").attr("class", "map-group");
-        const statesGroup = mapGroup.append("g").attr("class", "states-group");
+        mapGroup = svg.append("g").attr("class", "map-group");
+        statesGroup = mapGroup.append("g").attr("class", "states-group");
         countiesGroup = mapGroup.append("g").attr("class", "counties-group");
-        const labelsGroup = mapGroup.append("g").attr("class", "labels-group");
+        labelsGroup = mapGroup.append("g").attr("class", "labels-group");
 
         // Callouts group (rendered outside mapGroup so it doesn't scale/zoom)
-        const calloutsGroup = svg.append("g").attr("class", "callouts-group");
-
-        let activeState = null;
+        calloutsGroup = svg.append("g").attr("class", "callouts-group");
 
         // 3. Render States
-        statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, zoomToState);
+        statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState);
 
-        const stateLabels = setupStateLabels(labelsGroup, statesFeatures, path)
+        stateLabels = setupStateLabels(labelsGroup, statesFeatures, path)
 
         for (const [smallAbbr, smallData] of Object.entries(smallStates)){ 
           const feature = statesFeatures.find(
@@ -328,96 +421,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
           let pill = setupCallouts(calloutsGroup, smallData, smallAbbr, centroid);
-          setupPillInteraction(pill, feature, statesGroup, zoomToState, stateHover, exitStateHover);
+          setupPillInteraction(pill, feature, statesGroup, setCurrentState, stateHover, exitStateHover);
         };
 
         // Reset Zoom action
         resetBtn.addEventListener("click", () => {
-          resetMap();
+          if (currentZoomLevel == 2){ //if zoomed to county
+            zoomToState()
+          }
+          else if (currentZoomLevel == 1){ //if zoomed to state
+            zoomOutState();
+          }
         });
 
-        svg.on("click", () => {
-          resetMap();
-        });
-
-        // Zoom to State implementation
-        function zoomToState(feature, stateAbbr) {
-          zoomed = true;
-          activeState = stateAbbr;
-
-          // Highlight callout pill if active
-          calloutsGroup
-            .selectAll(".state-callout-pill")
-            .classed("active", (d) => d.abbr === stateAbbr);
-
-          // Calculate zoom bounds
-          const bounds = path.bounds(feature);
-          const dx = bounds[1][0] - bounds[0][0];
-          const dy = bounds[1][1] - bounds[0][1];
-          const x = (bounds[0][0] + bounds[1][0]) / 2;
-          const y = (bounds[0][1] + bounds[1][1]) / 2;
-
-          // Standard padding scale
-          const scale = Math.max(1, Math.min(8, 0.85 / Math.max(dx / width, dy / height)));
-          const translate = [width / 2 - scale * x, height / 2 - scale * y];
-
-          // 1. Zoom Transition
-          mapGroup
-            .transition()
-            .duration(800)
-            .attr("transform", `translate(${translate})scale(${scale})`);
-
-          zoomInStates(statePaths, scale, stateAbbr)
-
-          // Hide state labels
-          stateLabels.transition().duration(200).style("opacity", 0);
-
-          // Hide callouts group
-          hideCallouts(calloutsGroup);
-
-          // Show Reset Button
-          resetBtn.style.display = "flex";
-
-          // 2. Load Counties for Zoomed State
-          renderCountiesForState(stateAbbr, scale);
-
-          // 3. Update info panel
-          updateInfoPanel(stateAbbr, currentYear);
-        }
-
-        // Reset Map function
-        function resetMap() {
-          resetState();
-          activeState = null;
-          zoomed = false;
-          updateChoropleth();
-
-          // Clear active state callout highlights
-          resetCallouts(calloutsGroup);
-
-          // Reset zoom transformation
-          mapGroup
-            .transition()
-            .duration(800)
-            .attr("transform", "translate(0,0)scale(1)");
-
-          zoomOutStates(statePaths);
-
-          countiesGroup.transition()
-            .duration(200)
-            .style("opacity", 0)
-
-          // Restore callouts group visibility
-          showCallouts(calloutsGroup);
-
-          // Restore state labels
-          stateLabels.transition().delay(400).duration(400).style("opacity", 1);
-
-          // Hide Reset Button
-          resetBtn.style.display = "none";
-          tooltip.style.display = "none";
-
-        }
+        // svg.on("click", () => {
+        //   zoomOutState();
+        // });
       })
       .catch((err) => {
         console.error(
