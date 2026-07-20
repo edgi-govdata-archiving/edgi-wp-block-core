@@ -11,13 +11,13 @@ import IRREGULAR_STATES from "./utilities/special-states.js"
 const irregularStates = IRREGULAR_STATES["IRREGULAR_STATES"];
 
 import timeline from './components/timeline.js';
-import infoPanel from './components/info-panel.js';
+import { setupCountryInfo, setupStateInfo } from './components/info-panel.js';
 import toggle from './components/toggle.js';
 import callout from './components/callout-group.js';
-import { setupStatePaths, hover, exitHover, zoomInStates, zoomOutStates} from './components/state-paths.js';
+import { setupStatePaths, stateHover, exitStateHover, zoomInStates, zoomOutStates} from './components/state-paths.js';
 
 import { setupStateLabels } from './components/state-labels.js';
-import { setupCallouts, showCallouts, hideCallouts, resetCallouts } from './components/callout-group.js';
+import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetCallouts } from './components/callout-group.js';
 
 var infoPanelContainer;
 var statePaths;
@@ -147,14 +147,15 @@ function updateInfoPanel(stateAbbr, year) {
   const emissions = currentState["emissions"][year][emissionType];
   const stateName = currentState.name;
 
-  currentStateLabel.innerHTML = stateName
+  infoPanelContainer.innerHTML = setupStateInfo();
+  //currentStateLabel.innerHTML = stateName
 
-  if (emissionType == "total_direct"){
-    currentEmissionsLabel.innerHTML = "Direct emissions: " + emissions;
-  }
-  else{
-    currentEmissionsLabel.innerHTML = "Supplier emissions: " + emissions;
-  }
+  // if (emissionType == "total_direct"){
+  //   currentEmissionsLabel.innerHTML = "Direct emissions: " + emissions;
+  // }
+  // else{
+  //   currentEmissionsLabel.innerHTML = "Supplier emissions: " + emissions;
+  // }
 }
 
 function updateChoropleth(){
@@ -172,8 +173,10 @@ function updateCountyChoropleth(){
 
 function resetState() {
   currentStateAbbr = "";
-  currentStateLabel.innerHTML = "Select state..."
-  currentEmissionsLabel.innerHTML = ""
+  
+  infoPanelContainer.innerHTML = setupCountryInfo();
+  // currentStateLabel.innerHTML = "Select state..."
+  // currentEmissionsLabel.innerHTML = ""
 }
 
 function toggleEmissionsType(){
@@ -225,11 +228,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const wrapper = dashboard.querySelector(".edgi-map-canvas-wrapper");
 
     infoPanelContainer = document.createElement("div");
-    infoPanelContainer.innerHTML = infoPanel;
+    infoPanelContainer.innerHTML = setupCountryInfo();
     wrapper.appendChild(infoPanelContainer);
 
-    currentStateLabel = infoPanelContainer.querySelector("#currentState")
-    currentEmissionsLabel = infoPanelContainer.querySelector("#stateEmissions")
+    // currentStateLabel = infoPanelContainer.querySelector("#currentState")
+    // currentEmissionsLabel = infoPanelContainer.querySelector("#stateEmissions")
     
     let timelineContainer = document.createElement("div");
     timelineContainer.innerHTML = timeline;
@@ -310,19 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let activeState = null;
 
         // 3. Render States
-        statePaths = setupStatePaths(statesGroup, statesFeatures, path);
-        
-        statePaths
-          .style("fill", (d) => {
-              const abbr = getNameToAbbr(d.properties.name);
-
-              return getStateColor(d.properties.name)
-          })
-          .on("click", (event, d) => {
-            event.stopPropagation();
-            const abbr = getNameToAbbr(d.properties.name);
-            if (abbr) zoomToState(d, abbr);
-          });
+        statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, zoomToState);
 
         const stateLabels = setupStateLabels(labelsGroup, statesFeatures, path)
 
@@ -337,17 +328,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
           let pill = setupCallouts(calloutsGroup, smallData, smallAbbr, centroid);
-
-          pill.on("click", (event) => {
-              event.stopPropagation();
-              zoomToState(feature, smallAbbr);
-            })
-            .on("mouseover", () => {
-                hover(statesGroup, smallAbbr)
-            })
-            .on("mouseout", () => {
-               exitHover(statesGroup);
-            });
+          setupPillInteraction(pill, feature, statesGroup, zoomToState, stateHover, exitStateHover);
         };
 
         // Reset Zoom action

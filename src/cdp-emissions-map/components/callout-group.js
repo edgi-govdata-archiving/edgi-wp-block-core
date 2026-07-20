@@ -32,6 +32,19 @@ export function setupCallouts(calloutsGroup, data, abbr, centroid){
 	return pill; 
 }
 
+export function setupPillInteraction(pill, feature, statesGroup, zoomToState, stateHover, exitStateHover){
+	pill.on("click", (event, data) => {
+		event.stopPropagation();
+		zoomToState(feature, data.abbr);
+	})
+	.on("mouseover", (data) => {
+		stateHover(statesGroup, data.abbr)
+	})
+	.on("mouseout", () => {
+		exitStateHover(statesGroup);
+	});
+}
+
 export function showCallouts(calloutsGroup){
 	calloutsGroup
 		.transition()

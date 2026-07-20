@@ -1,6 +1,6 @@
 import { getNameToAbbr, getStateToFips } from "../utilities/convert.js"
 
-export function setupStatePaths(statesGroup, stateData, path){
+export function setupStatePaths(statesGroup, stateData, path, getStateColor, zoomToState){
 	let statePaths = statesGroup
 		.selectAll(".state-boundary")
 		.data(stateData)
@@ -8,18 +8,27 @@ export function setupStatePaths(statesGroup, stateData, path){
 		.append("path")
 		.attr("class", "state-boundary")
 		.attr("d", path)
+		.style("fill", (d) => {
+			const abbr = getNameToAbbr(d.properties.name);
+			return getStateColor(d.properties.name)
+		})
+		.on("click", (event, d) => {
+			event.stopPropagation();
+			const abbr = getNameToAbbr(d.properties.name);
+			if (abbr) zoomToState(d, abbr);
+		})
 
 	return statePaths;
 }
 
-export function hover(statesGroup, abbr){
+export function stateHover(statesGroup, abbr){
 	statesGroup
 		.selectAll(".state-boundary")
 		.filter((f) => getNameToAbbr(f.properties.name) === abbr)
 		.classed("hover", true);
 }
 
-export function exitHover(statesGroup){
+export function exitStateHover(statesGroup){
 	statesGroup.selectAll(".state-boundary").classed("hover", false);
 }
 
