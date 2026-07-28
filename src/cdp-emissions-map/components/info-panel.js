@@ -8,7 +8,7 @@ export default `
 
 var countryInfoPanel = `
 	<section class="info-panel country-view">
-		<h2 id="info-header">United Sates</h2>
+		<h2 id="info-header">United States</h2>
 		<h5 id="info-status">2000 Supplier Emissions</h5>
 		<h2>Top Emitting States</h2>
 		<ol>
