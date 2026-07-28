@@ -8,7 +8,8 @@ export function processStateData(rawData){
         output[source.state_abbr] = {
             name: source.state_name,
             abbr: source.state_abbr,
-            emissions: source.emissions
+            emissions: source.emissions,
+            counties: []
         }
     }
 
@@ -29,5 +30,16 @@ export function processCountyData(rawData){
             emissions: source.emissions
         }
     }
+    //console.log(output);
     return output;
+}
+
+export function sortCountiesIntoStates(stateData, countyData){
+    for (var countyFips in countyData){
+        var county = countyData[countyFips];
+        if (county.state_abbr && stateData[county.state_abbr]){
+            stateData[county.state_abbr].counties.push(county);
+        }
+    }
+    return stateData;
 }

@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
-import { processStateData, processCountyData } from "./utilities/process-data.js"
+import { processStateData, processCountyData, sortCountiesIntoStates } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
 import SMALL_STATES from "./utilities/special-states.js"
@@ -11,7 +11,7 @@ import IRREGULAR_STATES from "./utilities/special-states.js"
 const irregularStates = IRREGULAR_STATES["IRREGULAR_STATES"];
 
 import timeline from './components/timeline.js';
-import { setupCountryInfo, setupStateInfo } from './components/info-panel.js';
+import { loadCountryInfo, loadStateInfo } from './components/info-panel.js';
 import toggle from './components/toggle.js';
 import callout from './components/callout-group.js';
 import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState} from './components/state-paths.js';
@@ -156,7 +156,7 @@ function updateInfoPanel(stateAbbr, year) {
   const emissions = currentStateInfo["emissions"][year][emissionType];
   const stateName = currentStateInfo.name;
 
-  infoPanelContainer.innerHTML = setupStateInfo();
+  infoPanelContainer = loadStateInfo(infoPanelContainer, currentState, currentYear, emissionType);
   //currentStateLabel.innerHTML = stateName
 
   // if (emissionType == "total_direct"){
@@ -183,7 +183,7 @@ function updateCountyChoropleth(){
 function resetState() {
   currentStateAbbr = "";
   
-  infoPanelContainer.innerHTML = setupCountryInfo();
+  infoPanelContainer.innerHTML = loadCountryInfo();
   // currentStateLabel.innerHTML = "Select state..."
   // currentEmissionsLabel.innerHTML = ""
 }
@@ -208,14 +208,22 @@ function toggleEmissionsType(){
 function setCurrentState(feature, stateAbbr){
   currentState = new Locale(feature.id);
   currentState.abbr = stateAbbr;
+  currentState.name = feature.properties.name;
   currentState.feature = feature;
+  currentState.data = stateData[stateAbbr];
+
+  console.log(feature);
 
   zoomToState();
 }
 
 function setCurrentCounty(feature, countyId){
-  currentCounty = new Locale(countyId)
+  currentCounty = new Locale(countyId);
+  currentCounty.name = feature.properties.name + " County";
   currentCounty.feature = feature;
+  currentCounty.data = countyData[countyId];
+
+  console.log(currentCounty.name);
 
   zoomToCounty();
 }
@@ -240,6 +248,8 @@ function zoomToState() {
   // Show Reset Button
   resetBtn.style.display = "flex";
   currentZoomLevel = 1;
+
+  console.log(currentState.data);
 }
 
 
@@ -327,7 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const wrapper = dashboard.querySelector(".edgi-map-canvas-wrapper");
 
     infoPanelContainer = document.createElement("div");
-    infoPanelContainer.innerHTML = setupCountryInfo();
+    infoPanelContainer.innerHTML = loadCountryInfo();
     wrapper.appendChild(infoPanelContainer);
 
     // currentStateLabel = infoPanelContainer.querySelector("#currentState")
@@ -368,6 +378,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // 1. Process data for fast lookup
         stateData = processStateData(stateGHGUrl);
         countyData = processCountyData(countyGHGUrl);
+
+        stateData = sortCountiesIntoStates(stateData, countyData);
+        console.log(stateData);
 
         const svg = d3
           .create("svg")
