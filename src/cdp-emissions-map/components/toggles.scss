@@ -1,0 +1,64 @@
+.toggle-group{
+	display : inline-flex;
+	padding: 1rem;
+
+	.toggle{
+		display : grid;
+  		align-self: center;
+	}
+
+	.label-group{
+		display : grid;
+  		align-self: center;
+  		padding-left: 1rem;
+
+
+		label{
+
+		}
+	}
+}
+
+
+.toggle{
+
+
+	.checkbox { 
+		position: absolute;
+		width: 50px; 
+	    height: 50px;
+	    z-index: 10;
+	    opacity: 0;
+	}
+
+	.switch {
+	    position: absolute;
+	    top: 5px; 
+	    left: 5px;
+	    width: 20px; 
+	    height: 20px;
+	    background: #fff;
+	    border-radius: 50%;
+	    transition: all 0.2s ease-in-out;
+	}
+
+	.hidden-label {
+	    width: 30px;
+	    height: 60px;
+	    background: #222;
+	    display: block;
+	    border-radius: 30px;
+	    position: relative;
+	    cursor: pointer;
+	    transition: background 0.4s;
+	}
+
+	.checkbox:checked ~ .hidden-label { 
+	    background: #000; 
+	}
+
+	.checkbox:checked ~ .hidden-label .switch {
+	    top: 35px; 
+	}
+
+}

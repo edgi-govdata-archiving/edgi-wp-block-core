@@ -2,7 +2,7 @@
 // @import url("./utilities/colors.scss");
 @import url("./components/timeline.scss");
 @import url("./components/info-panel.scss");
-@import url("./components/toggle.scss");
+@import url("./components/toggles.scss");
 @import url("./components/state-paths.scss");
 @import url("./components/state-labels.scss");
 @import url("./components/callout-group.scss");
@@ -75,6 +75,21 @@
 		left: 16px;
 		z-index: 10;
 	}
+
+	#map-controls {
+		width: 100%;
+
+		#timelineSlider{
+			width: 65%;
+			display: inline-block;
+		}
+
+		#toggles{
+			display: inline-block;
+			
+		}
+	}
+
 
 	.edgi-btn {
 		background: #edf2f7;

@@ -12,7 +12,7 @@ const irregularStates = IRREGULAR_STATES["IRREGULAR_STATES"];
 
 import timeline from './components/timeline.js';
 import { loadCountryInfo, loadStateInfo } from './components/info-panel.js';
-import toggle from './components/toggle.js';
+import toggles from './components/toggles.js';
 import callout from './components/callout-group.js';
 import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState} from './components/state-paths.js';
 import { setupCountyPaths, resetCountyPaths, selectCounty, deselectCounty} from './components/county-paths.js';
@@ -342,28 +342,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // currentStateLabel = infoPanelContainer.querySelector("#currentState")
     // currentEmissionsLabel = infoPanelContainer.querySelector("#stateEmissions")
-    
-    let timelineContainer = document.createElement("div");
-    timelineContainer.innerHTML = timeline;
-    dashboard.appendChild(timelineContainer);
+
+    let controlContainer = document.createElement("div");
+    controlContainer.setAttribute("id", "map-controls");
+    dashboard.appendChild(controlContainer);
+    controlContainer.insertAdjacentHTML("afterbegin", timeline);
 
     document.querySelector("#yearslider").addEventListener("change", function() {
       updateYear(this.value)
     });
 
+    controlContainer.insertAdjacentHTML("beforeend", toggles);
 
-    let toggleContainer = document.createElement("div");
-    toggleContainer.innerHTML = toggle;
-    dashboard.appendChild(toggleContainer);
+    var test = document.querySelector("#emission-toggle");
+    console.log(test)
 
-    document.querySelector("#toggle").addEventListener("change", function() {
+    document.querySelector("#emission-toggle").addEventListener("change", function() {
       toggleEmissionsType();
     });
+
+    // document.querySelector("#texas-toggle").addEventListener("change", function() {
+    //   //toggle texas function
+    // });
 
     canvasContainer.innerHTML =
       '<div style="padding: 20px; font-weight:300; color:#afe0d7;">Loading environmental data and maps...</div>';
 
-      //timeline.innerHTML = timelineHTML;
+
     // Load resources
     Promise.all([
       d3.csv(csvUrl),
