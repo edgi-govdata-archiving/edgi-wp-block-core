@@ -68,7 +68,7 @@ var currentCounty = null;
 function renderCountiesForState(stateAbbr, scale) {
   const stateFips = getStateToFips(stateAbbr);
 
-  resetCountyPaths(countiesGroup);
+  //resetCountyPaths(countiesGroup);
 
   if (!stateFips) return;
 
@@ -81,6 +81,7 @@ function renderCountiesForState(stateAbbr, scale) {
       }
     )
 
+  //console.log("countyPaths: " + countyPaths)
   countyPaths = setupCountyPaths(countiesGroup, path, stateCounties, countyData, scale, setCurrentCounty)
 
   updateCountyChoropleth();
@@ -181,9 +182,18 @@ function updateCountyChoropleth(){
 }
 
 function resetState() {
+  currentState = null;
   currentStateAbbr = "";
   
   infoPanelContainer.innerHTML = loadCountryInfo();
+  // currentStateLabel.innerHTML = "Select state..."
+  // currentEmissionsLabel.innerHTML = ""
+}
+
+function resetCounty() {
+  currentCounty = null;
+  
+  //infoPanelContainer.innerHTML = loadStateInfo();
   // currentStateLabel.innerHTML = "Select state..."
   // currentEmissionsLabel.innerHTML = ""
 }
@@ -206,26 +216,30 @@ function toggleEmissionsType(){
 }
 
 function setCurrentState(feature, stateAbbr){
-  currentState = new Locale(feature.id);
-  currentState.abbr = stateAbbr;
-  currentState.name = feature.properties.name;
-  currentState.feature = feature;
-  currentState.data = stateData[stateAbbr];
+  if (currentZoomLevel == 0){ //can only select county from state view
+    currentState = new Locale(feature.id);
+    currentState.abbr = stateAbbr;
+    currentState.name = feature.properties.name;
+    currentState.feature = feature;
+    currentState.data = stateData[stateAbbr];
 
-  console.log(feature);
+    //console.log(feature);
 
-  zoomToState();
+    zoomToState();
+  }
 }
 
 function setCurrentCounty(feature, countyId){
-  currentCounty = new Locale(countyId);
-  currentCounty.name = feature.properties.name + " County";
-  currentCounty.feature = feature;
-  currentCounty.data = countyData[countyId];
+  if (currentZoomLevel == 1){ //can only select county from state view
+    currentCounty = new Locale(countyId);
+    currentCounty.name = feature.properties.name + " County";
+    currentCounty.feature = feature;
+    currentCounty.data = countyData[countyId];
 
-  console.log(currentCounty.name);
+    //console.log(currentCounty.name);
 
-  zoomToCounty();
+    zoomToCounty();
+  }
 }
 
 // Zoom to State implementation
@@ -247,31 +261,28 @@ function zoomToState() {
 
   // Show Reset Button
   resetBtn.style.display = "flex";
-  currentZoomLevel = 1;
-
-  console.log(currentState.data);
 }
 
 
 function zoomToCounty() {
-  console.log("county feature: " + currentCounty.feature);
+  currentZoomLevel = 2;
+
   scale = zoomToFeature(mapGroup, path, width, height, currentCounty.feature);
 
-  //selectState(statePaths, scale, stateAbbr)
-  //hideStateLabels(stateLabels);
-  //hideCallouts(calloutsGroup);
-  //renderCountiesForState(stateAbbr, scale);
+
+  selectCounty(countyPaths, scale, currentCounty.id)
   
   //updateInfoPanel(stateAbbr, currentYear);
 
   // Show Reset Button
   resetBtn.style.display = "flex";
-  currentZoomLevel = 2;
+  
 }
 
+
 function zoomOutState() {
+  currentZoomLevel = 0;
   resetState();
-  currentState = null;
   zoomed = false;
   updateChoropleth();
 
@@ -284,26 +295,28 @@ function zoomOutState() {
     .duration(200)
     .style("opacity", 0)
 
+  resetCountyPaths(countiesGroup);
+  countyPaths.innerHTML = null;
+
   showCallouts(calloutsGroup);
   showStateLabels(stateLabels)
 
   // Hide Reset Button
   resetBtn.style.display = "none";
-  tooltip.style.display = "none";
+  //tooltip.style.display = "none";
 }
 
 function zoomOutCounty() {
-  //resetState();
-  //currentState = null;
-  //zoomed = false;
+  currentZoomLevel = 1;
+  resetCounty();
+  scale = zoomToFeature(mapGroup, path, width, height, currentState.feature);
+  selectState(statePaths, scale, currentState.abbr);
+  //updateInfoPanel(currentState.abbr, currentYear);
+
   updateCountyChoropleth();
 
   deselectCounty(countyPaths);
-  zoomToState()
-
-  // countiesGroup.transition()
-  //   .duration(200)
-  //   .style("opacity", 0)
+  
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -354,9 +367,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     controlContainer.insertAdjacentHTML("beforeend", toggles);
 
-    var test = document.querySelector("#emission-toggle");
-    console.log(test)
-
     document.querySelector("#emission-toggle").addEventListener("change", function() {
       toggleEmissionsType();
     });
@@ -385,7 +395,6 @@ document.addEventListener("DOMContentLoaded", () => {
         countyData = processCountyData(countyGHGUrl);
 
         stateData = sortCountiesIntoStates(stateData, countyData);
-        console.log(stateData);
 
         const svg = d3
           .create("svg")
@@ -445,7 +454,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Reset Zoom action
         resetBtn.addEventListener("click", () => {
           if (currentZoomLevel == 2){ //if zoomed to county
-            zoomToState()
+            zoomOutCounty();
+
           }
           else if (currentZoomLevel == 1){ //if zoomed to state
             zoomOutState();

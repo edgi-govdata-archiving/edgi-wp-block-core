@@ -16,7 +16,6 @@ export function zoomToFeature(mapGroup, path, width, height, feature){
 	.duration(800)
 	.attr("transform", `translate(${translate})scale(${scale})`);
 
-	console.log("scale: " + scale);
 	return scale;
 }
 

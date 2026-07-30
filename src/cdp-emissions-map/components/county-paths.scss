@@ -1,0 +1,20 @@
+.county-boundary {
+	fill: #f7fafc;
+	stroke: #131913;
+	stroke-width: 0.5px;
+	vector-effect: non-scaling-stroke;
+	transition: all 0.2s ease;
+
+	&:hover, &.hover {
+		fill: rgba(49, 130, 206, 0.15);
+		stroke: #3182ce;
+		stroke-width: 1.5px;
+		cursor: pointer;
+	}
+
+	&.active {
+		fill: none !important;
+		stroke: oklch(49.369% 0.01594 145.492) !important;
+		stroke-width: 1px !important;
+	}
+}

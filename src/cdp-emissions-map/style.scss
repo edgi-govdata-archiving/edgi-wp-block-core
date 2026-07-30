@@ -4,6 +4,7 @@
 @import url("./components/info-panel.scss");
 @import url("./components/toggles.scss");
 @import url("./components/state-paths.scss");
+@import url("./components/county-paths.scss");
 @import url("./components/state-labels.scss");
 @import url("./components/callout-group.scss");
 
@@ -126,21 +127,6 @@
 			width: 100%;
 			height: auto;
 			max-height: 520px;
-		}
-	}
-
-
-	.county-boundary {
-		fill: #f7fafc;
-		stroke: #131913;
-		stroke-width: 2px;
-		transition: all 0.2s ease;
-
-		&:hover, &.hover {
-			fill: rgba(49, 130, 206, 0.15);
-			stroke: #3182ce;
-			stroke-width: 1.5px;
-			cursor: pointer;
 		}
 	}
 }

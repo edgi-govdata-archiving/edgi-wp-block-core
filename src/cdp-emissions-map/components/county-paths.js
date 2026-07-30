@@ -1,4 +1,4 @@
-export function setupCountyPaths(countiesGroup, path, stateCounties, countyData, scale, zoomToCounty){
+export function setupCountyPaths(countiesGroup, path, stateCounties, countyData, scale, setCurrentCounty){
 	var countyPaths = countiesGroup
 		.selectAll(".county-boundary")
 		.data(stateCounties)
@@ -11,10 +11,9 @@ export function setupCountyPaths(countiesGroup, path, stateCounties, countyData,
 	countyPaths.on("click", (event, d) => {
 			event.stopPropagation();
 			const countyId = d.id;
-			console.log(d);
 			//if (abbr) zoomToState(d, abbr);
-			selectCounty(countyPaths, scale, countyId);
-			zoomToCounty(d, countyId);
+			//selectCounty(countyPaths, scale, countyId);
+			setCurrentCounty(d, countyId);
 		})
 
 	countiesGroup.transition()
@@ -25,11 +24,18 @@ export function setupCountyPaths(countiesGroup, path, stateCounties, countyData,
 }
 
 export function resetCountyPaths(countiesGroup){
+	//countiesGroup.innerHTML = "";
 	countiesGroup.selectAll(".county-boundary").remove();
 	countiesGroup.selectAll(".county-tooltip-line").remove();
 	countiesGroup.transition()
 	.duration(200)
 	.style("opacity", 0)
+
+	console.log(countiesGroup);
+}
+
+export function lockCountyPaths(countiesGroup){
+	countiesGroup.style.zIndex = "-1";
 }
 
 
@@ -45,10 +51,10 @@ export function selectCounty(countyPaths, scale, countyId){
 		.transition()
 		.duration(400)
 		.style("opacity", (d) =>
-			d.id === countyId ? 1 : 0.2,
+			d.id === countyId ? 1 : 0,
 		)
 		.attr("class", (d) =>
-		`state-boundary${d.id === countyId ? " active" : ""}`,
+		`county-boundary${d.id === countyId ? " active" : ""}`,
 	);
 }
 
@@ -56,8 +62,8 @@ export function deselectCounty(countyPaths){
 	// Restore county outline stroke width and opacity
 	countyPaths
 		.transition()
-		.duration(800)
+		.duration(400)
 		.style("stroke-width", "1px")
 		.style("opacity", 1)
-		.attr("class", "state-boundary");
+		.attr("class", "county-boundary");
 }
