@@ -11,7 +11,7 @@ import IRREGULAR_STATES from "./utilities/special-states.js"
 const irregularStates = IRREGULAR_STATES["IRREGULAR_STATES"];
 
 import timeline from './components/timeline.js';
-import { loadCountryInfo, loadStateInfo } from './components/info-panel.js';
+import { loadDefaultInfo, loadCountryInfo, loadStateInfo, loadCountyInfo } from './components/info-panel.js';
 import toggles from './components/toggles.js';
 import callout from './components/callout-group.js';
 import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState} from './components/state-paths.js';
@@ -134,9 +134,7 @@ function getCountyColor(countyFips){
 function updateYear(year){
   currentYear = year;
 
-  if (currentStateAbbr != ""){
-    updateInfoPanel(currentStateAbbr, currentYear)
-  }
+  updateInfoPanel()
 
   if (zoomed){
      updateCountyChoropleth();
@@ -146,18 +144,26 @@ function updateYear(year){
   }
 }
 
-function updateInfoPanel(stateAbbr, year) {
-  currentStateAbbr = stateAbbr;
-  const currentStateInfo = stateData[stateAbbr];
+function updateInfoPanel() {
+  // currentStateAbbr = stateAbbr;
+  // const currentStateInfo = stateData[stateAbbr];
 
-  if (!currentStateInfo) {
-    return;
+  // if (!currentStateInfo) {
+  //   return;
+  // }
+
+  // const emissions = currentStateInfo["emissions"][currentYear][emissionType];
+  // const stateName = currentStateInfo.name;
+
+  if (currentZoomLevel == 0){
+    infoPanelContainer = loadCountryInfo(infoPanelContainer, stateData, currentYear, emissionType);
   }
-
-  const emissions = currentStateInfo["emissions"][year][emissionType];
-  const stateName = currentStateInfo.name;
-
-  infoPanelContainer = loadStateInfo(infoPanelContainer, currentState, currentYear, emissionType);
+  else if (currentZoomLevel == 1){
+    infoPanelContainer = loadStateInfo(infoPanelContainer, currentState, currentYear, emissionType);
+  }
+  else if (currentZoomLevel == 2){
+    infoPanelContainer = loadCountyInfo(infoPanelContainer, currentCounty, currentYear, emissionType);
+  }
   //currentStateLabel.innerHTML = stateName
 
   // if (emissionType == "total_direct"){
@@ -185,13 +191,14 @@ function resetState() {
   currentState = null;
   currentStateAbbr = "";
   
-  infoPanelContainer.innerHTML = loadCountryInfo();
+  updateInfoPanel();
   // currentStateLabel.innerHTML = "Select state..."
   // currentEmissionsLabel.innerHTML = ""
 }
 
 function resetCounty() {
   currentCounty = null;
+  updateInfoPanel();
   
   //infoPanelContainer.innerHTML = loadStateInfo();
   // currentStateLabel.innerHTML = "Select state..."
@@ -206,7 +213,7 @@ function toggleEmissionsType(){
     emissionType = "total_direct";
   }
 
-  updateInfoPanel(currentStateAbbr, currentYear);
+  updateInfoPanel();
   if (zoomed){
      updateCountyChoropleth();
   }
@@ -257,7 +264,7 @@ function zoomToState() {
   hideStateLabels(stateLabels);
   hideCallouts(calloutsGroup);
   renderCountiesForState(currentState.abbr, scale);
-  updateInfoPanel(currentState.abbr, currentYear);
+  updateInfoPanel();
 
   // Show Reset Button
   resetBtn.style.display = "flex";
@@ -272,7 +279,7 @@ function zoomToCounty() {
 
   selectCounty(countyPaths, scale, currentCounty.id)
   
-  //updateInfoPanel(stateAbbr, currentYear);
+  updateInfoPanel();
 
   // Show Reset Button
   resetBtn.style.display = "flex";
@@ -311,7 +318,7 @@ function zoomOutCounty() {
   resetCounty();
   scale = zoomToFeature(mapGroup, path, width, height, currentState.feature);
   selectState(statePaths, scale, currentState.abbr);
-  //updateInfoPanel(currentState.abbr, currentYear);
+  updateInfoPanel();
 
   updateCountyChoropleth();
 
@@ -350,7 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const wrapper = dashboard.querySelector(".edgi-map-canvas-wrapper");
 
     infoPanelContainer = document.createElement("div");
-    infoPanelContainer.innerHTML = loadCountryInfo();
+    infoPanelContainer.innerHTML = loadDefaultInfo();
     wrapper.appendChild(infoPanelContainer);
 
     // currentStateLabel = infoPanelContainer.querySelector("#currentState")
@@ -396,6 +403,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         stateData = sortCountiesIntoStates(stateData, countyData);
 
+        updateInfoPanel();
+
         const svg = d3
           .create("svg")
           .attr("viewBox", `0 0 ${width} ${height}`)
@@ -435,7 +444,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 3. Render States
         statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState);
 
-        stateLabels = setupStateLabels(labelsGroup, statesFeatures, path)
+        stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
 
         for (const [smallAbbr, smallData] of Object.entries(smallStates)){ 
           const feature = statesFeatures.find(

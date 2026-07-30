@@ -6,19 +6,23 @@ export default `
 `; 
 
 
+var defaultInfoPanel = `
+	<section class="info-panel country-view">
+		<h5">loading...</h5>
+    </section>`
+
 var countryInfoPanel = `
 	<section class="info-panel country-view">
 		<h2 id="info-header">United States</h2>
-		<h5 id="info-status">2000 Supplier Emissions</h5>
+		<h5 id="info-subheader">2000 Supplier Emissions</h5>
 		<h2>Top Emitting States</h2>
-		<ol>
+		<ol id="top-emitters">
 			<li>Alabama</li>
 			<li>Alaska</li>
 			<li>Arizona</li>
 			<li>California</li>
 			<li>Colorado</li>
 		</ol>
-		<h3 id="stateEmissions"></h3>
     </section>`
 
 var stateInfoPanel = `
@@ -35,11 +39,37 @@ var stateInfoPanel = `
 			<li>Aransas</li>
 			<li>Archer</li>
 		</ol>
-		<h3 id="stateEmissions"></h3>
     </section>`
 
-export function loadCountryInfo(){
-	return countryInfoPanel;
+ var countyInfoPanel = `
+	<section class="info-panel county-view">
+		<h2 id="info-header">Texas</h2>
+		<h5 id="info-subheader">2000 Supplier Emissions</h5>
+		<h1 id="emissions-total">12,345</h1>
+		<label>tCO₂e</label>
+
+    </section>`
+
+export function loadDefaultInfo(){
+	return defaultInfoPanel;
+}
+
+export function loadCountryInfo(container, stateData, year, emissionType){
+	var subheader = getSubheader(year, emissionType);
+
+	var stateList = [];
+
+	for (var key in stateData) {
+        stateList.push( stateData[key] );
+	}
+
+	var topStates = getTopEmitters(stateList, year, emissionType, 5);
+
+	container.innerHTML = countryInfoPanel;
+	container.querySelector("#info-subheader").innerHTML = subheader;
+	container.querySelector("#top-emitters").innerHTML = makeOrderedList(topStates, "name");
+
+	return container;
 } 
 
 export function loadStateInfo(container, currentState, year, emissionType){
@@ -47,7 +77,7 @@ export function loadStateInfo(container, currentState, year, emissionType){
 	var subheader = getSubheader(year, emissionType);
 
 	var data = currentState.data;
-	//console.log(data);
+	console.log(data);
 
 	var emissions = data.emissions[year][emissionType];
 
@@ -59,7 +89,29 @@ export function loadStateInfo(container, currentState, year, emissionType){
 	container.querySelector("#info-header").innerHTML = header;
 	container.querySelector("#info-subheader").innerHTML = subheader;
 	container.querySelector("#emissions-total").innerHTML = emissions;
-	container.querySelector("#top-emitters").innerHTML = makeOrderedList(topCounties);
+	container.querySelector("#top-emitters").innerHTML = makeOrderedList(topCounties, "county_name");
+
+	return container;
+} 
+
+export function loadCountyInfo(container, currentCounty, year, emissionType){
+	var header = currentCounty.name;
+	var subheader = getSubheader(year, emissionType);
+
+	var data = currentCounty.data;
+	console.log(data);
+
+	var emissions = data.emissions[year][emissionType];
+
+	// //console.log(data.counties);
+	// var topCounties = getTopEmitters(data.counties, year, emissionType, 5);
+	// //console.log(topCounties);
+
+	container.innerHTML = countyInfoPanel;
+	container.querySelector("#info-header").innerHTML = header;
+	container.querySelector("#info-subheader").innerHTML = subheader;
+	container.querySelector("#emissions-total").innerHTML = emissions;
+	// container.querySelector("#top-emitters").innerHTML = makeOrderedList(topCounties);
 
 	return container;
 } 
@@ -79,17 +131,24 @@ function getSubheader(year, emissionType){
 }
 
 function getTopEmitters(fullList, year, emissionType, listLength){
-	// console.log(fullList[0].emissions[year][emissionType])
-	// console.log(fullList[1].emissions[year][emissionType])
+	console.log(fullList[0].emissions[year])
+	console.log(fullList[1].emissions[year])
 
-	var sorted = fullList.sort((a, b) => b.emissions[year][emissionType] - a.emissions[year][emissionType]);
+	var sorted = fullList.sort((a, b) => {
+		if (a.emissions[year] && b.emissions[year]){	
+			return b.emissions[year][emissionType] - a.emissions[year][emissionType];
+		}
+		else{
+			return b.name - a.name; //in case of no emissions data, just list alphabetically
+		}
+	});
 	return sorted.slice(0, listLength);
 }
 
-function makeOrderedList(list){
+function makeOrderedList(list, selector){
 	var html = "";
 	for (var i in list){
-		html += "<li>" + list[i].county_name + "</li>";
+		html += "<li>" + list[i][selector] + "</li>";
 	}
 	return html;
 }
