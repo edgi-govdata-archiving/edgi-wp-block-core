@@ -22,15 +22,17 @@ export function setupStatePaths(statesGroup, stateData, path, getStateColor, set
 }
 
 export function hideTexas(statePaths){
+	console.log("hideTexas()!");
 	statePaths
 		.transition()
 		.duration(200)
 		.style("opacity", (d) =>
-			d.properties.name === "Texas" ? 0 : 1,
+			d.properties.name == "Texas" ? 0 : 1,
 		)
 }
 
 export function showTexas(statePaths){
+	console.log("showTexas()!");
 	statePaths
 		.transition()
 		.duration(200)

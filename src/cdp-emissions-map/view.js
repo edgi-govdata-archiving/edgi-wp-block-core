@@ -78,15 +78,20 @@ var currentCounty = null;
 function toggleTexas(){
   includeTexas = !includeTexas;
 
-  if (includeTexas && currentZoomLevel == 0){
-    showTexas(statePaths);
-    showStateLabels(stateLabels, true);
-  }
-  else{
-    hideTexas(statePaths);
-    hideTexasLabel(stateLabels);
-  }
+  console.log("includeTexas: " + includeTexas);
+  console.log("currentZoomLevel: " + currentZoomLevel);
 
+  if (currentZoomLevel == 0){
+    if (!includeTexas){
+      hideTexas(statePaths);
+      hideTexasLabel(stateLabels);
+    }
+    else {
+      console.log("showing texas...");
+      showTexas(statePaths);
+      showStateLabels(stateLabels, true);
+    }
+  }
 
   updateChoropleth();
   updateInfoPanel();
@@ -173,13 +178,7 @@ function updateYear(year){
   currentYear = year;
 
   updateInfoPanel()
-
-  if (zoomed){
-     updateCountyChoropleth();
-  }
-  else{
-     updateChoropleth();
-  }
+  updateChoropleth();
 }
 
 function updateInfoPanel() {
@@ -213,6 +212,15 @@ function updateInfoPanel() {
 }
 
 function updateChoropleth(){
+  if (currentZoomLevel == 0){
+    updateStateChoropleth();
+  }
+  else if (currentZoomLevel == 1){
+    updateCountyChoropleth();
+  }
+}
+
+function updateStateChoropleth(){
    statePaths.style("fill", (d) => {
           const abbr = getNameToAbbr(d.properties.name);
           return getStateColor(d.properties.name)
@@ -252,12 +260,7 @@ function toggleEmissionsType(){
   }
 
   updateInfoPanel();
-  if (zoomed){
-     updateCountyChoropleth();
-  }
-  else{
-     updateChoropleth();
-  }
+  updateChoropleth();
 }
 
 function setCurrentState(feature, stateAbbr){
