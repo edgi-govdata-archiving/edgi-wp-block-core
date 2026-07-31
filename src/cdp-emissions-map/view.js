@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
-import { processStateData, processCountyData, sortCountiesIntoStates, getEmissionRange } from "./utilities/process-data.js"
+import { processStateData, processCountyData, sortCountiesIntoStates } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
 import SMALL_STATES from "./utilities/special-states.js"
@@ -22,6 +22,7 @@ import { setupStateLabels, showStateLabels, hideStateLabels, hideTexasLabel } fr
 import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetCallouts } from './components/callout-group.js';
 
 import Locale from "./utilities/locale.js"
+import Range from "./utilities/range.js"
 
 var infoPanelContainer;
 var statePaths;
@@ -59,10 +60,12 @@ const width = 960;
 const height = 600;
 
 //range values - [min,max]
-var directRange;
-var supplierRange;
-var directRangeNoTexas;
-var supplierRangeNoTexas;
+// var directRange;
+// var supplierRange;
+// var directRangeNoTexas;
+// var supplierRangeNoTexas;
+
+var range;
 
 var includeTexas = true;
 
@@ -99,13 +102,16 @@ function toggleTexas(){
 }
 
 function calculateRanges(){
-  var test = getEmissionRange(stateData, "total_direct");
+  range = new Range(); 
 
-  directRange = getEmissionRange(stateData, "total_direct");
-  supplierRange = getEmissionRange(stateData, "total_supplier");
+  range.setStateRange(stateData, true);
+  range.setStateRange(stateDataNoTexas, false);
 
-  directRangeNoTexas = getEmissionRange(stateDataNoTexas, "total_direct");
-  supplierRangeNoTexas = getEmissionRange(stateDataNoTexas, "total_supplier");
+  // directRange = getEmissionRange(stateData, "total_direct");
+  // supplierRange = getEmissionRange(stateData, "total_supplier");
+
+  // directRangeNoTexas = getEmissionRange(stateDataNoTexas, "total_direct");
+  // supplierRangeNoTexas = getEmissionRange(stateDataNoTexas, "total_supplier");
 }
 
 function renderCountiesForState(stateAbbr, scale) {
@@ -141,10 +147,10 @@ function getStateColor(name){
     var emissions = emissionsData[emissionType];
 
     if (emissionType == "total_direct"){
-      return getDirectColor(emissions, includeTexas ? directRange : directRangeNoTexas);
+      return getDirectColor(emissions, range.getStateRange("total_direct", includeTexas));
     }
     else{
-      return getSupplierColor(emissions, includeTexas ? supplierRange : supplierRangeNoTexas);
+      return getSupplierColor(emissions, range.getStateRange("total_supplier", includeTexas));
     }
   }
   else{
