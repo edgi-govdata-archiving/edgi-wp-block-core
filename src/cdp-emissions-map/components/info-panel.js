@@ -77,13 +77,8 @@ export function loadStateInfo(container, currentState, year, emissionType){
 	var subheader = getSubheader(year, emissionType);
 
 	var data = currentState.data;
-	console.log(data);
-
 	var emissions = data.emissions[year][emissionType];
-
-	//console.log(data.counties);
 	var topCounties = getTopEmitters(data.counties, year, emissionType, 5);
-	//console.log(topCounties);
 
 	container.innerHTML = stateInfoPanel;
 	container.querySelector("#info-header").innerHTML = header;
@@ -99,13 +94,8 @@ export function loadCountyInfo(container, currentCounty, year, emissionType){
 	var subheader = getSubheader(year, emissionType);
 
 	var data = currentCounty.data;
-	console.log(data);
 
 	var emissions = data.emissions[year][emissionType];
-
-	// //console.log(data.counties);
-	// var topCounties = getTopEmitters(data.counties, year, emissionType, 5);
-	// //console.log(topCounties);
 
 	container.innerHTML = countyInfoPanel;
 	container.querySelector("#info-header").innerHTML = header;
@@ -131,8 +121,8 @@ function getSubheader(year, emissionType){
 }
 
 function getTopEmitters(fullList, year, emissionType, listLength){
-	console.log(fullList[0].emissions[year])
-	console.log(fullList[1].emissions[year])
+	// console.log(fullList[0].emissions[year])
+	// console.log(fullList[1].emissions[year])
 
 	var sorted = fullList.sort((a, b) => {
 		if (a.emissions[year] && b.emissions[year]){	

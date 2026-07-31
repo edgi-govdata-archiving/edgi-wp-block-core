@@ -43,3 +43,31 @@ export function sortCountiesIntoStates(stateData, countyData){
     }
     return stateData;
 }
+
+export function getEmissionRange(data, emissionType){
+    var range = [1000, 0];
+
+    //console.log(data);
+
+    for (var region in data) {
+        var emissionsData = data[region].emissions;
+
+        for (var year in emissionsData) {
+            var yearData = emissionsData[year];
+            var emissions = yearData[emissionType];
+
+            //check if lower that min range
+            if (emissions < range[0]){
+                range[0] = emissions;
+            }
+            
+            //check if higher than max range
+            if (emissions > range[1]){
+                range[1] = emissions;
+            }
+        }
+    }
+
+    console.log(range);
+    return range;
+}

@@ -21,6 +21,22 @@ export function setupStatePaths(statesGroup, stateData, path, getStateColor, set
 	return statePaths;
 }
 
+export function hideTexas(statePaths){
+	statePaths
+		.transition()
+		.duration(200)
+		.style("opacity", (d) =>
+			d.properties.name === "Texas" ? 0 : 1,
+		)
+}
+
+export function showTexas(statePaths){
+	statePaths
+		.transition()
+		.duration(200)
+		.style("opacity", 1)
+}
+
 export function stateHover(statesGroup, abbr){
 	statesGroup
 		.selectAll(".state-boundary")
@@ -52,12 +68,14 @@ export function selectState(statePaths, scale, selectedAbbr){
 	);
 }
 
-export function deselectState(statePaths){
+export function deselectState(statePaths, includeTexas){
 	// Restore state outline stroke width and opacity
 	statePaths
 		.transition()
 		.duration(800)
 		.style("stroke-width", "1px")
-		.style("opacity", 1)
+        .style("opacity", (d) =>
+          (!includeTexas && d.properties.name === "Texas") ? 0 : 1,
+        )
 		.attr("class", "state-boundary");
 }

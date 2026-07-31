@@ -43,9 +43,19 @@ export function hideStateLabels(stateLabels){
             .style("opacity", 0);
 }
 
-export function showStateLabels(stateLabels){
+export function hideTexasLabel(stateLabels){
+  stateLabels.transition()
+            .duration(200)
+            .style("opacity", (d) =>
+              d.properties.name === "Texas" ? 0 : 1,
+            )
+}
+
+export function showStateLabels(stateLabels, includeTexas){
   stateLabels.transition()
             .delay(400)
             .duration(400)
-            .style("opacity", 1);
+            .style("opacity", (d) =>
+              (!includeTexas && d.properties.name === "Texas") ? 0 : 1,
+            )
 }

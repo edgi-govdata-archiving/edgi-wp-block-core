@@ -23,15 +23,14 @@ export function setupCountyPaths(countiesGroup, path, stateCounties, countyData,
 	return countyPaths;
 }
 
+
 export function resetCountyPaths(countiesGroup){
 	//countiesGroup.innerHTML = "";
 	countiesGroup.selectAll(".county-boundary").remove();
 	countiesGroup.selectAll(".county-tooltip-line").remove();
 	countiesGroup.transition()
 	.duration(200)
-	.style("opacity", 0)
-
-	console.log(countiesGroup);
+	.style("opacity", 0);
 }
 
 export function lockCountyPaths(countiesGroup){

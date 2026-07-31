@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
-import { processStateData, processCountyData, sortCountiesIntoStates } from "./utilities/process-data.js"
+import { processStateData, processCountyData, sortCountiesIntoStates, getEmissionRange } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
 import SMALL_STATES from "./utilities/special-states.js"
@@ -14,23 +14,26 @@ import timeline from './components/timeline.js';
 import { loadDefaultInfo, loadCountryInfo, loadStateInfo, loadCountyInfo } from './components/info-panel.js';
 import toggles from './components/toggles.js';
 import callout from './components/callout-group.js';
-import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState} from './components/state-paths.js';
+import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState, hideTexas, showTexas} from './components/state-paths.js';
 import { setupCountyPaths, resetCountyPaths, selectCounty, deselectCounty} from './components/county-paths.js';
 import { zoomToFeature, resetZoom} from './components/map-zoom.js';
 
-import { setupStateLabels, showStateLabels, hideStateLabels } from './components/state-labels.js';
+import { setupStateLabels, showStateLabels, hideStateLabels, hideTexasLabel } from './components/state-labels.js';
 import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetCallouts } from './components/callout-group.js';
 
 import Locale from "./utilities/locale.js"
 
 var infoPanelContainer;
 var statePaths;
+var statePathsNoTexas;
 var currentStateLabel;
 var currentEmissionsLabel;
 var currentYear = 2016;
 var currentStateAbbr = "";
 var emissionType = "total_direct" //or "total_supplier"
+
 var stateData = {};
+var stateDataNoTexas = {};
 var countyData = {};
 
 var countiesFeatures = {}
@@ -55,6 +58,14 @@ var zoomed = false;
 const width = 960;
 const height = 600;
 
+//range values - [min,max]
+var directRange;
+var supplierRange;
+var directRangeNoTexas;
+var supplierRangeNoTexas;
+
+var includeTexas = true;
+
 var scale = 1;
 
 var currentState = {
@@ -64,6 +75,33 @@ var currentState = {
 }
 var currentCounty = null;
 
+function toggleTexas(){
+  includeTexas = !includeTexas;
+
+  if (includeTexas && currentZoomLevel == 0){
+    showTexas(statePaths);
+    showStateLabels(stateLabels, true);
+  }
+  else{
+    hideTexas(statePaths);
+    hideTexasLabel(stateLabels);
+  }
+
+
+  updateChoropleth();
+  updateInfoPanel();
+
+}
+
+function calculateRanges(){
+  var test = getEmissionRange(stateData, "total_direct");
+
+  directRange = getEmissionRange(stateData, "total_direct");
+  supplierRange = getEmissionRange(stateData, "total_supplier");
+
+  directRangeNoTexas = getEmissionRange(stateDataNoTexas, "total_direct");
+  supplierRangeNoTexas = getEmissionRange(stateDataNoTexas, "total_supplier");
+}
 
 function renderCountiesForState(stateAbbr, scale) {
   const stateFips = getStateToFips(stateAbbr);
@@ -98,10 +136,10 @@ function getStateColor(name){
     var emissions = emissionsData[emissionType];
 
     if (emissionType == "total_direct"){
-      return getDirectColor(emissions, [0, 500000000])
+      return getDirectColor(emissions, includeTexas ? directRange : directRangeNoTexas);
     }
     else{
-      return getSupplierColor(emissions, [0, 500000000])
+      return getSupplierColor(emissions, includeTexas ? supplierRange : supplierRangeNoTexas);
     }
   }
   else{
@@ -156,7 +194,7 @@ function updateInfoPanel() {
   // const stateName = currentStateInfo.name;
 
   if (currentZoomLevel == 0){
-    infoPanelContainer = loadCountryInfo(infoPanelContainer, stateData, currentYear, emissionType);
+    infoPanelContainer = loadCountryInfo(infoPanelContainer, includeTexas ? stateData : stateDataNoTexas, currentYear, emissionType);
   }
   else if (currentZoomLevel == 1){
     infoPanelContainer = loadStateInfo(infoPanelContainer, currentState, currentYear, emissionType);
@@ -296,7 +334,7 @@ function zoomOutState() {
   // Clear active state callout highlights
   resetCallouts(calloutsGroup);
   resetZoom(mapGroup);
-  deselectState(statePaths);
+  deselectState(statePaths, includeTexas);
 
   countiesGroup.transition()
     .duration(200)
@@ -306,7 +344,7 @@ function zoomOutState() {
   countyPaths.innerHTML = null;
 
   showCallouts(calloutsGroup);
-  showStateLabels(stateLabels)
+  showStateLabels(stateLabels, includeTexas);
 
   // Hide Reset Button
   resetBtn.style.display = "none";
@@ -378,9 +416,9 @@ document.addEventListener("DOMContentLoaded", () => {
       toggleEmissionsType();
     });
 
-    // document.querySelector("#texas-toggle").addEventListener("change", function() {
-    //   //toggle texas function
-    // });
+    document.querySelector("#texas-toggle").addEventListener("change", function() {
+      toggleTexas();
+    });
 
     canvasContainer.innerHTML =
       '<div style="padding: 20px; font-weight:300; color:#afe0d7;">Loading environmental data and maps...</div>';
@@ -402,7 +440,10 @@ document.addEventListener("DOMContentLoaded", () => {
         countyData = processCountyData(countyGHGUrl);
 
         stateData = sortCountiesIntoStates(stateData, countyData);
+        stateDataNoTexas = structuredClone(stateData);
+        delete stateDataNoTexas.TX;
 
+        calculateRanges();
         updateInfoPanel();
 
         const svg = d3
