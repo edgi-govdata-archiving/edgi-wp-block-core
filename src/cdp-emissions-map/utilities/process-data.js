@@ -61,3 +61,36 @@ export function removeTexasCountyData(countyData){
     }
     return output;
 }
+
+
+export function processFacilitiesData(countyData, rawFacilityData){
+    var output = {};
+    const facilitiesArray = rawFacilityData["features"];
+
+    var index = 0;
+
+    for (var key in facilitiesArray) {
+       var source = facilitiesArray[key]["properties"]
+       var facility = {};
+
+        facility = {
+            facility_id : source["Facility Id"],
+            facility_name : source["Facility Name"],
+            total_direct : source["Total Direct Emissions"],
+            total_supplier : source["Total Supplier Emissions"],
+            latest_parent : source["Latest Parent Company"],
+            county_fips: Math.floor(source["County_FIPS"]) //value is float in dataset
+        }
+
+        countyData[facility.county_fips] = facility;
+
+
+       // if (index < 3){
+       //  console.log(facility);
+       //  index++;
+       // }
+   
+    }
+    //console.log(output);
+    return countyData;
+}

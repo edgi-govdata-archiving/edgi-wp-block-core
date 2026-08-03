@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
-import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData } from "./utilities/process-data.js"
+import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData, processFacilitiesData } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
 import SMALL_STATES from "./utilities/special-states.js"
@@ -39,6 +39,7 @@ var stateData = {};
 var stateDataNoTexas = {};
 var countyData = {};
 var countyDataNoTexas = {};
+var facilitiesData = {};
 
 var countiesFeatures = {}
 var countiesGroup;
@@ -56,7 +57,6 @@ var path;
 var zoomLevels = ["country", "state", "county", "facility"];
 var currentZoomLevel = 0;
 var currentZoomLabel = zoomLevels[currentZoomLevel]; 
-var zoomed = false;
 
 //D3 canvas dimensions
 const width = 960;
@@ -346,7 +346,6 @@ function zoomToCounty() {
 function zoomOutState() {
   currentZoomLevel = 0;
   resetState();
-  zoomed = false;
   updateChoropleth();
 
   // Clear active state callout highlights
@@ -392,6 +391,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const countiesJsonUrl = dashboard.getAttribute("data-counties-json-url");
       const stateGHGUrl = dashboard.getAttribute("data-states-ghg-json-url"); 
       const countyGHGUrl = dashboard.getAttribute("data-counties-ghg-url");
+      const testFacilitiesUrl = dashboard.getAttribute("data-facilities");
+
 
       if (!csvUrl || !statesJsonUrl || !countiesJsonUrl || !stateGHGUrl || !countyGHGUrl) {
       console.error("CDP Map Dashboard: Missing required data attributes!");
@@ -455,13 +456,15 @@ document.addEventListener("DOMContentLoaded", () => {
       d3.json(countiesJsonUrl),
       d3.json(stateGHGUrl),
       d3.json(countyGHGUrl),
+      d3.json(testFacilitiesUrl)
     ])
-        .then(([csvData, statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl]) => {
+        .then(([csvData, statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl, testFacilitiesUrl]) => {
         canvasContainer.innerHTML = "";
 
         // 1. Process data for fast lookup
         stateData = processStateData(stateGHGUrl);
         countyData = processCountyData(countyGHGUrl);
+        countyData = processFacilitiesData(countyData, testFacilitiesUrl);
 
         stateData = sortCountiesIntoStates(stateData, countyData);
         stateDataNoTexas = removeTexasStateData(stateData);
