@@ -1,9 +1,4 @@
 export default class Range{
-	directRange;
-	supplierRange;
-	directRangeNoTexas;
-	supplierRangeNoTexas;
-
 	range = {
 		total_direct: {
 			all: [],
@@ -14,7 +9,6 @@ export default class Range{
 			noTexas : []
 		}
 	};
-
 
 	constructor(){
 		
@@ -27,7 +21,6 @@ export default class Range{
 		else{
 			return this.range[emissionType].noTexas;
 		}
-		
 	}
 
 	setRange(data, includeTexas){
@@ -40,7 +33,6 @@ export default class Range{
 	    	this.range.total_supplier.noTexas = this.getEmissionRange(data, "total_supplier");
 	    }
 	}
-
 
 	getEmissionRange(data, emissionType){
     var range = [1000, 0];
@@ -69,6 +61,6 @@ export default class Range{
     }
     console.log(range);
     return range;
-}
+	}
 }
 

@@ -11,6 +11,7 @@ import IRREGULAR_STATES from "./utilities/special-states.js"
 const irregularStates = IRREGULAR_STATES["IRREGULAR_STATES"];
 
 import timeline from './components/timeline.js';
+import { loadDefaultTitle, loadCountryTitle, loadStateTitle, loadCountyTitle } from './components/title.js';
 import { loadDefaultInfo, loadCountryInfo, loadStateInfo, loadCountyInfo } from './components/info-panel.js';
 import toggles from './components/toggles.js';
 import callout from './components/callout-group.js';
@@ -24,6 +25,7 @@ import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetC
 import Locale from "./utilities/locale.js"
 import Range from "./utilities/range.js"
 
+var titleContainer;
 var infoPanelContainer;
 var statePaths;
 var statePathsNoTexas;
@@ -196,16 +198,6 @@ function updateYear(year){
 }
 
 function updateInfoPanel() {
-  // currentStateAbbr = stateAbbr;
-  // const currentStateInfo = stateData[stateAbbr];
-
-  // if (!currentStateInfo) {
-  //   return;
-  // }
-
-  // const emissions = currentStateInfo["emissions"][currentYear][emissionType];
-  // const stateName = currentStateInfo.name;
-
   if (currentZoomLevel == 0){
     infoPanelContainer = loadCountryInfo(infoPanelContainer, includeTexas ? stateData : stateDataNoTexas, currentYear, emissionType);
   }
@@ -215,14 +207,18 @@ function updateInfoPanel() {
   else if (currentZoomLevel == 2){
     infoPanelContainer = loadCountyInfo(infoPanelContainer, currentCounty, currentYear, emissionType);
   }
-  //currentStateLabel.innerHTML = stateName
+}
 
-  // if (emissionType == "total_direct"){
-  //   currentEmissionsLabel.innerHTML = "Direct emissions: " + emissions;
-  // }
-  // else{
-  //   currentEmissionsLabel.innerHTML = "Supplier emissions: " + emissions;
-  // }
+function updateTitle() {
+  if (currentZoomLevel == 0){
+    titleContainer = loadCountryTitle(titleContainer);
+  }
+  else if (currentZoomLevel == 1){
+    titleContainer = loadStateTitle(titleContainer, currentState);
+  }
+  else if (currentZoomLevel == 2){
+    titleContainer = loadCountyTitle(titleContainer, currentCounty);
+  }
 }
 
 function updateChoropleth(){
@@ -251,6 +247,7 @@ function resetState() {
   currentState = null;
   currentStateAbbr = "";
   
+  updateTitle();
   updateInfoPanel();
   // currentStateLabel.innerHTML = "Select state..."
   // currentEmissionsLabel.innerHTML = ""
@@ -258,6 +255,7 @@ function resetState() {
 
 function resetCounty() {
   currentCounty = null;
+  updateTitle();
   updateInfoPanel();
   
   //infoPanelContainer.innerHTML = loadStateInfo();
@@ -273,6 +271,7 @@ function toggleEmissionsType(){
     emissionType = "total_direct";
   }
 
+  updateTitle();
   updateInfoPanel();
   updateChoropleth();
 }
@@ -319,6 +318,7 @@ function zoomToState() {
   hideStateLabels(stateLabels);
   hideCallouts(calloutsGroup);
   renderCountiesForState(currentState.abbr, scale);
+  updateTitle();
   updateInfoPanel();
 
   // Show Reset Button
@@ -334,6 +334,7 @@ function zoomToCounty() {
 
   selectCounty(countyPaths, scale, currentCounty.id)
   
+  updateTitle();
   updateInfoPanel();
 
   // Show Reset Button
@@ -373,6 +374,7 @@ function zoomOutCounty() {
   resetCounty();
   scale = zoomToFeature(mapGroup, path, width, height, currentState.feature);
   selectState(statePaths, scale, currentState.abbr);
+  updateTitle();
   updateInfoPanel();
 
   updateCountyChoropleth();
@@ -405,11 +407,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Containers
+    const baseContainer = dashboard.querySelector(".edgi-map-container");
     const mapContainer = dashboard.querySelector(".edgi-map-layout");
 
     const canvasContainer = dashboard.querySelector(".edgi-map-canvas");
     resetBtn = dashboard.querySelector(".edgi-btn-reset");
     const wrapper = dashboard.querySelector(".edgi-map-canvas-wrapper");
+
+    titleContainer = document.createElement("div");
+    titleContainer.innerHTML = loadDefaultTitle();
+    baseContainer.insertBefore(titleContainer, baseContainer.firstChild);
 
     infoPanelContainer = document.createElement("div");
     infoPanelContainer.innerHTML = loadDefaultInfo();
