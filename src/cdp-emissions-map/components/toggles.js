@@ -20,7 +20,7 @@ export default `
 			    </label>
 			</div>
 			<div class="label-group">
-				<label>Show Texas</label>
+				<label>Include Texas</label>
 			</div>
 		</div>
 	</div>

@@ -43,3 +43,21 @@ export function sortCountiesIntoStates(stateData, countyData){
     }
     return stateData;
 }
+
+export function removeTexasStateData(stateData){
+    var output = structuredClone(stateData);
+    delete output.TX;
+    return output;
+}
+
+export function removeTexasCountyData(countyData){
+    var output = {};
+
+    for (var key in countyData) {
+        var county = countyData[key];
+        if (county.state_abbr != "TX"){
+            output[key] = county;
+        }
+    }
+    return output;
+}

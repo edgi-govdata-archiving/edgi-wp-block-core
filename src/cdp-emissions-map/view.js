@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
-import { processStateData, processCountyData, sortCountiesIntoStates } from "./utilities/process-data.js"
+import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
 import SMALL_STATES from "./utilities/special-states.js"
@@ -36,6 +36,7 @@ var emissionType = "total_direct" //or "total_supplier"
 var stateData = {};
 var stateDataNoTexas = {};
 var countyData = {};
+var countyDataNoTexas = {};
 
 var countiesFeatures = {}
 var countiesGroup;
@@ -65,7 +66,8 @@ const height = 600;
 // var directRangeNoTexas;
 // var supplierRangeNoTexas;
 
-var range;
+var stateRange;
+var countyRange;
 
 var includeTexas = true;
 
@@ -102,10 +104,16 @@ function toggleTexas(){
 }
 
 function calculateRanges(){
-  range = new Range(); 
+  stateRange = new Range(); 
 
-  range.setStateRange(stateData, true);
-  range.setStateRange(stateDataNoTexas, false);
+  stateRange.setRange(stateData, true);
+  stateRange.setRange(stateDataNoTexas, false);
+
+  countyRange = new Range(); 
+
+  countyRange.setRange(countyData, true);
+  countyRange.setRange(countyDataNoTexas, false);
+
 
   // directRange = getEmissionRange(stateData, "total_direct");
   // supplierRange = getEmissionRange(stateData, "total_supplier");
@@ -147,10 +155,10 @@ function getStateColor(name){
     var emissions = emissionsData[emissionType];
 
     if (emissionType == "total_direct"){
-      return getDirectColor(emissions, range.getStateRange("total_direct", includeTexas));
+      return getDirectColor(emissions, stateRange.getRange("total_direct", includeTexas));
     }
     else{
-      return getSupplierColor(emissions, range.getStateRange("total_supplier", includeTexas));
+      return getSupplierColor(emissions, stateRange.getRange("total_supplier", includeTexas));
     }
   }
   else{
@@ -168,10 +176,10 @@ function getCountyColor(countyFips){
     var emissions = emissionsData[emissionType];
 
     if (emissionType == "total_direct"){
-      return getDirectColor(emissions, [0, 10000000])
+      return getDirectColor(emissions, countyRange.getRange("total_direct", includeTexas))
     }
     else{
-      return getSupplierColor(emissions, [0, 10000000])
+      return getSupplierColor(emissions, countyRange.getRange("total_supplier", includeTexas))
     }
   }
   else{
@@ -449,8 +457,8 @@ document.addEventListener("DOMContentLoaded", () => {
         countyData = processCountyData(countyGHGUrl);
 
         stateData = sortCountiesIntoStates(stateData, countyData);
-        stateDataNoTexas = structuredClone(stateData);
-        delete stateDataNoTexas.TX;
+        stateDataNoTexas = removeTexasStateData(stateData);
+        countyDataNoTexas = removeTexasCountyData(countyData);
 
         calculateRanges();
         updateInfoPanel();

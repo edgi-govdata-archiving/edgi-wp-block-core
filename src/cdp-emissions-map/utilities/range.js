@@ -4,18 +4,7 @@ export default class Range{
 	directRangeNoTexas;
 	supplierRangeNoTexas;
 
-	stateRange = {
-		total_direct: {
-			all: [],
-			noTexas : []
-		},
-		total_supplier: {
-			all: [],
-			noTexas : []
-		}
-	};
-
-	countyRange = {
+	range = {
 		total_direct: {
 			all: [],
 			noTexas : []
@@ -31,24 +20,24 @@ export default class Range{
 		
 	}
 
-	getStateRange(emissionType, includeTexas){
+	getRange(emissionType, includeTexas){
 		if (includeTexas){
-			return this.stateRange[emissionType].all;
+			return this.range[emissionType].all;
 		}
 		else{
-			return this.stateRange[emissionType].noTexas;
+			return this.range[emissionType].noTexas;
 		}
 		
 	}
 
-	setStateRange(data, includeTexas){
+	setRange(data, includeTexas){
 		if (includeTexas){
-	    	this.stateRange.total_direct.all = this.getEmissionRange(data, "total_direct");
-	    	this.stateRange.total_supplier.all = this.getEmissionRange(data, "total_supplier");
+	    	this.range.total_direct.all = this.getEmissionRange(data, "total_direct");
+	    	this.range.total_supplier.all = this.getEmissionRange(data, "total_supplier");
 	    }
 	    else{
-	    	this.stateRange.total_direct.noTexas = this.getEmissionRange(data, "total_direct");
-	    	this.stateRange.total_supplier.noTexas = this.getEmissionRange(data, "total_supplier");
+	    	this.range.total_direct.noTexas = this.getEmissionRange(data, "total_direct");
+	    	this.range.total_supplier.noTexas = this.getEmissionRange(data, "total_supplier");
 	    }
 	}
 
@@ -64,7 +53,7 @@ export default class Range{
             var emissions = yearData[emissionType];
 
             //check if lower that min range
-            if (emissions < range[0]){
+            if (emissions < range[0] && emissions >= 0){
                 range[0] = emissions;
             }
             
@@ -72,8 +61,13 @@ export default class Range{
             if (emissions > range[1]){
                 range[1] = emissions;
             }
+
+            // if (emissions < 0){
+            // 	console.log(data[region]);
+            // }
         }
     }
+    console.log(range);
     return range;
 }
 }
