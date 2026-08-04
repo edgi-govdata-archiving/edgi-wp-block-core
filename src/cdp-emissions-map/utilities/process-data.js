@@ -27,10 +27,11 @@ export function processCountyData(rawData){
             county_name: source.county_name,
             county_fips: source.county_fips,
             state_abbr: source.state,
-            emissions: source.emissions
+            emissions: source.emissions,
+            facility_data: [],
+            facility_geometry: [],
         }
     }
-    //console.log(output);
     return output;
 }
 
@@ -82,7 +83,13 @@ export function processFacilitiesData(countyData, rawFacilityData){
             county_fips: Math.floor(source["County_FIPS"]) //value is float in dataset
         }
 
-        countyData[facility.county_fips] = facility;
+
+        if (countyData[facility.county_fips]){
+            countyData[facility.county_fips].facility_data.push(facility);
+            countyData[facility.county_fips].facility_geometry.push(facilitiesArray[key].geometry);
+        }
+
+
 
 
        // if (index < 3){

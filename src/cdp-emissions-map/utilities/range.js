@@ -59,7 +59,6 @@ export default class Range{
             // }
         }
     }
-    console.log(range);
     return range;
 	}
 }

@@ -17,6 +17,7 @@ import toggles from './components/toggles.js';
 import callout from './components/callout-group.js';
 import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState, hideTexas, showTexas} from './components/state-paths.js';
 import { setupCountyPaths, resetCountyPaths, selectCounty, deselectCounty} from './components/county-paths.js';
+import { setupFacilityPaths } from './components/facility-paths.js';
 import { zoomToFeature, resetZoom} from './components/map-zoom.js';
 
 import { setupStateLabels, showStateLabels, hideStateLabels, hideTexasLabel } from './components/state-labels.js';
@@ -44,6 +45,9 @@ var facilitiesData = {};
 var countiesFeatures = {}
 var countiesGroup;
 var countyPaths;
+
+var facilityGroup;
+var facilityPath;
 
 var mapGroup;
 var statesGroup;
@@ -479,6 +483,18 @@ document.addEventListener("DOMContentLoaded", () => {
           .attr("width", "100%")
           .attr("height", "100%");
 
+        svg.append("svg:defs").append("svg:marker")
+          .attr("id", "triangle")
+          .attr("class", "facility-marker")
+          .attr("refX", 1)
+          .attr("refY", 1)
+          .attr("markerWidth", 2)
+          .attr("markerHeight", 2)
+          .attr("markerUnits","userSpaceOnUse")
+          .append("path")
+          .attr("d", "M 0 2 1 0 2 2")
+          .style("fill", "#00000088");
+
         canvasContainer.appendChild(svg.node());
 
         // Draw projection
@@ -504,6 +520,7 @@ document.addEventListener("DOMContentLoaded", () => {
         mapGroup = svg.append("g").attr("class", "map-group");
         statesGroup = mapGroup.append("g").attr("class", "states-group");
         countiesGroup = mapGroup.append("g").attr("class", "counties-group");
+        facilityGroup = mapGroup.append("g").attr("class", "facilities-group");
         labelsGroup = mapGroup.append("g").attr("class", "labels-group");
 
         // Callouts group (rendered outside mapGroup so it doesn't scale/zoom)
@@ -511,6 +528,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // 3. Render States
         statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState);
+        console.log(statesFeatures);
+
+        var testData = countyData["12086"].facility_geometry;
+        console.log(testData);
+        facilityPath = setupFacilityPaths(facilityGroup, testData, path);
 
         stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
 
