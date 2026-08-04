@@ -17,7 +17,7 @@ import toggles from './components/toggles.js';
 import callout from './components/callout-group.js';
 import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState, hideTexas, showTexas} from './components/state-paths.js';
 import { setupCountyPaths, resetCountyPaths, selectCounty, deselectCounty} from './components/county-paths.js';
-import { setupFacilityPaths } from './components/facility-paths.js';
+import { setupFacilityPaths, resetFacilityPaths } from './components/facility-paths.js';
 import { zoomToFeature, resetZoom} from './components/map-zoom.js';
 
 import { setupStateLabels, showStateLabels, hideStateLabels, hideTexasLabel } from './components/state-labels.js';
@@ -336,10 +336,17 @@ function zoomToCounty() {
   scale = zoomToFeature(mapGroup, path, width, height, currentCounty.feature);
 
 
+
   selectCounty(countyPaths, scale, currentCounty.id)
   
   updateTitle();
   updateInfoPanel();
+
+  if (facilitiesData[currentCounty.id]){
+    var currentFacilities = facilitiesData[currentCounty.id].geometry;
+    console.log(currentFacilities);
+    facilityPath = setupFacilityPaths(facilityGroup, currentFacilities, path);
+  }
 
   // Show Reset Button
   resetBtn.style.display = "flex";
@@ -383,6 +390,7 @@ function zoomOutCounty() {
   updateCountyChoropleth();
 
   deselectCounty(countyPaths);
+  resetFacilityPaths(facilityGroup);
   
 }
 
@@ -408,6 +416,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!tooltip) {
       tooltip = document.createElement("div");
       tooltip.className = "edgi-map-tooltip";
+
       document.body.appendChild(tooltip);
     }
 
@@ -468,7 +477,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 1. Process data for fast lookup
         stateData = processStateData(stateGHGUrl);
         countyData = processCountyData(countyGHGUrl);
-        countyData = processFacilitiesData(countyData, testFacilitiesUrl);
+        facilitiesData = processFacilitiesData(testFacilitiesUrl);
 
         stateData = sortCountiesIntoStates(stateData, countyData);
         stateDataNoTexas = removeTexasStateData(stateData);
@@ -487,12 +496,12 @@ document.addEventListener("DOMContentLoaded", () => {
           .attr("id", "triangle")
           .attr("class", "facility-marker")
           .attr("refX", 1)
-          .attr("refY", 1)
+          .attr("refY", 5)
           .attr("markerWidth", 2)
           .attr("markerHeight", 2)
           .attr("markerUnits","userSpaceOnUse")
           .append("path")
-          .attr("d", "M 0 2 1 0 2 2")
+          .attr("d", "M 0 1 1 0 2 1")
           .style("fill", "#00000088");
 
         canvasContainer.appendChild(svg.node());
@@ -530,9 +539,9 @@ document.addEventListener("DOMContentLoaded", () => {
         statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState);
         console.log(statesFeatures);
 
-        var testData = countyData["12086"].facility_geometry;
-        console.log(testData);
-        facilityPath = setupFacilityPaths(facilityGroup, testData, path);
+        // var testData = facilitiesData["12086"].geometry;
+        // console.log(testData);
+        // facilityPath = setupFacilityPaths(facilityGroup, testData, path);
 
         stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
 

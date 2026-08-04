@@ -64,34 +64,36 @@ export function removeTexasCountyData(countyData){
 }
 
 
-export function processFacilitiesData(countyData, rawFacilityData){
+export function processFacilitiesData(rawData){
     var output = {};
-    const facilitiesArray = rawFacilityData["features"];
+    const facilitiesArray = rawData["features"];
 
     var index = 0;
 
     for (var key in facilitiesArray) {
-       var source = facilitiesArray[key]["properties"]
+
+       var properties = facilitiesArray[key]["properties"]
+       var countyFips = Math.floor(properties["County_FIPS"]) //value is float in dataset;
        var facility = {};
 
         facility = {
-            facility_id : source["Facility Id"],
-            facility_name : source["Facility Name"],
-            total_direct : source["Total Direct Emissions"],
-            total_supplier : source["Total Supplier Emissions"],
-            latest_parent : source["Latest Parent Company"],
-            county_fips: Math.floor(source["County_FIPS"]) //value is float in dataset
+            facility_id : properties["Facility Id"],
+            facility_name : properties["Facility Name"],
+            total_direct : properties["Total Direct Emissions"],
+            total_supplier : properties["Total Supplier Emissions"],
+            latest_parent : properties["Latest Parent Company"],
+            county_fips: countyFips
         }
 
-
-        if (countyData[facility.county_fips]){
-            countyData[facility.county_fips].facility_data.push(facility);
-            countyData[facility.county_fips].facility_geometry.push(facilitiesArray[key].geometry);
+        if (!output[countyFips]){
+            output[countyFips] = {};
+            output[countyFips].properties = [];
+            output[countyFips].geometry = [];
         }
 
-
-
-
+        output[countyFips].properties.push(facility);
+        output[countyFips].geometry.push(facilitiesArray[key].geometry);
+        
        // if (index < 3){
        //  console.log(facility);
        //  index++;
@@ -99,5 +101,5 @@ export function processFacilitiesData(countyData, rawFacilityData){
    
     }
     //console.log(output);
-    return countyData;
+    return output;
 }

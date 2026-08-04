@@ -8,27 +8,17 @@ export function setupFacilityPaths(facilityGroup, facilityData, path){
         .append("path")
         .attr("marker-end", "url(#triangle)")
         .attr("class", "facility-path")
-        .attr("d", path);
-
-
-
-		// .selectAll(".facility-path")
-		// .data(facilityData)
-		// .enter()
-		// .append("circle")
-		// .attr("class", "facility-path")
-		// .attr("d", path)
-		// .style("fill", "green");
-
-		// .style("fill", (d) => {
-		// 	// const abbr = getNameToAbbr(d.properties.name);
-		// 	// return getStateColor(d.properties.name)
-		// })
-		// .on("click", (event, d) => {
-		// 	event.stopPropagation();
-		// 	const abbr = getNameToAbbr(d.properties.name);
-		// 	if (abbr) setCurrentState(d, abbr);
-		// })
+        .attr("d", path)
+        .style("opacity", 1)
 
 	return facilityPaths;
+}
+
+
+export function resetFacilityPaths(facilityGroup){
+	//countiesGroup.innerHTML = "";
+	facilityGroup.selectAll(".facility-path").remove();
+	// facilityGroup.transition()
+	// .duration(200)
+	// .style("opacity", 0);
 }
