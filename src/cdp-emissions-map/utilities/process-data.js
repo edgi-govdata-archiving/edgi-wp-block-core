@@ -74,30 +74,31 @@ export function processFacilitiesData(rawData){
 
        var properties = facilitiesArray[key]["properties"]
        var countyFips = Math.floor(properties["County_FIPS"]) //value is float in dataset;
-       var facility = {};
+       var facility = facilitiesArray[key];
 
-        facility = {
-            facility_id : properties["Facility Id"],
-            facility_name : properties["Facility Name"],
-            total_direct : properties["Total Direct Emissions"],
-            total_supplier : properties["Total Supplier Emissions"],
-            latest_parent : properties["Latest Parent Company"],
-            county_fips: countyFips
-        }
+        // facility = {
+        //     facility_id : properties["Facility Id"],
+        //     facility_name : properties["Facility Name"],
+        //     total_direct : properties["Total Direct Emissions"],
+        //     total_supplier : properties["Total Supplier Emissions"],
+        //     latest_parent : properties["Latest Parent Company"],
+        //     county_fips: countyFips
+        // }
 
         if (!output[countyFips]){
-            output[countyFips] = {};
-            output[countyFips].properties = [];
-            output[countyFips].geometry = [];
+            output[countyFips] = [];
+            // output[countyFips].properties = [];
+            // output[countyFips].geometry = [];
         }
 
-        output[countyFips].properties.push(facility);
-        output[countyFips].geometry.push(facilitiesArray[key].geometry);
+        // output[countyFips].properties.push(facility);
+        // output[countyFips].geometry.push(facilitiesArray[key]);
+        output[countyFips].push(facility);
         
-       // if (index < 3){
-       //  console.log(facility);
-       //  index++;
-       // }
+       if (index < 2){
+        console.log(output[countyFips]);
+        index++;
+       }
    
     }
     //console.log(output);

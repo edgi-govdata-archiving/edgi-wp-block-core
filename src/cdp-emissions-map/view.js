@@ -57,6 +57,7 @@ var calloutsGroup;
 var backButton;
 
 var path;
+var projection;
 
 var zoomLevels = ["country", "state", "county", "facility"];
 var currentZoomLevel = 0;
@@ -85,6 +86,7 @@ var currentState = {
   "path" : "",
 }
 var currentCounty = null;
+
 
 function toggleTexas(){
   includeTexas = !includeTexas;
@@ -335,17 +337,24 @@ function zoomToCounty() {
 
   scale = zoomToFeature(mapGroup, path, width, height, currentCounty.feature);
 
-
-
   selectCounty(countyPaths, scale, currentCounty.id)
   
   updateTitle();
   updateInfoPanel();
 
   if (facilitiesData[currentCounty.id]){
-    var currentFacilities = facilitiesData[currentCounty.id].geometry;
-    console.log(currentFacilities);
-    facilityPath = setupFacilityPaths(facilityGroup, currentFacilities, path);
+    var currentFacilities = facilitiesData[currentCounty.id];
+    var filteredFacilities = [];
+    if (emissionType == "total_direct"){
+      filteredFacilities = currentFacilities.filter(facility => facility.properties["Is_Direct_Emitter"]);
+    }
+    else{
+      filteredFacilities = currentFacilities.filter(facility => facility.properties["Is_Supplier"])
+    }
+    
+    // console.log(currentFacilities);
+    // console.log(filteredFacilities);
+    facilityPath = setupFacilityPaths(facilityGroup, filteredFacilities, path, projection, emissionType);
   }
 
   // Show Reset Button
@@ -491,27 +500,27 @@ document.addEventListener("DOMContentLoaded", () => {
           .attr("width", "100%")
           .attr("height", "100%");
 
-        svg.append("svg:defs").append("svg:marker")
-          .attr("id", "triangle")
-          .attr("class", "facility-marker")
-          .attr("refX", 1)
-          .attr("refY", 5)
-          .attr("markerWidth", 2)
-          .attr("markerHeight", 2)
-          .attr("markerUnits","userSpaceOnUse")
-          .append("path")
-          .attr("d", "M 0 1 1 0 2 1")
-          .style("fill", "#00000088");
+        // svg.append("svg:defs").append("svg:marker")
+        //   .attr("id", "triangle")
+        //   .attr("class", "facility-marker")
+        //   .attr("refX", .5)
+        //   .attr("refY", 4.5)
+        //   .attr("markerWidth", 1)
+        //   .attr("markerHeight", 1)
+        //   .attr("markerUnits","userSpaceOnUse")
+        //   .append("path")
+        //   .attr("d", "M 0 .5 .5 0 1 .5")
+        //   .style("fill", "#00000088");
 
         canvasContainer.appendChild(svg.node());
 
         // Draw projection
-        const projection = d3
+        projection = d3
           .geoAlbersUsa()
           .translate([width / 2, height / 2])
           .scale(1150);
 
-        path = d3.geoPath().projection(projection);
+        path = d3.geoPath().projection(projection).pointRadius(.5);
 
         // Extract GeoJSON features
         const statesFeatures = topojson.feature(
@@ -538,9 +547,9 @@ document.addEventListener("DOMContentLoaded", () => {
         statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState);
         console.log(statesFeatures);
 
-        // var testData = facilitiesData["12086"].geometry;
-        // console.log(testData);
-        // facilityPath = setupFacilityPaths(facilityGroup, testData, path);
+        var testData = facilitiesData["12086"];
+        console.log(testData);
+        facilityPath = setupFacilityPaths(facilityGroup, testData, path, projection, emissionType);
 
         stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
 

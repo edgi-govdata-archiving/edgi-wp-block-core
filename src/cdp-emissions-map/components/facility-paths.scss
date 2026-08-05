@@ -1,12 +1,18 @@
 	/* Map Elements styling */
 	.facility-path {
-		fill: none;
-		stroke: none;
+		fill: red;
+		stroke: 1px;
 		vector-effect: non-scaling-stroke;
 		markerWidth: "0"
+
+
+	
 	}
 
-	.facility-marker{
-		fill: red;
-		stroke: 2px solid red;
+	.direct-facility{
+		fill: #00660088;
+	}
+
+		.direct-facility{
+		fill: #00006688;
 	}
