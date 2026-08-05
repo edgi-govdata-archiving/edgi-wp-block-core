@@ -1,11 +1,11 @@
 var defaultTitle = 
-	`<div class="edgi-map-header">
-          <h3 id="map-title" class="edgi-map-title">What states have the highest emissions?</h3>
+	`<div class="map-header">
+          <h3 id="map-title" class="map-title">What states have the highest emissions?</h3>
      </div>`
 
 var titleTemplate = 
-	`<div class="edgi-map-header">
-          <h3 id="map-title" class="edgi-map-title">What states have the highest emissions?</h3>
+	`<div class="map-header">
+          <h3 id="map-title" class="map-title">What states have the highest emissions?</h3>
      </div>`
 
 export function loadDefaultTitle(){

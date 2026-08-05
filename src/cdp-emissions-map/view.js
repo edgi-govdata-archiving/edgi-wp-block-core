@@ -54,7 +54,7 @@ var statesGroup;
 var labelsGroup;
 var stateLabels;
 var calloutsGroup;
-var resetBtn;
+var backButton;
 
 var path;
 
@@ -326,7 +326,7 @@ function zoomToState() {
   updateInfoPanel();
 
   // Show Reset Button
-  resetBtn.style.display = "flex";
+  backButton.style.display = "flex";
 }
 
 
@@ -349,7 +349,7 @@ function zoomToCounty() {
   }
 
   // Show Reset Button
-  resetBtn.style.display = "flex";
+  backButton.style.display = "flex";
   
 }
 
@@ -374,8 +374,8 @@ function zoomOutState() {
   showCallouts(calloutsGroup);
   showStateLabels(stateLabels, includeTexas);
 
-  // Hide Reset Button
-  resetBtn.style.display = "none";
+  // Hide Back Button
+  backButton.style.display = "none";
   //tooltip.style.display = "none";
 }
 
@@ -395,7 +395,7 @@ function zoomOutCounty() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const dashboards = document.querySelectorAll(".edgi-visualization-dashboard");
+  const dashboards = document.querySelectorAll(".cdp-emissions-map");
 
   dashboards.forEach((dashboard) => {
     const csvUrl = dashboard.getAttribute("data-csv-url");
@@ -421,12 +421,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Containers
-    const baseContainer = dashboard.querySelector(".edgi-map-container");
-    const mapContainer = dashboard.querySelector(".edgi-map-layout");
+    const baseContainer = dashboard.querySelector(".dashboard");
 
-    const canvasContainer = dashboard.querySelector(".edgi-map-canvas");
-    resetBtn = dashboard.querySelector(".edgi-btn-reset");
-    const wrapper = dashboard.querySelector(".edgi-map-canvas-wrapper");
+    const canvasContainer = dashboard.querySelector(".map");
+    backButton = dashboard.querySelector(".back-button");
+    const wrapper = dashboard.querySelector(".map-wrapper");
 
     titleContainer = document.createElement("div");
     titleContainer.innerHTML = loadDefaultTitle();
@@ -560,7 +559,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
 
         // Reset Zoom action
-        resetBtn.addEventListener("click", () => {
+        backButton.addEventListener("click", () => {
           if (currentZoomLevel == 2){ //if zoomed to county
             zoomOutCounty();
 
