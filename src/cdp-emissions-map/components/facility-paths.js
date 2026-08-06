@@ -1,4 +1,4 @@
-export function setupFacilityPaths(facilityGroup, facilityData, path, projection, emissionType){
+export function loadFacilityPaths(facilityGroup, facilityData, path, projection, year, emissionType){
 
 	let facilityPaths = facilityGroup
 		.append("g")
@@ -7,7 +7,7 @@ export function setupFacilityPaths(facilityGroup, facilityData, path, projection
 		.enter()
 		.append("circle")
 		.attr("cx", function(d) {
-			// console.log(d.geometry.coordinates);
+			//console.log(d);
 			// var point = projection(d.geometry.coordinates);
 			// console.log(point)
 			return projection(d.geometry.coordinates)[0];
@@ -17,11 +17,12 @@ export function setupFacilityPaths(facilityGroup, facilityData, path, projection
 			return projection(d.geometry.coordinates)[1];
 		})
 		.attr("r", function(d) {
+			//d.emissions[year]
 			//return Math.min(1, Math.max(10, d.properties["Total Direct Emissions"] * .0001));
 			return 1;
 		})
 		.attr("class", emissionType == "total_direct" ? "direct-facility" : "supplier-facility")
-		.attr("fill", "#00660088");
+		.attr("fill", "#00000088" );
 
 		// .append("g")
         // .attr("class", "facility-path")

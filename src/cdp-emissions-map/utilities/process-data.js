@@ -64,43 +64,68 @@ export function removeTexasCountyData(countyData){
 }
 
 
-export function processFacilitiesData(rawData){
-    var output = {};
+export function processFacilitiesYear(facilityData, rawData, year){
     const facilitiesArray = rawData["features"];
 
     var index = 0;
 
     for (var key in facilitiesArray) {
 
-       var properties = facilitiesArray[key]["properties"]
-       var countyFips = Math.floor(properties["County_FIPS"]) //value is float in dataset;
-       var facility = facilitiesArray[key];
+       var entry = facilitiesArray[key];
+       var properties = entry["properties"];
+       var countyFips = Math.floor(properties["County_FIPS"]); //value is float in dataset;
+       var facilityId = properties["Facility Id"];
+       
 
-        // facility = {
-        //     facility_id : properties["Facility Id"],
-        //     facility_name : properties["Facility Name"],
-        //     total_direct : properties["Total Direct Emissions"],
-        //     total_supplier : properties["Total Supplier Emissions"],
-        //     latest_parent : properties["Latest Parent Company"],
-        //     county_fips: countyFips
-        // }
-
-        if (!output[countyFips]){
-            output[countyFips] = [];
-            // output[countyFips].properties = [];
-            // output[countyFips].geometry = [];
-        }
-
-        // output[countyFips].properties.push(facility);
-        // output[countyFips].geometry.push(facilitiesArray[key]);
-        output[countyFips].push(facility);
-        
-       if (index < 2){
-        console.log(output[countyFips]);
-        index++;
+       //if main facilityData does not already include county, start new list to track facilities in that county
+       if (!facilityData[countyFips]){
+            facilityData[countyFips] = {};
        }
+
+
+       var listedFacility = facilityData[countyFips][facilityId];
+       
+       //if specific facility does not exist in that list, start new entry
+       if (!listedFacility){
+
+            var facilityEmissions = {};
+            facilityEmissions[year] = {
+                total_direct : properties["Total Direct Emissions"],
+                total_supplier : properties["Total Supplier Emissions"]
+            };
+
+            var facility = {
+                facility_id : facilityId,
+                facility_name : properties["Facility Name"],
+                latest_parent : properties["Latest Parent Company"],
+                is_direct_emitter : properties["Is_Direct_Emitter"],
+                is_supplier : properties["Is_Supplier"],
+                county_fips: countyFips,
+                geometry : entry.geometry,
+                emissions : facilityEmissions
+            }
+
+            facilityData[countyFips][facilityId] = facility;
+       }
+
+       else{
+          listedFacility.emissions[year].total_direct = properties["Total Direct Emissions"];
+          listedFacility.emissions[year].total_supplier = properties["Total Supplier Emissions"];
+
+          facilityData[countyFips][facilityId] = facility;
+       }
+
+
+       //  // output[countyFips].properties.push(facility);
+       //  // output[countyFips].geometry.push(facilitiesArray[key]);
+       //  output[countyFips].push(facility);
+        
+       // if (index < 1){
+       //  console.log(facilityData[countyFips]);
+       //  index++;
+       // }
    
     }
     //console.log(output);
-    return output;
+    return facilityData;
 }

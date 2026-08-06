@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
-import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData, processFacilitiesData } from "./utilities/process-data.js"
+import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData, processFacilitiesYear } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
 import SMALL_STATES from "./utilities/special-states.js"
@@ -17,7 +17,7 @@ import toggles from './components/toggles.js';
 import callout from './components/callout-group.js';
 import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState, hideTexas, showTexas} from './components/state-paths.js';
 import { setupCountyPaths, resetCountyPaths, selectCounty, deselectCounty} from './components/county-paths.js';
-import { setupFacilityPaths, resetFacilityPaths } from './components/facility-paths.js';
+import { loadFacilityPaths, resetFacilityPaths } from './components/facility-paths.js';
 import { zoomToFeature, resetZoom} from './components/map-zoom.js';
 
 import { setupStateLabels, showStateLabels, hideStateLabels, hideTexasLabel } from './components/state-labels.js';
@@ -40,7 +40,7 @@ var stateData = {};
 var stateDataNoTexas = {};
 var countyData = {};
 var countyDataNoTexas = {};
-var facilitiesData = {};
+var facilityData = {};
 
 var countiesFeatures = {}
 var countiesGroup;
@@ -342,19 +342,19 @@ function zoomToCounty() {
   updateTitle();
   updateInfoPanel();
 
-  if (facilitiesData[currentCounty.id]){
-    var currentFacilities = facilitiesData[currentCounty.id];
-    var filteredFacilities = [];
-    if (emissionType == "total_direct"){
-      filteredFacilities = currentFacilities.filter(facility => facility.properties["Is_Direct_Emitter"]);
-    }
-    else{
-      filteredFacilities = currentFacilities.filter(facility => facility.properties["Is_Supplier"])
-    }
+  if (facilityData[currentCounty.id]){
+    var currentFacilities = Object.values(facilityData[currentCounty.id]);
+    // var filteredFacilities = [];
+    // if (emissionType == "total_direct"){
+    //   filteredFacilities = currentFacilities.filter(facility => facility.properties["Is_Direct_Emitter"]);
+    // }
+    // else{
+    //   filteredFacilities = currentFacilities.filter(facility => facility.properties["Is_Supplier"])
+    // }
     
-    // console.log(currentFacilities);
+    console.log(currentFacilities);
     // console.log(filteredFacilities);
-    facilityPath = setupFacilityPaths(facilityGroup, filteredFacilities, path, projection, emissionType);
+    facilityPath = loadFacilityPaths(facilityGroup, currentFacilities, path, projection, 2016, emissionType);
   }
 
   // Show Reset Button
@@ -485,7 +485,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // 1. Process data for fast lookup
         stateData = processStateData(stateGHGUrl);
         countyData = processCountyData(countyGHGUrl);
-        facilitiesData = processFacilitiesData(testFacilitiesUrl);
+        facilityData = processFacilitiesYear(facilityData, testFacilitiesUrl, 2016);
 
         stateData = sortCountiesIntoStates(stateData, countyData);
         stateDataNoTexas = removeTexasStateData(stateData);
@@ -547,9 +547,9 @@ document.addEventListener("DOMContentLoaded", () => {
         statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState);
         console.log(statesFeatures);
 
-        var testData = facilitiesData["12086"];
-        console.log(testData);
-        facilityPath = setupFacilityPaths(facilityGroup, testData, path, projection, emissionType);
+        // var testData = facilitiesData["12086"];
+        // console.log(testData);
+        // facilityPath = loadFacilityPaths(facilityGroup, testData, path, projection, year, emissionType);
 
         stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
 
