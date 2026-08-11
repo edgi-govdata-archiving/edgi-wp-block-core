@@ -1,4 +1,4 @@
-export function loadFacilityPaths(facilityGroup, facilityData, path, projection, year, emissionType){
+export function loadFacilityPaths(facilityGroup, facilityData, path, projection, year, range, emissionType, includeTexas){
 
 	let facilityPaths = facilityGroup
 		.append("g")
@@ -17,12 +17,23 @@ export function loadFacilityPaths(facilityGroup, facilityData, path, projection,
 			return projection(d.geometry.coordinates)[1];
 		})
 		.attr("r", function(d) {
-			//d.emissions[year]
+			return .25 + getScaledRadius(d.emissions[year][emissionType], range, emissionType, includeTexas) * 5;
 			//return Math.min(1, Math.max(10, d.properties["Total Direct Emissions"] * .0001));
-			return 1;
 		})
-		.attr("class", emissionType == "total_direct" ? "direct-facility" : "supplier-facility")
-		.attr("fill", "#00000088" );
+		.attr("class", function(d) {
+			//console.log(JSON.stringify(d))
+			if (emissionType == "total_direct" && d.is_direct_emitter){
+				return "direct-facility";
+			}
+			else if (emissionType == "total_supplier" && d.is_supplier){
+				return "supplier-facility";
+			}
+			else{
+				return "hide-facility";
+			}
+		})
+			//emissionType == "total_direct" ? "direct-facility" : "supplier-facility")
+		//attr("fill", "transparent" );
 
 		// .append("g")
         // .attr("class", "facility-path")
@@ -63,4 +74,23 @@ export function resetFacilityPaths(facilityGroup){
 	// facilityGroup.transition()
 	// .duration(200)
 	// .style("opacity", 0);
+}
+
+function getScaledRadius(emissions, rangeObj, type, includeTexas){
+	//console.log("range obj: " + JSON.stringify(rangeObj));
+	if (includeTexas){
+		return scale(emissions, rangeObj["range"][type].all);
+	}
+	else{
+		return scale(emissions, rangeObj["range"][type].noTexas);
+	}
+}
+
+//returns value between 0 and 1 mapped to scale
+function scale(value, range){
+	//console.log(range);
+	//console.log("value: " + value);
+	var result = (value - range[0]) / (range[1] - range[0]);
+	//console.log("result: " + result);
+	return (value - range[0]) / (range[1] - range[0])
 }

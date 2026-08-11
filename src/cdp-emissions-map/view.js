@@ -107,6 +107,10 @@ function toggleTexas(){
       showStateLabels(stateLabels, true);
     }
   }
+  else if (currentZoomLevel == 2){
+
+    updateFacilities();
+  }
 
   updateChoropleth();
   updateInfoPanel();
@@ -256,6 +260,17 @@ function updateCountyChoropleth(){
       });
 }
 
+function updateFacilities(){
+  resetFacilityPaths(facilityGroup);
+    if (facilityData[currentCounty.id]){
+    var currentFacilities = Object.values(facilityData[currentCounty.id]);
+    
+    //console.log(currentFacilities);
+    facilityPath = loadFacilityPaths(facilityGroup, currentFacilities, path, projection, 2016, facilityRange, emissionType, includeTexas);
+  }
+
+}
+
 function resetState() {
   currentState = null;
   currentStateAbbr = "";
@@ -282,6 +297,10 @@ function toggleEmissionsType(){
   }
   else{
     emissionType = "total_direct";
+  }
+
+  if (currentZoomLevel == 2){
+    updateFacilities();
   }
 
   updateTitle();
@@ -349,20 +368,7 @@ function zoomToCounty() {
   updateTitle();
   updateInfoPanel();
 
-  if (facilityData[currentCounty.id]){
-    var currentFacilities = Object.values(facilityData[currentCounty.id]);
-    // var filteredFacilities = [];
-    // if (emissionType == "total_direct"){
-    //   filteredFacilities = currentFacilities.filter(facility => facility.properties["Is_Direct_Emitter"]);
-    // }
-    // else{
-    //   filteredFacilities = currentFacilities.filter(facility => facility.properties["Is_Supplier"])
-    // }
-    
-    console.log(currentFacilities);
-    // console.log(filteredFacilities);
-    facilityPath = loadFacilityPaths(facilityGroup, currentFacilities, path, projection, 2016, emissionType);
-  }
+  updateFacilities();
 
   // Show Reset Button
   backButton.style.display = "flex";

@@ -70,11 +70,11 @@ export function removeTexasFacilityData(facilityData, countyData){
     for (var countyFips in facilityData) {
         var countyFacilities = facilityData[countyFips];
         var county = countyData[countyFips];
-        if (!county){
-            mismatchedFipsCount += 1;
-            console.log("mismatched county fips: " + countyFips)
-            
-        }
+        // if (!county){
+        //     mismatchedFipsCount += 1;
+        //     console.log("mismatched county fips: " + countyFips)
+
+        // }
         if (county && county.state_abbr != "TX"){
             output[countyFips] = countyFacilities;
         }
@@ -96,6 +96,10 @@ export function processFacilitiesYear(facilityData, rawData, year){
        var entry = facilitiesArray[key];
        var properties = entry["properties"];
        var countyFips = Math.floor(properties["County_FIPS"]).toString(); //value is float in dataset;
+
+       // if (countyFips == "NaN"){
+       //  console.log("null fips: " + JSON.stringify(properties));
+       // }
 
        if (countyFips.length < 5){
             countyFips = "0" + countyFips;
