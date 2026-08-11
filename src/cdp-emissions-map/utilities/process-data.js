@@ -63,6 +63,28 @@ export function removeTexasCountyData(countyData){
     return output;
 }
 
+export function removeTexasFacilityData(facilityData, countyData){
+    var output = {};
+    var mismatchedFipsCount = 0;
+
+    for (var countyFips in facilityData) {
+        var countyFacilities = facilityData[countyFips];
+        var county = countyData[countyFips];
+        if (!county){
+            mismatchedFipsCount += 1;
+            console.log("mismatched county fips: " + countyFips)
+            
+        }
+        if (county && county.state_abbr != "TX"){
+            output[countyFips] = countyFacilities;
+        }
+    }
+
+    console.log("mismatched county fips count: " + mismatchedFipsCount)
+
+    return output;
+}
+
 
 export function processFacilitiesYear(facilityData, rawData, year){
     const facilitiesArray = rawData["features"];
@@ -73,7 +95,11 @@ export function processFacilitiesYear(facilityData, rawData, year){
 
        var entry = facilitiesArray[key];
        var properties = entry["properties"];
-       var countyFips = Math.floor(properties["County_FIPS"]); //value is float in dataset;
+       var countyFips = Math.floor(properties["County_FIPS"]).toString(); //value is float in dataset;
+
+       if (countyFips.length < 5){
+            countyFips = "0" + countyFips;
+       }
        var facilityId = properties["Facility Id"];
        
 
@@ -120,10 +146,10 @@ export function processFacilitiesYear(facilityData, rawData, year){
        //  // output[countyFips].geometry.push(facilitiesArray[key]);
        //  output[countyFips].push(facility);
         
-       // if (index < 1){
-       //  console.log(facilityData[countyFips]);
-       //  index++;
-       // }
+       if (index < 1){
+        console.log(facilityData[countyFips]);
+        index++;
+       }
    
     }
     //console.log(output);

@@ -1,7 +1,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
-import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData, processFacilitiesYear } from "./utilities/process-data.js"
+import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData, processFacilitiesYear, removeTexasFacilityData } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
 import SMALL_STATES from "./utilities/special-states.js"
@@ -41,6 +41,7 @@ var stateDataNoTexas = {};
 var countyData = {};
 var countyDataNoTexas = {};
 var facilityData = {};
+var facilityDataNoTexas = {};
 
 var countiesFeatures = {}
 var countiesGroup;
@@ -75,6 +76,7 @@ const height = 600;
 
 var stateRange;
 var countyRange;
+var facilityRange;
 
 var includeTexas = true;
 
@@ -121,6 +123,11 @@ function calculateRanges(){
 
   countyRange.setRange(countyData, true);
   countyRange.setRange(countyDataNoTexas, false);
+
+  facilityRange = new Range(); 
+
+  facilityRange.setRange(facilityData, true, true);
+  facilityRange.setRange(facilityDataNoTexas, false, true);
 
 
   // directRange = getEmissionRange(stateData, "total_direct");
@@ -490,6 +497,7 @@ document.addEventListener("DOMContentLoaded", () => {
         stateData = sortCountiesIntoStates(stateData, countyData);
         stateDataNoTexas = removeTexasStateData(stateData);
         countyDataNoTexas = removeTexasCountyData(countyData);
+        facilityDataNoTexas = removeTexasFacilityData(facilityData, countyData);
 
         calculateRanges();
         updateInfoPanel();
