@@ -222,7 +222,12 @@ function updateInfoPanel() {
     infoPanelContainer = loadStateInfo(infoPanelContainer, currentState, currentYear, emissionType);
   }
   else if (currentZoomLevel == 2){
-    infoPanelContainer = loadCountyInfo(infoPanelContainer, currentCounty, currentYear, emissionType);
+    var countyFacilities = [];
+    if (facilityData[currentCounty.id]){
+      countyFacilities = Object.values(facilityData[currentCounty.id]);
+    }
+
+    infoPanelContainer = loadCountyInfo(infoPanelContainer, currentCounty, currentYear, emissionType, countyFacilities);
   }
 }
 

@@ -13,9 +13,9 @@ var defaultInfoPanel = `
 
 var countryInfoPanel = `
 	<section class="info-panel country-view">
-		<h2 id="info-header">United States</h2>
-		<h5 id="info-subheader">2000 Supplier Emissions</h5>
-		<h2>Top Emitting States</h2>
+		<h1 id="info-header">United States</h1>
+		<h3 id="info-subheader">2000 Supplier Emissions</h3>
+		<h3 class="list-header">Top Emitting States</h3>
 		<ol id="top-emitters">
 			<li>Alabama</li>
 			<li>Alaska</li>
@@ -27,11 +27,13 @@ var countryInfoPanel = `
 
 var stateInfoPanel = `
 	<section class="info-panel state-view">
-		<h2 id="info-header">Texas</h2>
-		<h5 id="info-subheader">2000 Supplier Emissions</h5>
-		<h1 id="emissions-total">12,345</h1>
-		<label>tCO₂e</label>
-		<h2>Top Emitting Counties</h2>
+		<h1 id="info-header">Texas</h1>
+		<h3 id="info-subheader">2000 Supplier Emissions</h3>
+		<section class="info-emissions">
+			<h1 id="emissions-total">12,345</h1>
+			<label class=>tCO₂e</label>
+		</section>
+		<h3 class="list-header">Top Emitting Counties</h3>
 		<ol id="top-emitters">
 			<li>Anderson</li>
 			<li>Andrews</li>
@@ -43,10 +45,20 @@ var stateInfoPanel = `
 
  var countyInfoPanel = `
 	<section class="info-panel county-view">
-		<h2 id="info-header">Texas</h2>
-		<h5 id="info-subheader">2000 Supplier Emissions</h5>
-		<h1 id="emissions-total">12,345</h1>
-		<label>tCO₂e</label>
+		<h1 id="info-header">Texas</h1>
+		<h3 id="info-subheader">2000 Supplier Emissions</h3>
+		<section class="info-emissions">
+			<h1 id="emissions-total">12,345</h1>
+			<label class=>tCO₂e</label>
+		</section>
+ 		<h3 class="list-header">Top Emitting Facilities</h3>
+		<ol id="top-emitters">
+			<li>Facility</li>
+			<li>Facility</li>
+			<li>Facility</li>
+			<li>Facility</li>
+			<li>Facility</li>
+		</ol>
 
     </section>`
 
@@ -83,25 +95,27 @@ export function loadStateInfo(container, currentState, year, emissionType){
 	container.innerHTML = stateInfoPanel;
 	container.querySelector("#info-header").innerHTML = header;
 	container.querySelector("#info-subheader").innerHTML = subheader;
-	container.querySelector("#emissions-total").innerHTML = emissions;
+	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
 	container.querySelector("#top-emitters").innerHTML = makeOrderedList(topCounties, "county_name");
 
 	return container;
 } 
 
-export function loadCountyInfo(container, currentCounty, year, emissionType){
+export function loadCountyInfo(container, currentCounty, year, emissionType, countyFacilities){
 	var header = currentCounty.name;
 	var subheader = getSubheader(year, emissionType);
 
 	var data = currentCounty.data;
 
 	var emissions = data.emissions[year][emissionType];
+	var topFacilities = getTopEmitters(countyFacilities, 2016, emissionType, 5);
+	console.log("top facilities: " + topFacilities);
 
 	container.innerHTML = countyInfoPanel;
 	container.querySelector("#info-header").innerHTML = header;
 	container.querySelector("#info-subheader").innerHTML = subheader;
-	container.querySelector("#emissions-total").innerHTML = emissions;
-	// container.querySelector("#top-emitters").innerHTML = makeOrderedList(topCounties);
+	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
+	container.querySelector("#top-emitters").innerHTML = makeOrderedList(topFacilities, "facility_name");
 
 	return container;
 } 
@@ -141,4 +155,23 @@ function makeOrderedList(list, selector){
 		html += "<li>" + list[i][selector] + "</li>";
 	}
 	return html;
+}
+
+function formatEmissions(emissions){
+	var billion = 1000000000;
+	var million = 1000000;
+
+	if (emissions > billion){
+		return round(emissions / billion) + " billion";
+	}
+	else if (emissions > million){
+		return round(emissions / million) + " million";
+	}
+	else{
+		return round(emissions);
+	}
+}
+
+function round(value){
+	return Math.round(value * 100) / 100;
 }

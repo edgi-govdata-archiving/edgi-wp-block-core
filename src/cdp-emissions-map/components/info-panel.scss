@@ -4,4 +4,31 @@
 	display: block;
 	background-color: #edf2f7;
 	padding: 50px;
+
+	#info-header{
+		margin: 0;
+	}
+	#info-subheader{
+		margin: 0;
+	}
+
+	.info-emissions{
+		display: flex;
+		align-items: baseline;
+		padding-top: 1rem;
+
+		#emissions-total{
+			margin: 0;
+			padding-right: .5rem;
+		}
+	}
+
+	.list-header{
+		margin: 0;
+		padding-top: 1rem;
+	}
+
+	h3{
+		font-weight: 500;
+	}
 }
