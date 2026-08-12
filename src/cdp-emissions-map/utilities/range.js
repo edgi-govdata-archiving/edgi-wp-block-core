@@ -34,10 +34,10 @@ export default class Range{
 		    	this.range.total_supplier.noTexas = this.getFacilityRange(data, "total_supplier");
 		    }
 		    
-			// console.log("facility range: " + this.range.total_direct.all);
-			// console.log("facility range: " + this.range.total_supplier.all);
-			// console.log("facility range: " + this.range.total_direct.noTexas);
-			// console.log("facility range: " + this.range.total_supplier.noTexas);
+			console.log("facility range: " + this.range.total_direct.all);
+			console.log("facility range: " + this.range.total_supplier.all);
+			console.log("facility range: " + this.range.total_direct.noTexas);
+			console.log("facility range: " + this.range.total_supplier.noTexas);
 
 		}
 		else{

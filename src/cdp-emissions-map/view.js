@@ -1,6 +1,7 @@
 import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
+import { loadBaseFiles, loadFacilityFiles } from "./utilities/load.js"
 import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData, processFacilitiesYear, removeTexasFacilityData } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
@@ -212,6 +213,10 @@ function updateYear(year){
 
   updateInfoPanel()
   updateChoropleth();
+
+  if (currentZoomLevel == 2){
+    updateFacilities();
+  }
 }
 
 function updateInfoPanel() {
@@ -271,7 +276,7 @@ function updateFacilities(){
     var currentFacilities = Object.values(facilityData[currentCounty.id]);
     
     //console.log(currentFacilities);
-    facilityPath = loadFacilityPaths(facilityGroup, currentFacilities, path, projection, 2016, facilityRange, emissionType, includeTexas);
+    facilityPath = loadFacilityPaths(facilityGroup, currentFacilities, path, projection, currentYear, facilityRange, emissionType, includeTexas);
   }
 
 }
@@ -421,36 +426,28 @@ function zoomOutCounty() {
   
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const dashboards = document.querySelectorAll(".cdp-emissions-map");
+var dashboard;
+var canvasContainer;
+var baseContainer;
 
-  dashboards.forEach((dashboard) => {
-    const csvUrl = dashboard.getAttribute("data-csv-url");
-      const statesJsonUrl = dashboard.getAttribute("data-states-json-url");
-      const countiesJsonUrl = dashboard.getAttribute("data-counties-json-url");
-      const stateGHGUrl = dashboard.getAttribute("data-states-ghg-json-url"); 
-      const countyGHGUrl = dashboard.getAttribute("data-counties-ghg-url");
-      const testFacilitiesUrl = dashboard.getAttribute("data-facilities");
+var statesTopo;
+var countiesTopo;
 
 
-      if (!csvUrl || !statesJsonUrl || !countiesJsonUrl || !stateGHGUrl || !countyGHGUrl) {
-      console.error("CDP Map Dashboard: Missing required data attributes!");
-      return;
-    }
+function loadComponents(){
+// Initialize tooltips
+  let tooltip = document.querySelector(".edgi-map-tooltip");
+  if (!tooltip) {
+    tooltip = document.createElement("div");
+    tooltip.className = "edgi-map-tooltip";
 
-    // Initialize tooltips
-    let tooltip = document.querySelector(".edgi-map-tooltip");
-    if (!tooltip) {
-      tooltip = document.createElement("div");
-      tooltip.className = "edgi-map-tooltip";
-
-      document.body.appendChild(tooltip);
-    }
+    document.body.appendChild(tooltip);
+  }
 
     // Containers
-    const baseContainer = dashboard.querySelector(".dashboard");
+    baseContainer = dashboard.querySelector(".dashboard");
 
-    const canvasContainer = dashboard.querySelector(".map");
+    canvasContainer = dashboard.querySelector(".map");
     backButton = dashboard.querySelector(".back-button");
     const wrapper = dashboard.querySelector(".map-wrapper");
 
@@ -486,132 +483,131 @@ document.addEventListener("DOMContentLoaded", () => {
 
     canvasContainer.innerHTML =
       '<div style="padding: 20px; font-weight:300; color:#afe0d7;">Loading environmental data and maps...</div>';
+}
 
+document.addEventListener("DOMContentLoaded", () => {
 
-    // Load resources
-    Promise.all([
-      d3.csv(csvUrl),
-      d3.json(statesJsonUrl),
-      d3.json(countiesJsonUrl),
-      d3.json(stateGHGUrl),
-      d3.json(countyGHGUrl),
-      d3.json(testFacilitiesUrl)
-    ])
-        .then(([csvData, statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl, testFacilitiesUrl]) => {
-        canvasContainer.innerHTML = "";
+  dashboard = document.querySelector("#cdp-emissions-map");
 
-        // 1. Process data for fast lookup
-        stateData = processStateData(stateGHGUrl);
-        countyData = processCountyData(countyGHGUrl);
-        facilityData = processFacilitiesYear(facilityData, testFacilitiesUrl, 2016);
-
-        stateData = sortCountiesIntoStates(stateData, countyData);
-        stateDataNoTexas = removeTexasStateData(stateData);
-        countyDataNoTexas = removeTexasCountyData(countyData);
-        facilityDataNoTexas = removeTexasFacilityData(facilityData, countyData);
-
-        calculateRanges();
-        updateInfoPanel();
-
-        const svg = d3
-          .create("svg")
-          .attr("viewBox", `0 0 ${width} ${height}`)
-          .attr("width", "100%")
-          .attr("height", "100%");
-
-        // svg.append("svg:defs").append("svg:marker")
-        //   .attr("id", "triangle")
-        //   .attr("class", "facility-marker")
-        //   .attr("refX", .5)
-        //   .attr("refY", 4.5)
-        //   .attr("markerWidth", 1)
-        //   .attr("markerHeight", 1)
-        //   .attr("markerUnits","userSpaceOnUse")
-        //   .append("path")
-        //   .attr("d", "M 0 .5 .5 0 1 .5")
-        //   .style("fill", "#00000088");
-
-        canvasContainer.appendChild(svg.node());
-
-        // Draw projection
-        projection = d3
-          .geoAlbersUsa()
-          .translate([width / 2, height / 2])
-          .scale(1150);
-
-        path = d3.geoPath().projection(projection).pointRadius(.5);
-
-        // Extract GeoJSON features
-        const statesFeatures = topojson.feature(
-          statesTopo,
-          statesTopo.objects.states,
-        ).features;
-
-        countiesFeatures = topojson.feature(
-          countiesTopo,
-          countiesTopo.objects.counties,
-        ).features;
-
-        // Base map group
-        mapGroup = svg.append("g").attr("class", "map-group");
-        statesGroup = mapGroup.append("g").attr("class", "states-group");
-        countiesGroup = mapGroup.append("g").attr("class", "counties-group");
-        facilityGroup = mapGroup.append("g").attr("class", "facilities-group");
-        labelsGroup = mapGroup.append("g").attr("class", "labels-group");
-
-        // Callouts group (rendered outside mapGroup so it doesn't scale/zoom)
-        calloutsGroup = svg.append("g").attr("class", "callouts-group");
-
-        // 3. Render States
-        statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState);
-        console.log(statesFeatures);
-
-        // var testData = facilitiesData["12086"];
-        // console.log(testData);
-        // facilityPath = loadFacilityPaths(facilityGroup, testData, path, projection, year, emissionType);
-
-        stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
-
-        for (const [smallAbbr, smallData] of Object.entries(smallStates)){ 
-          const feature = statesFeatures.find(
-              (f) => getNameToAbbr(f.properties.name) === smallAbbr,
-          );
-          if (!feature) return;
-
-          const centroid = path.centroid(feature);
-          if (!centroid) return;
-
-
-          let pill = setupCallouts(calloutsGroup, smallData, smallAbbr, centroid);
-          setupPillInteraction(pill, feature, statesGroup, setCurrentState, stateHover, exitStateHover);
-        };
-
-        // Reset Zoom action
-        backButton.addEventListener("click", () => {
-          if (currentZoomLevel == 2){ //if zoomed to county
-            zoomOutCounty();
-
-          }
-          else if (currentZoomLevel == 1){ //if zoomed to state
-            zoomOutState();
-          }
-        });
-
-        // svg.on("click", () => {
-        //   zoomOutState();
-        // });
-      })
-      .catch((err) => {
-        console.error(
-          "EDGI Map Dashboard: Error loading visualization resources:",
-          err,
-        );
-        canvasContainer.innerHTML = `
-				<div style="padding: 20px; color:#e74c3c;">
-					<p>Error loading map resources. Please make sure the plugin files are fully uploaded.</p>
-					<small>${err.message}</small>
-				</div>
-			`;
-      });
-  });
+  loadComponents();
+  loadBaseFiles(dashboard, loadBaseData)
 });
+
+function loadMap(){
+  canvasContainer.innerHTML = "";
+
+  calculateRanges();
+  updateInfoPanel();
+
+  const svg = d3
+    .create("svg")
+    .attr("viewBox", `0 0 ${width} ${height}`)
+    .attr("width", "100%")
+    .attr("height", "100%");
+
+
+  canvasContainer.appendChild(svg.node());
+
+  // Draw projection
+  projection = d3
+    .geoAlbersUsa()
+    .translate([width / 2, height / 2])
+    .scale(1150);
+
+  path = d3.geoPath().projection(projection).pointRadius(.5);
+
+  // Extract GeoJSON features
+  const statesFeatures = topojson.feature(
+    statesTopo,
+    statesTopo.objects.states,
+  ).features;
+
+  countiesFeatures = topojson.feature(
+    countiesTopo,
+    countiesTopo.objects.counties,
+  ).features;
+
+  // Base map group
+  mapGroup = svg.append("g").attr("class", "map-group");
+  statesGroup = mapGroup.append("g").attr("class", "states-group");
+  countiesGroup = mapGroup.append("g").attr("class", "counties-group");
+  facilityGroup = mapGroup.append("g").attr("class", "facilities-group");
+  labelsGroup = mapGroup.append("g").attr("class", "labels-group");
+
+  // Callouts group (rendered outside mapGroup so it doesn't scale/zoom)
+  calloutsGroup = svg.append("g").attr("class", "callouts-group");
+
+  // 3. Render States
+  statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState);
+  console.log(statesFeatures);
+
+  stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
+
+  for (const [smallAbbr, smallData] of Object.entries(smallStates)){ 
+    const feature = statesFeatures.find(
+        (f) => getNameToAbbr(f.properties.name) === smallAbbr,
+    );
+    if (!feature) return;
+
+    const centroid = path.centroid(feature);
+    if (!centroid) return;
+
+
+    let pill = setupCallouts(calloutsGroup, smallData, smallAbbr, centroid);
+    setupPillInteraction(pill, feature, statesGroup, setCurrentState, stateHover, exitStateHover);
+  };
+
+  // Reset Zoom action
+  backButton.addEventListener("click", () => {
+    if (currentZoomLevel == 2){ //if zoomed to county
+      zoomOutCounty();
+
+    }
+    else if (currentZoomLevel == 1){ //if zoomed to state
+      zoomOutState();
+    }
+
+  });
+
+  // svg.on("click", () => {
+  //   zoomOutState();
+  // });
+}
+
+function loadBaseData(csvData, statesTopoData, countiesTopoData, stateGHGUrl, countyGHGUrl, testFacilitiesUrl){
+  statesTopo = statesTopoData;
+  countiesTopo = countiesTopoData;
+  stateData = processStateData(stateGHGUrl);
+  countyData = processCountyData(countyGHGUrl);
+  //facilityData = processFacilitiesYear(facilityData, testFacilitiesUrl, 2016);
+
+  stateData = sortCountiesIntoStates(stateData, countyData);
+  stateDataNoTexas = removeTexasStateData(stateData);
+  countyDataNoTexas = removeTexasCountyData(countyData);
+  //facilityDataNoTexas = removeTexasFacilityData(facilityData, countyData);
+
+  console.log("test load: " + JSON.stringify(testFacilitiesUrl));
+
+  loadFacilityFiles(dashboard, loadFacilities);
+}
+
+function loadFacilities(files, startYear, endYear){
+  console.log("called loadFacilities!");
+
+    for (let index = 0; index < endYear - startYear + 1; index++){
+      var year = startYear + index;
+      var file = files[index];
+      console.log("loaded " + year + ": " + JSON.stringify(file));
+      facilityData = processFacilitiesYear(facilityData, file, year);
+    }
+
+  //facilityData = processFacilitiesYear(facilityData, files[0], 2016);
+
+  facilityDataNoTexas = removeTexasFacilityData(facilityData, countyData);
+
+    // var testData = facilityData["12086"];
+    // console.log(testData);
+    // facilityPath = loadFacilityPaths(facilityGroup, testData, path, projection, currentYear, facilityRange, emissionType, includeTexas);
+
+  loadMap();
+}
