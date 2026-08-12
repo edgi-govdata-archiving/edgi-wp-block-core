@@ -26,7 +26,7 @@ export default `
 		  });
 		}
 
-		document.querySelector("#yearslider").addEventListener("change", function() {
+		document.querySelector("#yearslider").addEventListener("input", function() {
 			let closest = getClosest(years, this.value);
 		  this.value = document.querySelector("#rangevalue").value = closest;
 		});

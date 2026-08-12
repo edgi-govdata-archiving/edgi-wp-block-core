@@ -138,14 +138,12 @@ function getTopEmitters(fullList, year, emissionType, listLength){
 	// console.log(fullList[0].emissions[year])
 	// console.log(fullList[1].emissions[year])
 
-	var sorted = fullList.sort((a, b) => {
-		if (a.emissions[year] && b.emissions[year]){	
-			return b.emissions[year][emissionType] - a.emissions[year][emissionType];
-		}
-		else{
-			return b.name - a.name; //in case of no emissions data, just list alphabetically
-		}
-	});
+	//only include emitters with data from current year + emission type
+	var filtered = fullList.filter((a) => a.emissions[year] && a.emissions[year][emissionType]); 
+
+	//sort by top emitters
+	var sorted = filtered.sort((a, b) => b.emissions[year][emissionType] - a.emissions[year][emissionType]);
+
 	return sorted.slice(0, listLength);
 }
 

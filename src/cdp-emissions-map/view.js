@@ -467,7 +467,7 @@ function loadComponents(){
     dashboard.appendChild(controlContainer);
     controlContainer.insertAdjacentHTML("afterbegin", timeline);
 
-    document.querySelector("#yearslider").addEventListener("change", function() {
+    document.querySelector("#yearslider").addEventListener("input", function() {
       updateYear(this.value)
     });
 

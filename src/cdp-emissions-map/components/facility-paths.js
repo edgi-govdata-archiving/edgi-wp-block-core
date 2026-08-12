@@ -1,7 +1,4 @@
 export function loadFacilityPaths(facilityGroup, facilityData, path, projection, year, range, emissionType, includeTexas){
-
-	console.log(facilityData)
-
 	let facilityPaths = facilityGroup
 		.append("g")
 		.selectAll("facility-path")
@@ -19,10 +16,10 @@ export function loadFacilityPaths(facilityGroup, facilityData, path, projection,
 			return projection(d.geometry.coordinates)[1];
 		})
 		.attr("r", function(d) {
-			if (!d.emissions[year]){
-				return 0; //no data for this year
+			if (d.emissions[year] && d.emissions[year][emissionType]){
+				return .25 + getScaledRadius(d.emissions[year][emissionType], range, emissionType, includeTexas) * 5;
 			}
-			return .25 + getScaledRadius(d.emissions[year][emissionType], range, emissionType, includeTexas) * 5;
+			return 0; //no data for this year / emission type
 			//return Math.min(1, Math.max(10, d.properties["Total Direct Emissions"] * .0001));
 		})
 		.attr("class", function(d) {
