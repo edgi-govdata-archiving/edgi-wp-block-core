@@ -17,10 +17,9 @@ export function loadFacilityPaths(facilityGroup, facilityData, path, projection,
 		})
 		.attr("r", function(d) {
 			if (d.emissions[year] && d.emissions[year][emissionType]){
-				return .25 + getScaledRadius(d.emissions[year][emissionType], range, emissionType, includeTexas) * 5;
+				return .5 + getScaledRadius(d.emissions[year][emissionType], range, emissionType, includeTexas) * 3;
 			}
 			return 0; //no data for this year / emission type
-			//return Math.min(1, Math.max(10, d.properties["Total Direct Emissions"] * .0001));
 		})
 		.attr("class", function(d) {
 			//console.log(JSON.stringify(d))

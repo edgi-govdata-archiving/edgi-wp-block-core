@@ -539,7 +539,7 @@ function loadMap(){
 
   // 3. Render States
   statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState);
-  console.log(statesFeatures);
+  //console.log(statesFeatures);
 
   stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
 
@@ -574,40 +574,27 @@ function loadMap(){
   // });
 }
 
-function loadBaseData(csvData, statesTopoData, countiesTopoData, stateGHGUrl, countyGHGUrl, testFacilitiesUrl){
+function loadBaseData(csvData, statesTopoData, countiesTopoData, stateGHGUrl, countyGHGUrl){
   statesTopo = statesTopoData;
   countiesTopo = countiesTopoData;
   stateData = processStateData(stateGHGUrl);
   countyData = processCountyData(countyGHGUrl);
-  //facilityData = processFacilitiesYear(facilityData, testFacilitiesUrl, 2016);
 
   stateData = sortCountiesIntoStates(stateData, countyData);
   stateDataNoTexas = removeTexasStateData(stateData);
   countyDataNoTexas = removeTexasCountyData(countyData);
-  //facilityDataNoTexas = removeTexasFacilityData(facilityData, countyData);
-
-  console.log("test load: " + JSON.stringify(testFacilitiesUrl));
 
   loadFacilityFiles(dashboard, loadFacilities);
 }
 
 function loadFacilities(files, startYear, endYear){
-  console.log("called loadFacilities!");
-
     for (let index = 0; index < endYear - startYear + 1; index++){
       var year = startYear + index;
       var file = files[index];
-      console.log("loaded " + year + ": " + JSON.stringify(file));
       facilityData = processFacilitiesYear(facilityData, file, year);
     }
 
-  //facilityData = processFacilitiesYear(facilityData, files[0], 2016);
-
   facilityDataNoTexas = removeTexasFacilityData(facilityData, countyData);
-
-    // var testData = facilityData["12086"];
-    // console.log(testData);
-    // facilityPath = loadFacilityPaths(facilityGroup, testData, path, projection, currentYear, facilityRange, emissionType, includeTexas);
 
   loadMap();
 }

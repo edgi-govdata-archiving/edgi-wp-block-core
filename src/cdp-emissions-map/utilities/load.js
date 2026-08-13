@@ -6,9 +6,8 @@ export function loadBaseFiles(dashboard, promisedFunction){
 	const countiesJsonUrl = dashboard.getAttribute("data-counties-json-url");
 	const stateGHGUrl = dashboard.getAttribute("data-states-ghg-json-url"); 
 	const countyGHGUrl = dashboard.getAttribute("data-counties-ghg-url");
-	const testFacilitiesUrl = dashboard.getAttribute("data-facilities-test");
 
-	if (!csvUrl || !statesJsonUrl || !countiesJsonUrl || !stateGHGUrl || !countyGHGUrl || !testFacilitiesUrl) {
+	if (!csvUrl || !statesJsonUrl || !countiesJsonUrl || !stateGHGUrl || !countyGHGUrl) {
 		console.error("CDP Map Dashboard: Missing required data attributes!");
 		return;
 	}
@@ -18,11 +17,10 @@ export function loadBaseFiles(dashboard, promisedFunction){
 		d3.json(statesJsonUrl),
 		d3.json(countiesJsonUrl),
 		d3.json(stateGHGUrl),
-		d3.json(countyGHGUrl),
-		d3.json(testFacilitiesUrl)
+		d3.json(countyGHGUrl)
 	])
-    .then(([csvData, statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl, testFacilitiesUrl]) => { 
-		promisedFunction(csvData, statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl, testFacilitiesUrl);
+    .then(([csvData, statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl]) => { 
+		promisedFunction(csvData, statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl);
 	})
 	.catch((err) => {
 	console.error(

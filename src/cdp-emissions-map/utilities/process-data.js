@@ -87,8 +87,6 @@ export function removeTexasFacilityData(facilityData, countyData){
 
 
 export function processFacilitiesYear(facilityData, rawData, year){
-    console.log("loading facility year: " + year);
-
     const facilitiesArray = rawData["features"];
 
     var index = 0;

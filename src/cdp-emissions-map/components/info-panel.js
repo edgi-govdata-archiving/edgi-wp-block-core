@@ -108,7 +108,7 @@ export function loadCountyInfo(container, currentCounty, year, emissionType, cou
 	var data = currentCounty.data;
 
 	var emissions = data.emissions[year][emissionType];
-	var topFacilities = getTopEmitters(countyFacilities, 2016, emissionType, 5);
+	var topFacilities = getTopEmitters(countyFacilities, year, emissionType, 5);
 	console.log("top facilities: " + topFacilities);
 
 	container.innerHTML = countyInfoPanel;
