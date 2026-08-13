@@ -1,4 +1,4 @@
-export function loadFacilityPaths(facilityGroup, facilityData, path, projection, year, range, emissionType, includeTexas){
+export function loadFacilityPaths(facilityGroup, facilityData, path, projection, year, range, emissionType, includeTexas, setCurrentFacility){
 	let facilityPaths = facilityGroup
 		.append("g")
 		.selectAll("facility-path")
@@ -6,9 +6,6 @@ export function loadFacilityPaths(facilityGroup, facilityData, path, projection,
 		.enter()
 		.append("circle")
 		.attr("cx", function(d) {
-			//console.log(d);
-			// var point = projection(d.geometry.coordinates);
-			// console.log(point)
 			return projection(d.geometry.coordinates)[0];
 
 		})
@@ -22,7 +19,6 @@ export function loadFacilityPaths(facilityGroup, facilityData, path, projection,
 			return 0; //no data for this year / emission type
 		})
 		.attr("class", function(d) {
-			//console.log(JSON.stringify(d))
 			if (emissionType == "total_direct" && d.is_direct_emitter){
 				return "direct-facility";
 			}
@@ -33,36 +29,10 @@ export function loadFacilityPaths(facilityGroup, facilityData, path, projection,
 				return "hide-facility";
 			}
 		})
-			//emissionType == "total_direct" ? "direct-facility" : "supplier-facility")
-		//attr("fill", "transparent" );
-
-		// .append("g")
-        // .attr("class", "facility-path")
-        // .selectAll("path")
-        // .data(facilityData)
-        // .enter()
-        // .append("path")
-        // .attr("d", path)
-		// .join("circle")
-		// .attr("fill", "none")
-		// .attr("stroke", "black");
-
-        //.style("opacity", 1)
-        // .attr("marker-end", "url(#triangle)")
-        // .attr("class", emissionType == "total_direct" ? "direct-facility" : "supplier-facility")
-
-
-          //    svg.append("svg:defs").append("svg:marker")
-          // .attr("id", "triangle")
-          // .attr("class", "facility-marker")
-          // .attr("refX", .5)
-          // .attr("refY", 4.5)
-          // .attr("markerWidth", 1)
-          // .attr("markerHeight", 1)
-          // .attr("markerUnits","userSpaceOnUse")
-          // .append("path")
-          // .attr("d", "M 0 .5 .5 0 1 .5")
-          // .style("fill", "#00000088");
+		.on("click", (event, d) => {
+			event.stopPropagation();
+			setCurrentFacility(d);
+		})
 
 	return facilityPaths;
 }
@@ -95,3 +65,23 @@ function scale(value, range){
 	//console.log("result: " + result);
 	return (value - range[0]) / (range[1] - range[0])
 }
+
+// export function selectFacility(facilityPaths, selectedId){
+// 	// Thin outline stroke when zoomed in
+// 	facilityPaths
+// 		.transition()
+// 		.duration(800)
+// 		.style("stroke-width", `${1.5 / scale}px`);
+
+// 	// Fade out other states
+// 	facilityPaths
+// 		.transition()
+// 		.duration(400)
+// 		.style("opacity", (d) =>
+// 			d.facility_id === selectedId ? 1 : 0,
+// 		)
+// 		.attr("class", (d) =>
+// 		`facility-boundary${d.facility_id === selectedId ? " active" : ""}`,
+// 	);
+// }
+

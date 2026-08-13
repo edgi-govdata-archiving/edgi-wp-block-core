@@ -62,6 +62,21 @@ var stateInfoPanel = `
 
     </section>`
 
+ var facilityInfoPanel = `
+	<section class="info-panel facility-view">
+		<h1 id="info-header">Facility Name</h1>
+		<h3 id="info-subheader">2000 Supplier Emissions</h3>
+		<section class="info-emissions">
+			<h1 id="emissions-total">12,345</h1>
+			<label class=>tCO₂e</label>
+		</section>
+ 		<h3 class="ownership-header">Parent Companies</h3>
+ 		<h5 id="parent-companies">Current Parent Companies</h5>
+ 		<h3 class="frsid-header">FRSID</h3>
+ 		<h5 id="frsid">0000000</h5>
+
+    </section>`
+
 export function loadDefaultInfo(){
 	return defaultInfoPanel;
 }
@@ -119,6 +134,23 @@ export function loadCountyInfo(container, currentCounty, year, emissionType, cou
 
 	return container;
 } 
+
+export function loadFacilityInfo(container, currentFacility, year, emissionType){
+	var header = currentFacility.facility_name;
+	var subheader = getSubheader(year, emissionType);
+
+	var emissions = currentFacility.emissions[year][emissionType];
+
+	container.innerHTML = facilityInfoPanel;
+	container.querySelector("#info-header").innerHTML = header;
+	container.querySelector("#info-subheader").innerHTML = subheader;
+	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
+	container.querySelector("#parent-companies").innerHTML = currentFacility.latest_parent;
+	container.querySelector("#frsid").innerHTML = currentFacility.facility_id;
+
+	return container;
+} 
+
 
 
 function getSubheader(year, emissionType){

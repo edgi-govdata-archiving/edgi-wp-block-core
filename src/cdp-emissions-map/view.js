@@ -13,7 +13,7 @@ const irregularStates = IRREGULAR_STATES["IRREGULAR_STATES"];
 
 import timeline from './components/timeline.js';
 import { loadDefaultTitle, loadCountryTitle, loadStateTitle, loadCountyTitle } from './components/title.js';
-import { loadDefaultInfo, loadCountryInfo, loadStateInfo, loadCountyInfo } from './components/info-panel.js';
+import { loadDefaultInfo, loadCountryInfo, loadStateInfo, loadCountyInfo, loadFacilityInfo } from './components/info-panel.js';
 import toggles from './components/toggles.js';
 import callout from './components/callout-group.js';
 import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState, hideTexas, showTexas} from './components/state-paths.js';
@@ -90,6 +90,7 @@ var currentState = {
 }
 var currentCounty = null;
 
+var currentFacility;
 
 function toggleTexas(){
   includeTexas = !includeTexas;
@@ -234,6 +235,9 @@ function updateInfoPanel() {
 
     infoPanelContainer = loadCountyInfo(infoPanelContainer, currentCounty, currentYear, emissionType, countyFacilities);
   }
+  else if (currentZoomLevel == 3){
+    infoPanelContainer = loadFacilityInfo(infoPanelContainer, currentFacility, currentYear, emissionType);
+  }
 }
 
 function updateTitle() {
@@ -276,7 +280,8 @@ function updateFacilities(){
     var currentFacilities = Object.values(facilityData[currentCounty.id]);
     
     //console.log(currentFacilities);
-    facilityPath = loadFacilityPaths(facilityGroup, currentFacilities, path, projection, currentYear, facilityRange, emissionType, includeTexas);
+    facilityPath = loadFacilityPaths(facilityGroup, currentFacilities, path, projection, currentYear, 
+                                     facilityRange, emissionType, includeTexas, setCurrentFacility);
   }
 
 }
@@ -319,7 +324,7 @@ function toggleEmissionsType(){
 }
 
 function setCurrentState(feature, stateAbbr){
-  if (currentZoomLevel == 0){ //can only select county from state view
+  if (currentZoomLevel == 0){ //can only select state from country view
     currentState = new Locale(feature.id);
     currentState.abbr = stateAbbr;
     currentState.name = feature.properties.name;
@@ -342,6 +347,17 @@ function setCurrentCounty(feature, countyId){
     //console.log(currentCounty.name);
 
     zoomToCounty();
+  }
+}
+
+function setCurrentFacility(facilityProperties){
+  if (currentZoomLevel == 2 || currentZoomLevel == 3){ //can only select facility from county view or facility view
+    console.log(facilityProperties);
+
+    currentFacility = facilityProperties;
+    //console.log(currentCounty.name);
+
+    zoomToFacility();
   }
 }
 
@@ -379,6 +395,21 @@ function zoomToCounty() {
   updateInfoPanel();
 
   updateFacilities();
+
+  // Show Reset Button
+  backButton.style.display = "flex";
+  
+}
+
+//does not literally zoom, just highlights facility on county zoom level
+function zoomToFacility() {
+  currentZoomLevel = 3;
+
+
+  //selectCounty(countyPaths, scale, currentCounty.id)
+  
+  //updateTitle();
+  updateInfoPanel();
 
   // Show Reset Button
   backButton.style.display = "flex";
@@ -424,6 +455,16 @@ function zoomOutCounty() {
   deselectCounty(countyPaths);
   resetFacilityPaths(facilityGroup);
   
+}
+
+function zoomOutFacility() {
+  currentZoomLevel = 2;
+
+  //updateTitle();
+  updateInfoPanel();
+
+  //deselect facility
+
 }
 
 var dashboard;
@@ -559,12 +600,14 @@ function loadMap(){
 
   // Reset Zoom action
   backButton.addEventListener("click", () => {
-    if (currentZoomLevel == 2){ //if zoomed to county
-      zoomOutCounty();
-
-    }
-    else if (currentZoomLevel == 1){ //if zoomed to state
+    if (currentZoomLevel == 1){ //if zoomed to state
       zoomOutState();
+    }
+    else if (currentZoomLevel == 2){ //if zoomed to county
+      zoomOutCounty();
+    }    
+    else if (currentZoomLevel == 3){ //if zoomed to facility
+      zoomOutFacility();
     }
 
   });

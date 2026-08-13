@@ -1,19 +1,19 @@
-	/* Map Elements styling */
-	.facility-path {
-		fill: red;
-		stroke: 1px;
-		vector-effect: non-scaling-stroke;
-		markerWidth: "0"
-	}
 
-	.direct-facility{
-		fill: #19649F88;
-	}
+.direct-facility{
+	fill: #19649F88;
+	vector-effect: non-scaling-stroke;
 
-	.supplier-facility{
-		fill: #C97C0888;
+	&:hover, &.hover {
+		fill: #19649F;
+		stroke: #000000 2px solid;
+		cursor: pointer;
 	}
+}
 
-	.hide-facility{
-		opacity: 0;
-	}
+.supplier-facility{
+	fill: #C97C0888;
+}
+
+.hide-facility{
+	opacity: 0;
+}
