@@ -18,7 +18,7 @@ import toggles from './components/toggles.js';
 import callout from './components/callout-group.js';
 import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState, hideTexas, showTexas} from './components/state-paths.js';
 import { setupCountyPaths, resetCountyPaths, selectCounty, deselectCounty} from './components/county-paths.js';
-import { loadFacilityPaths, resetFacilityPaths } from './components/facility-paths.js';
+import { loadFacilityPaths, resetFacilityPaths, selectFacility, deselectFacility } from './components/facility-paths.js';
 import { zoomToFeature, resetZoom} from './components/map-zoom.js';
 
 import { setupStateLabels, showStateLabels, hideStateLabels, hideTexasLabel } from './components/state-labels.js';
@@ -26,6 +26,14 @@ import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetC
 
 import Locale from "./utilities/locale.js"
 import Range from "./utilities/range.js"
+
+//core html containers
+var dashboard;
+var canvasContainer;
+var baseContainer;
+
+var statesTopo;
+var countiesTopo;
 
 var titleContainer;
 var infoPanelContainer;
@@ -69,12 +77,7 @@ var currentZoomLabel = zoomLevels[currentZoomLevel];
 const width = 960;
 const height = 600;
 
-//range values - [min,max]
-// var directRange;
-// var supplierRange;
-// var directRangeNoTexas;
-// var supplierRangeNoTexas;
-
+//Ranges - stored in Range class that includes direct, supplier + w and w/o Texas
 var stateRange;
 var countyRange;
 var facilityRange;
@@ -83,20 +86,14 @@ var includeTexas = true;
 
 var scale = 1;
 
-var currentState = {
-  "abbr" : "",
-  "id" : "",
-  "path" : "",
-}
-var currentCounty = null;
+//Current locales - stored in Locale class 
+var currentState;
+var currentCounty;
+var currentFacility; //not in locale class, just obj of facility data
 
-var currentFacility;
-
+//toggles texas from map + refreshes vizualizations to use ranges w/o texas
 function toggleTexas(){
   includeTexas = !includeTexas;
-
-  console.log("includeTexas: " + includeTexas);
-  console.log("currentZoomLevel: " + currentZoomLevel);
 
   if (currentZoomLevel == 0){
     if (!includeTexas){
@@ -104,7 +101,6 @@ function toggleTexas(){
       hideTexasLabel(stateLabels);
     }
     else {
-      console.log("showing texas...");
       showTexas(statePaths);
       showStateLabels(stateLabels, true);
     }
@@ -119,6 +115,7 @@ function toggleTexas(){
 
 }
 
+//precalculates ranges that are used in scaling choropleth + facility bubbles
 function calculateRanges(){
   stateRange = new Range(); 
 
@@ -134,19 +131,11 @@ function calculateRanges(){
 
   facilityRange.setRange(facilityData, true, true);
   facilityRange.setRange(facilityDataNoTexas, false, true);
-
-
-  // directRange = getEmissionRange(stateData, "total_direct");
-  // supplierRange = getEmissionRange(stateData, "total_supplier");
-
-  // directRangeNoTexas = getEmissionRange(stateDataNoTexas, "total_direct");
-  // supplierRangeNoTexas = getEmissionRange(stateDataNoTexas, "total_supplier");
 }
 
+//show county svgs + choropleth within particular state
 function renderCountiesForState(stateAbbr, scale) {
   const stateFips = getStateToFips(stateAbbr);
-
-  //resetCountyPaths(countiesGroup);
 
   if (!stateFips) return;
 
@@ -159,9 +148,7 @@ function renderCountiesForState(stateAbbr, scale) {
       }
     )
 
-  //console.log("countyPaths: " + countyPaths)
   countyPaths = setupCountyPaths(countiesGroup, path, stateCounties, countyData, scale, setCurrentCounty)
-
   updateCountyChoropleth();
   }
 
@@ -220,6 +207,7 @@ function updateYear(year){
   }
 }
 
+//updates info panel with text depending on zoom level
 function updateInfoPanel() {
   if (currentZoomLevel == 0){
     infoPanelContainer = loadCountryInfo(infoPanelContainer, includeTexas ? stateData : stateDataNoTexas, currentYear, emissionType);
@@ -240,6 +228,7 @@ function updateInfoPanel() {
   }
 }
 
+//updates main title depending on zoom level
 function updateTitle() {
   if (currentZoomLevel == 0){
     titleContainer = loadCountryTitle(titleContainer);
@@ -252,6 +241,7 @@ function updateTitle() {
   }
 }
 
+//updates map choropleth depending on zoom level
 function updateChoropleth(){
   if (currentZoomLevel == 0){
     updateStateChoropleth();
@@ -261,6 +251,7 @@ function updateChoropleth(){
   }
 }
 
+//updates state map choropleth
 function updateStateChoropleth(){
    statePaths.style("fill", (d) => {
           const abbr = getNameToAbbr(d.properties.name);
@@ -268,44 +259,41 @@ function updateStateChoropleth(){
       });
 }
 
+//updates county map choropleth
 function updateCountyChoropleth(){
    countyPaths.style("fill", (d) => {
           return getCountyColor(d.id)   
       });
 }
 
+//loads current county's facilities onto map
 function updateFacilities(){
-  resetFacilityPaths(facilityGroup);
+    resetFacilityPaths(facilityGroup);
     if (facilityData[currentCounty.id]){
     var currentFacilities = Object.values(facilityData[currentCounty.id]);
-    
-    //console.log(currentFacilities);
     facilityPath = loadFacilityPaths(facilityGroup, currentFacilities, path, projection, currentYear, 
-                                     facilityRange, emissionType, includeTexas, setCurrentFacility);
-  }
+                                 facilityRange, emissionType, includeTexas, setCurrentFacility);
+    }
 
 }
 
+//resets any state-related info, called when pressing 'back' on state view
 function resetState() {
   currentState = null;
   currentStateAbbr = "";
   
   updateTitle();
   updateInfoPanel();
-  // currentStateLabel.innerHTML = "Select state..."
-  // currentEmissionsLabel.innerHTML = ""
 }
 
+//resets any county-related info, called when pressing 'back' on county view
 function resetCounty() {
   currentCounty = null;
   updateTitle();
   updateInfoPanel();
-  
-  //infoPanelContainer.innerHTML = loadStateInfo();
-  // currentStateLabel.innerHTML = "Select state..."
-  // currentEmissionsLabel.innerHTML = ""
 }
 
+//toggles emission type + refreshes any viz / info related to emissions
 function toggleEmissionsType(){
   if (emissionType == "total_direct"){
     emissionType = "total_supplier";
@@ -323,6 +311,7 @@ function toggleEmissionsType(){
   updateChoropleth();
 }
 
+//sets current state, loads critical info, zooms to that state. called when state is clicked
 function setCurrentState(feature, stateAbbr){
   if (currentZoomLevel == 0){ //can only select state from country view
     currentState = new Locale(feature.id);
@@ -330,13 +319,11 @@ function setCurrentState(feature, stateAbbr){
     currentState.name = feature.properties.name;
     currentState.feature = feature;
     currentState.data = stateData[stateAbbr];
-
-    //console.log(feature);
-
     zoomToState();
   }
 }
 
+//sets current county, loads critical info, zooms to that county. called when county is clicked
 function setCurrentCounty(feature, countyId){
   if (currentZoomLevel == 1){ //can only select county from state view
     currentCounty = new Locale(countyId);
@@ -344,28 +331,22 @@ function setCurrentCounty(feature, countyId){
     currentCounty.feature = feature;
     currentCounty.data = countyData[countyId];
 
-    //console.log(currentCounty.name);
-
     zoomToCounty();
   }
 }
 
+//sets current facility, loads critical info, zooms to that state. called when facility is clicked
 function setCurrentFacility(facilityProperties){
   if (currentZoomLevel == 2 || currentZoomLevel == 3){ //can only select facility from county view or facility view
-    console.log(facilityProperties);
-
     currentFacility = facilityProperties;
-    //console.log(currentCounty.name);
-
     zoomToFacility();
   }
 }
 
-// Zoom to State implementation
+//zooms map to current state, hides callouts + updates viz to current state info
 function zoomToState() {
   currentZoomLevel = 1;
 
-  // Highlight callout pill if active
   calloutsGroup
     .selectAll(".state-callout-pill")
     .classed("active", (d) => d.abbr === currentState.abbr);
@@ -379,24 +360,20 @@ function zoomToState() {
   updateTitle();
   updateInfoPanel();
 
-  // Show Reset Button
   backButton.style.display = "flex";
 }
 
-
+//zooms map to current county, hides callouts + updates viz to current county info
 function zoomToCounty() {
   currentZoomLevel = 2;
 
   scale = zoomToFeature(mapGroup, path, width, height, currentCounty.feature);
 
   selectCounty(countyPaths, scale, currentCounty.id)
-  
   updateTitle();
   updateInfoPanel();
-
   updateFacilities();
 
-  // Show Reset Button
   backButton.style.display = "flex";
   
 }
@@ -405,18 +382,15 @@ function zoomToCounty() {
 function zoomToFacility() {
   currentZoomLevel = 3;
 
-
-  //selectCounty(countyPaths, scale, currentCounty.id)
+  selectFacility(facilityPath, currentFacility, emissionType);
   
-  //updateTitle();
+  //updateTitle(); //should title update?
   updateInfoPanel();
 
-  // Show Reset Button
   backButton.style.display = "flex";
-  
 }
 
-
+//zooms out from current state view, deselect states + resets map
 function zoomOutState() {
   currentZoomLevel = 0;
   resetState();
@@ -437,11 +411,11 @@ function zoomOutState() {
   showCallouts(calloutsGroup);
   showStateLabels(stateLabels, includeTexas);
 
-  // Hide Back Button
   backButton.style.display = "none";
   //tooltip.style.display = "none";
 }
 
+//zooms out from current county view, reselects state + loads state level view
 function zoomOutCounty() {
   currentZoomLevel = 1;
   resetCounty();
@@ -457,83 +431,69 @@ function zoomOutCounty() {
   
 }
 
+//does not literally zoom out, just resets to county level view
 function zoomOutFacility() {
   currentZoomLevel = 2;
 
   //updateTitle();
   updateInfoPanel();
 
-  //deselect facility
-
+  deselectFacility(facilityPath, emissionType);
 }
 
-var dashboard;
-var canvasContainer;
-var baseContainer;
-
-var statesTopo;
-var countiesTopo;
-
-
+//loads core html containers
 function loadComponents(){
-// Initialize tooltips
   let tooltip = document.querySelector(".edgi-map-tooltip");
   if (!tooltip) {
     tooltip = document.createElement("div");
     tooltip.className = "edgi-map-tooltip";
-
     document.body.appendChild(tooltip);
   }
+  baseContainer = dashboard.querySelector(".dashboard");
 
-    // Containers
-    baseContainer = dashboard.querySelector(".dashboard");
+  canvasContainer = dashboard.querySelector(".map");
+  backButton = dashboard.querySelector(".back-button");
+  const wrapper = dashboard.querySelector(".map-wrapper");
 
-    canvasContainer = dashboard.querySelector(".map");
-    backButton = dashboard.querySelector(".back-button");
-    const wrapper = dashboard.querySelector(".map-wrapper");
+  titleContainer = document.createElement("div");
+  titleContainer.innerHTML = loadDefaultTitle();
+  baseContainer.insertBefore(titleContainer, baseContainer.firstChild);
 
-    titleContainer = document.createElement("div");
-    titleContainer.innerHTML = loadDefaultTitle();
-    baseContainer.insertBefore(titleContainer, baseContainer.firstChild);
+  infoPanelContainer = document.createElement("div");
+  infoPanelContainer.innerHTML = loadDefaultInfo();
+  wrapper.appendChild(infoPanelContainer);
 
-    infoPanelContainer = document.createElement("div");
-    infoPanelContainer.innerHTML = loadDefaultInfo();
-    wrapper.appendChild(infoPanelContainer);
+  let controlContainer = document.createElement("div");
+  controlContainer.setAttribute("id", "map-controls");
+  dashboard.appendChild(controlContainer);
+  controlContainer.insertAdjacentHTML("afterbegin", timeline);
 
-    // currentStateLabel = infoPanelContainer.querySelector("#currentState")
-    // currentEmissionsLabel = infoPanelContainer.querySelector("#stateEmissions")
+  document.querySelector("#yearslider").addEventListener("input", function() {
+    updateYear(this.value)
+  });
 
-    let controlContainer = document.createElement("div");
-    controlContainer.setAttribute("id", "map-controls");
-    dashboard.appendChild(controlContainer);
-    controlContainer.insertAdjacentHTML("afterbegin", timeline);
+  controlContainer.insertAdjacentHTML("beforeend", toggles);
 
-    document.querySelector("#yearslider").addEventListener("input", function() {
-      updateYear(this.value)
-    });
+  document.querySelector("#emission-toggle").addEventListener("change", function() {
+  toggleEmissionsType();
+  });
 
-    controlContainer.insertAdjacentHTML("beforeend", toggles);
+  document.querySelector("#texas-toggle").addEventListener("change", function() {
+  toggleTexas();
+  });
 
-    document.querySelector("#emission-toggle").addEventListener("change", function() {
-      toggleEmissionsType();
-    });
-
-    document.querySelector("#texas-toggle").addEventListener("change", function() {
-      toggleTexas();
-    });
-
-    canvasContainer.innerHTML =
-      '<div style="padding: 20px; font-weight:300; color:#afe0d7;">Loading environmental data and maps...</div>';
+  canvasContainer.innerHTML =
+  '<div style="padding: 20px; font-weight:300; color:#afe0d7;">Loading environmental data and maps...</div>';
 }
 
+//triggers loading process
 document.addEventListener("DOMContentLoaded", () => {
-
   dashboard = document.querySelector("#cdp-emissions-map");
-
   loadComponents();
   loadBaseFiles(dashboard, loadBaseData)
 });
 
+//loads svg map and labels, sets up event triggers
 function loadMap(){
   canvasContainer.innerHTML = "";
 
@@ -545,7 +505,6 @@ function loadMap(){
     .attr("viewBox", `0 0 ${width} ${height}`)
     .attr("width", "100%")
     .attr("height", "100%");
-
 
   canvasContainer.appendChild(svg.node());
 
@@ -578,10 +537,7 @@ function loadMap(){
   // Callouts group (rendered outside mapGroup so it doesn't scale/zoom)
   calloutsGroup = svg.append("g").attr("class", "callouts-group");
 
-  // 3. Render States
   statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState);
-  //console.log(statesFeatures);
-
   stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
 
   for (const [smallAbbr, smallData] of Object.entries(smallStates)){ 
@@ -617,6 +573,7 @@ function loadMap(){
   // });
 }
 
+//processes base data files once files are loaded 
 function loadBaseData(csvData, statesTopoData, countiesTopoData, stateGHGUrl, countyGHGUrl){
   statesTopo = statesTopoData;
   countiesTopo = countiesTopoData;
@@ -630,6 +587,7 @@ function loadBaseData(csvData, statesTopoData, countiesTopoData, stateGHGUrl, co
   loadFacilityFiles(dashboard, loadFacilities);
 }
 
+//processes facility files into single obj facilityData -- files are split by year
 function loadFacilities(files, startYear, endYear){
     for (let index = 0; index < endYear - startYear + 1; index++){
       var year = startYear + index;

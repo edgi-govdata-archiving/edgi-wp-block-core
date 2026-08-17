@@ -1,17 +1,44 @@
 
 .direct-facility{
-	fill: #19649F88;
 	vector-effect: non-scaling-stroke;
+	fill: #19649F88;
 
 	&:hover, &.hover {
-		fill: #19649F;
-		stroke: #000000 2px solid;
+		fill: #54CDBC;
 		cursor: pointer;
 	}
 }
 
+.direct-facility-selected{
+	vector-effect: non-scaling-stroke;
+	fill: #54CDBC;
+	stroke: #000000;
+	stroke-width: 3px;
+}
+
+.direct-facility-faded{
+	fill: #19649F33;
+}
+
 .supplier-facility{
+   vector-effect: non-scaling-stroke;
 	fill: #C97C0888;
+
+	&:hover, &.hover {
+		fill: #54CDBC;
+		cursor: pointer;
+	}
+}
+
+.supplier-facility-selected{
+	vector-effect: non-scaling-stroke;
+	fill: #54CDBC;
+	stroke: #000000;
+	stroke-width: 3px;
+}
+
+.supplier-facility-faded{
+	fill: #C97C0833;
 }
 
 .hide-facility{

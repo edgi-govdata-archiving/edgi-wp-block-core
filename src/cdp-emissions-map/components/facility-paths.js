@@ -66,22 +66,41 @@ function scale(value, range){
 	return (value - range[0]) / (range[1] - range[0])
 }
 
-// export function selectFacility(facilityPaths, selectedId){
-// 	// Thin outline stroke when zoomed in
-// 	facilityPaths
-// 		.transition()
-// 		.duration(800)
-// 		.style("stroke-width", `${1.5 / scale}px`);
+export function selectFacility(facilityPaths, currentFacility, emissionType){
+	facilityPaths
+	.attr("class", (d) =>{
+		var status = "";
+		if (d.facility_id == currentFacility.facility_id){
+			status = "-selected";
+		}
+		else{
+			status = "-faded";
+		}
+		if (emissionType == "total_direct" && d.is_direct_emitter){
+			return "direct-facility" + status;
+		}
+		else if (emissionType == "total_supplier" && d.is_supplier){
+			return "supplier-facility" + status;
+		}
+		else{
+			return "hide-facility";
+		}
 
-// 	// Fade out other states
-// 	facilityPaths
-// 		.transition()
-// 		.duration(400)
-// 		.style("opacity", (d) =>
-// 			d.facility_id === selectedId ? 1 : 0,
-// 		)
-// 		.attr("class", (d) =>
-// 		`facility-boundary${d.facility_id === selectedId ? " active" : ""}`,
-// 	);
-// }
+	});
 
+}
+
+export function deselectFacility(facilityPaths, emissionType){
+	facilityPaths
+	.attr("class", (d) =>{
+		if (emissionType == "total_direct" && d.is_direct_emitter){
+			return "direct-facility";
+		}
+		else if (emissionType == "total_supplier" && d.is_supplier){
+			return "supplier-facility";
+		}
+		else{
+			return "hide-facility";
+		}
+	});
+}
