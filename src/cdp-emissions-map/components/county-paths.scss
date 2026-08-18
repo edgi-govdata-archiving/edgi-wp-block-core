@@ -18,3 +18,31 @@
 		stroke-width: 1px !important;
 	}
 }
+
+.county-hover-pill {
+
+	.county-hover-line{
+		vector-effect: non-scaling-stroke;
+		stroke-width: 2px;
+		stroke: #cbd5e0;
+	}
+
+	.county-hover-bg {
+		vector-effect: non-scaling-stroke;
+		fill: #ffffff;
+		stroke: #cbd5e0;
+		
+		transition: all 0.2s ease;
+	}
+
+	.county-hover-text {
+		font-family: 'Mona Sans', sans-serif;
+		font-weight: 700;
+		fill: #4a5568;
+		pointer-events: none;
+
+        margin: 10px;
+
+
+	}
+}

@@ -8,6 +8,7 @@ export function setupCountyPaths(countiesGroup, path, stateCounties, countyData,
 		.attr("class", "county-boundary")
 		.style("stroke-width", `${0.6 / scale}px`)
 
+
 	countyPaths.on("click", (event, d) => {
 			event.stopPropagation();
 			const countyId = d.id;
@@ -15,12 +16,85 @@ export function setupCountyPaths(countiesGroup, path, stateCounties, countyData,
 			//selectCounty(countyPaths, scale, countyId);
 			setCurrentCounty(d, countyId);
 		})
+	countyPaths.on("mouseover", (event, d) => {
+			//event.stopPropagation();
+			showLabel(countiesGroup, path, event.target, d, scale);
+		})
+	countyPaths.on("mouseout", (event, d) => {
+			//hideLabel(countiesGroup, d.id);
+		})
+
 
 	countiesGroup.transition()
 		.duration(200)
 		.style("opacity", 1)
 
 	return countyPaths;
+}
+
+function showLabel(countiesGroup, path, target, countyData, scale){
+	//console.log(JSON.stringify(countyData));
+
+	countiesGroup.selectAll(".county-hover-pill").remove();
+
+	var centroid = getCentroid(target);
+	var fontSize = 20 / scale;
+	var label = countyData.properties.name + " County";
+	const pill = countiesGroup.append("g")
+	.datum(countyData)
+	.attr("class", "county-hover-pill")
+	.attr("transform", `translate(${centroid[0]}, ${centroid[1]})`)
+
+	pill.append("line")
+	.attr("class", "county-hover-line")
+	.attr("x1", 0)
+	.attr("y1", -5)
+	.attr("x2", 0)
+	.attr("y2", -1);
+
+	var pillWidth = 250 / scale;
+	var pillHeight = 60 / scale;
+
+	// 	pill.append("rect")
+	// .attr("rx", 3)
+	// .attr("ry", 3)
+	// .attr("x", -16)
+	// .attr("y", -15)
+	// .attr("width", 32)
+	// .attr("height", 10)
+	// .attr("class", "county-hover-bg");
+
+
+	pill.append("rect")
+	.attr("rx", 0)
+	.attr("ry", 0)
+	.attr("x", -pillWidth * .5)
+	.attr("y", -pillHeight * 1.5)
+	.attr("width", pillWidth)
+	.attr("height", pillHeight)
+	.attr("class", "county-hover-bg");
+
+	pill.append("text")
+	.text(label)
+	.attr("text-anchor", "middle")
+	.attr("font-size", `${fontSize}px`)
+	.attr("dy", -fontSize - pillHeight * .5)
+	.attr("class", "county-hover-text");
+
+}
+
+function hideLabel(countiesGroup, countyId){
+	countiesGroup
+	.selectAll(".county-hover-pill")
+	// .transition()
+	// .duration(400)
+	.style("opacity", (d) =>
+		d.id === countyId ? 0 : 1)
+}
+
+function getCentroid(element){
+	let bbox = element.getBBox();
+	return [bbox.x + bbox.width * .5, bbox.y + bbox.height * .5]
 }
 
 
