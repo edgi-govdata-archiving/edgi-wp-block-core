@@ -1,4 +1,4 @@
-export function setupCountyPaths(countiesGroup, path, stateCounties, countyData, scale, setCurrentCounty){
+export function setupCountyPaths(countiesGroup, path, stateCounties, countyData, scale, setCurrentCounty, mapHover, mapExitHover){
 	var countyPaths = countiesGroup
 		.selectAll(".county-boundary")
 		.data(stateCounties)
@@ -8,22 +8,20 @@ export function setupCountyPaths(countiesGroup, path, stateCounties, countyData,
 		.attr("class", "county-boundary")
 		.style("stroke-width", `${0.6 / scale}px`)
 
-
 	countyPaths.on("click", (event, d) => {
 			event.stopPropagation();
-			const countyId = d.id;
-			//if (abbr) zoomToState(d, abbr);
-			//selectCounty(countyPaths, scale, countyId);
-			setCurrentCounty(d, countyId);
+			setCurrentCounty(d, d.id);
 		})
 	countyPaths.on("mouseover", (event, d) => {
-			//event.stopPropagation();
-			showLabel(countiesGroup, path, event.target, d, scale);
+			event.stopPropagation();
+			//showLabel(countiesGroup, path, event.target, d, scale);
+			mapHover(countiesGroup, path, event.target, d.properties.name + " County");
 		})
 	countyPaths.on("mouseout", (event, d) => {
-			//hideLabel(countiesGroup, d.id);
+			event.stopPropagation();
+			//hideLabel(countiesGroup);
+			mapExitHover(countiesGroup);
 		})
-
 
 	countiesGroup.transition()
 		.duration(200)
@@ -33,8 +31,6 @@ export function setupCountyPaths(countiesGroup, path, stateCounties, countyData,
 }
 
 function showLabel(countiesGroup, path, target, countyData, scale){
-	//console.log(JSON.stringify(countyData));
-
 	countiesGroup.selectAll(".county-hover-pill").remove();
 
 	var centroid = getCentroid(target);
@@ -48,22 +44,12 @@ function showLabel(countiesGroup, path, target, countyData, scale){
 	pill.append("line")
 	.attr("class", "county-hover-line")
 	.attr("x1", 0)
-	.attr("y1", -5)
+	.attr("y1", -8)
 	.attr("x2", 0)
 	.attr("y2", -1);
 
 	var pillWidth = 250 / scale;
 	var pillHeight = 60 / scale;
-
-	// 	pill.append("rect")
-	// .attr("rx", 3)
-	// .attr("ry", 3)
-	// .attr("x", -16)
-	// .attr("y", -15)
-	// .attr("width", 32)
-	// .attr("height", 10)
-	// .attr("class", "county-hover-bg");
-
 
 	pill.append("rect")
 	.attr("rx", 0)
@@ -80,23 +66,16 @@ function showLabel(countiesGroup, path, target, countyData, scale){
 	.attr("font-size", `${fontSize}px`)
 	.attr("dy", -fontSize - pillHeight * .5)
 	.attr("class", "county-hover-text");
-
 }
 
 function hideLabel(countiesGroup, countyId){
-	countiesGroup
-	.selectAll(".county-hover-pill")
-	// .transition()
-	// .duration(400)
-	.style("opacity", (d) =>
-		d.id === countyId ? 0 : 1)
+	countiesGroup.selectAll(".county-hover-pill").remove();
 }
 
 function getCentroid(element){
 	let bbox = element.getBBox();
 	return [bbox.x + bbox.width * .5, bbox.y + bbox.height * .5]
 }
-
 
 export function resetCountyPaths(countiesGroup){
 	//countiesGroup.innerHTML = "";

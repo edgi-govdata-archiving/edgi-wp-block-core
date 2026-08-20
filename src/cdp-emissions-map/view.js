@@ -23,6 +23,7 @@ import { zoomToFeature, resetZoom} from './components/map-zoom.js';
 
 import { setupStateLabels, showStateLabels, hideStateLabels, hideTexasLabel } from './components/state-labels.js';
 import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetCallouts } from './components/callout-group.js';
+import { showLabel, hideLabel } from './components/hover-label.js';
 
 import Locale from "./utilities/locale.js"
 import Range from "./utilities/range.js"
@@ -148,7 +149,7 @@ function renderCountiesForState(stateAbbr, scale) {
       }
     )
 
-  countyPaths = setupCountyPaths(countiesGroup, path, stateCounties, countyData, scale, setCurrentCounty)
+  countyPaths = setupCountyPaths(countiesGroup, path, stateCounties, countyData, scale, setCurrentCounty, mapHover, mapExitHover)
   updateCountyChoropleth();
   }
 
@@ -272,7 +273,8 @@ function updateFacilities(){
     if (facilityData[currentCounty.id]){
     var currentFacilities = Object.values(facilityData[currentCounty.id]);
     facilityPath = loadFacilityPaths(facilityGroup, currentFacilities, path, projection, currentYear, 
-                                 facilityRange, emissionType, includeTexas, setCurrentFacility);
+                                     facilityRange, emissionType, includeTexas, 
+                                     setCurrentFacility, mapHover, mapExitHover);
     }
 
 }
@@ -309,6 +311,22 @@ function toggleEmissionsType(){
   updateTitle();
   updateInfoPanel();
   updateChoropleth();
+}
+
+function mapHover(elementGroup, path, target, text){
+  if (currentZoomLevel == 0 && elementGroup == statesGroup){
+    showLabel(elementGroup, path, target, text, scale, 170);
+  }
+  else if (currentZoomLevel == 1 && elementGroup == countiesGroup){
+    showLabel(elementGroup, path, target, text, scale, 250);
+  }
+  else if (currentZoomLevel == 2 && elementGroup == facilityGroup){
+    showLabel(elementGroup, path, target, text, scale, 250);
+  }
+}
+
+function mapExitHover(elementGroup){
+  hideLabel(elementGroup);
 }
 
 //sets current state, loads critical info, zooms to that state. called when state is clicked
@@ -351,6 +369,8 @@ function zoomToState() {
     .selectAll(".state-callout-pill")
     .classed("active", (d) => d.abbr === currentState.abbr);
 
+  hideLabel(statesGroup);
+
   scale = zoomToFeature(mapGroup, path, width, height, currentState.feature);
 
   selectState(statePaths, scale, currentState.abbr)
@@ -366,6 +386,8 @@ function zoomToState() {
 //zooms map to current county, hides callouts + updates viz to current county info
 function zoomToCounty() {
   currentZoomLevel = 2;
+
+  hideLabel(countiesGroup);
 
   scale = zoomToFeature(mapGroup, path, width, height, currentCounty.feature);
 
@@ -393,6 +415,7 @@ function zoomToFacility() {
 //zooms out from current state view, deselect states + resets map
 function zoomOutState() {
   currentZoomLevel = 0;
+  scale = 1;
   resetState();
   updateChoropleth();
 
@@ -537,7 +560,7 @@ function loadMap(){
   // Callouts group (rendered outside mapGroup so it doesn't scale/zoom)
   calloutsGroup = svg.append("g").attr("class", "callouts-group");
 
-  statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState);
+  statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState, mapHover, mapExitHover);
   stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
 
   for (const [smallAbbr, smallData] of Object.entries(smallStates)){ 

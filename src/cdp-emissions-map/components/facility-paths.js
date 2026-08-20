@@ -1,4 +1,5 @@
-export function loadFacilityPaths(facilityGroup, facilityData, path, projection, year, range, emissionType, includeTexas, setCurrentFacility){
+export function loadFacilityPaths(facilityGroup, facilityData, path, projection, year, range, emissionType, includeTexas, 
+								  setCurrentFacility, mapHover, mapExitHover){
 	let facilityPaths = facilityGroup
 		.append("g")
 		.selectAll("facility-path")
@@ -33,10 +34,17 @@ export function loadFacilityPaths(facilityGroup, facilityData, path, projection,
 			event.stopPropagation();
 			setCurrentFacility(d);
 		})
+		.on("mouseover", (event, d) => {
+			event.stopPropagation();
+			mapHover(facilityGroup, path, event.target, d.facility_name);
+		})
+		.on("mouseout", (event, d) => {
+			event.stopPropagation();
+			mapExitHover(facilityGroup);
+		})
 
 	return facilityPaths;
 }
-
 
 export function resetFacilityPaths(facilityGroup){
 	//countiesGroup.innerHTML = "";

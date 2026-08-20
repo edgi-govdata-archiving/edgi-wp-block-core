@@ -1,0 +1,22 @@
+
+.hover-label {
+	.hover-label-line{
+		vector-effect: non-scaling-stroke;
+		stroke-width: 2px;
+		stroke: #000000;
+	}
+
+	.hover-label-bg {
+		vector-effect: non-scaling-stroke;
+		fill: #ffffff;
+		stroke: #000000;
+	}
+
+	.hover-label-text {
+		font-family: 'Mona Sans', sans-serif;
+		font-weight: 700;
+		fill: #000000;
+		pointer-events: none;
+        margin: 10px;
+	}
+}

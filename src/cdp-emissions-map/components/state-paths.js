@@ -1,6 +1,6 @@
 import { getNameToAbbr, getStateToFips } from "../utilities/convert.js"
 
-export function setupStatePaths(statesGroup, stateData, path, getStateColor, setCurrentState){
+export function setupStatePaths(statesGroup, stateData, path, getStateColor, setCurrentState, mapHover, mapExitHover){
 	let statePaths = statesGroup
 		.selectAll(".state-boundary")
 		.data(stateData)
@@ -16,6 +16,14 @@ export function setupStatePaths(statesGroup, stateData, path, getStateColor, set
 			event.stopPropagation();
 			const abbr = getNameToAbbr(d.properties.name);
 			if (abbr) setCurrentState(d, abbr);
+		})
+		.on("mouseover", (event, d) => {
+			event.stopPropagation();
+			mapHover(statesGroup, path, event.target, d.properties.name);
+		})
+		.on("mouseout", (event, d) => {
+			event.stopPropagation();
+			mapExitHover(statesGroup);
 		})
 
 	return statePaths;
