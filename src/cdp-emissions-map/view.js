@@ -464,6 +464,7 @@ function zoomOutFacility() {
   deselectFacility(facilityPath, emissionType);
 }
 
+
 //loads core html containers
 function loadComponents(){
   let tooltip = document.querySelector(".edgi-map-tooltip");
@@ -516,6 +517,8 @@ document.addEventListener("DOMContentLoaded", () => {
   loadBaseFiles(dashboard, loadBaseData)
 });
 
+var hoverLabelContainer;
+
 //loads svg map and labels, sets up event triggers
 function loadMap(){
   canvasContainer.innerHTML = "";
@@ -528,6 +531,18 @@ function loadMap(){
     .attr("viewBox", `0 0 ${width} ${height}`)
     .attr("width", "100%")
     .attr("height", "100%");
+
+    // svg.append("svg:defs").append("svg:filter")
+    //     .attr("id", "solid")
+    //     .attr("x", 0)
+    //     .attr("y", 0)
+    //     .attr("width", 1)
+    //     .attr("height", 1)
+    //     .append("f")
+    //     .attr("markerUnits","userSpaceOnUse")
+    //     .append("path")
+    //     .attr("d", "M 0 1 1 0 2 1")
+    //     .style("fill", "#00000088");
 
   canvasContainer.appendChild(svg.node());
 
