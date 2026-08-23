@@ -86,6 +86,7 @@ var facilityRange;
 var includeTexas = true;
 
 var scale = 1;
+var isZooming = false; //true during zoom transition state
 
 //Current locales - stored in Locale class 
 var currentState;
@@ -99,11 +100,11 @@ function toggleTexas(){
   if (currentZoomLevel == 0){
     if (!includeTexas){
       hideTexas(statePaths);
-      hideTexasLabel(stateLabels);
+      //hideTexasLabel(stateLabels);
     }
     else {
       showTexas(statePaths);
-      showStateLabels(stateLabels, true);
+      //showStateLabels(stateLabels, true);
     }
   }
   else if (currentZoomLevel == 2){
@@ -314,14 +315,16 @@ function toggleEmissionsType(){
 }
 
 function mapHover(elementGroup, path, target, text){
-  if (currentZoomLevel == 0 && elementGroup == statesGroup){
-    showLabel(elementGroup, path, target, text, scale, 170);
-  }
-  else if (currentZoomLevel == 1 && elementGroup == countiesGroup){
-    showLabel(elementGroup, path, target, text, scale, 250);
-  }
-  else if (currentZoomLevel == 2 && elementGroup == facilityGroup){
-    showLabel(elementGroup, path, target, text, scale, 250);
+  if (!isZooming){
+    if (currentZoomLevel == 0 && elementGroup == statesGroup){
+      showLabel(elementGroup, path, target, text, scale, 170);
+    }
+    else if (currentZoomLevel == 1 && elementGroup == countiesGroup){
+      showLabel(elementGroup, path, target, text, scale, 250);
+    }
+    else if ((currentZoomLevel == 2 || currentZoomLevel == 3) && elementGroup == facilityGroup){
+      showLabel(elementGroup, path, target, text, scale, 250);
+    }
   }
 }
 
@@ -361,8 +364,18 @@ function setCurrentFacility(facilityProperties){
   }
 }
 
+function doneWithZoom(){
+  isZooming = false;
+}
+
+function waitForZoom(){
+  isZooming = true;
+  setTimeout(doneWithZoom, 500);
+}
+
 //zooms map to current state, hides callouts + updates viz to current state info
 function zoomToState() {
+  waitForZoom();
   currentZoomLevel = 1;
 
   calloutsGroup
@@ -374,7 +387,7 @@ function zoomToState() {
   scale = zoomToFeature(mapGroup, path, width, height, currentState.feature);
 
   selectState(statePaths, scale, currentState.abbr)
-  hideStateLabels(stateLabels);
+  //hideStateLabels(stateLabels);
   hideCallouts(calloutsGroup);
   renderCountiesForState(currentState.abbr, scale);
   updateTitle();
@@ -385,6 +398,7 @@ function zoomToState() {
 
 //zooms map to current county, hides callouts + updates viz to current county info
 function zoomToCounty() {
+  waitForZoom();
   currentZoomLevel = 2;
 
   hideLabel(countiesGroup);
@@ -414,6 +428,7 @@ function zoomToFacility() {
 
 //zooms out from current state view, deselect states + resets map
 function zoomOutState() {
+  waitForZoom();
   currentZoomLevel = 0;
   scale = 1;
   resetState();
@@ -432,7 +447,7 @@ function zoomOutState() {
   countyPaths.innerHTML = null;
 
   showCallouts(calloutsGroup);
-  showStateLabels(stateLabels, includeTexas);
+  //showStateLabels(stateLabels, includeTexas);
 
   backButton.style.display = "none";
   //tooltip.style.display = "none";
@@ -440,6 +455,7 @@ function zoomOutState() {
 
 //zooms out from current county view, reselects state + loads state level view
 function zoomOutCounty() {
+  waitForZoom();
   currentZoomLevel = 1;
   resetCounty();
   scale = zoomToFeature(mapGroup, path, width, height, currentState.feature);
@@ -456,6 +472,7 @@ function zoomOutCounty() {
 
 //does not literally zoom out, just resets to county level view
 function zoomOutFacility() {
+  waitForZoom();
   currentZoomLevel = 2;
 
   //updateTitle();
@@ -576,7 +593,7 @@ function loadMap(){
   calloutsGroup = svg.append("g").attr("class", "callouts-group");
 
   statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState, mapHover, mapExitHover);
-  stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
+  //stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
 
   for (const [smallAbbr, smallData] of Object.entries(smallStates)){ 
     const feature = statesFeatures.find(
