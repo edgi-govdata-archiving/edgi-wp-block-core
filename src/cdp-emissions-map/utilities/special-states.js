@@ -5,20 +5,20 @@ const SMALL_STATES = {
 	"DC": {
 		"name" : "DC",
 		"abbr" : "DC",
-		"pillX" : 880,
-		"pillY" : 370
+		"pillX" : 860,
+		"pillY" : 340
 	},
 	"DE": {
 		"name" : "Delaware",
 		"abbr" : "DE",
-		"pillX" : 895,
-		"pillY" : 320
+		"pillX" : 850,
+		"pillY" : 290
 	},
 	"CT": {
 		"name" : "Connecticut",
 		"abbr" : "CT",
-		"pillX" : 920,
-		"pillY" : 270
+		"pillX" : 865,
+		"pillY" : 240
 	},
 	// "MA": {
 	// 	"name" : "Massachusetts",
@@ -45,10 +45,10 @@ const SMALL_STATES = {
 	// 	"pillY" : 265
 	// },
 	"RI": {
-		"name" : "RI",
+		"name" : "Rhode Island",
 		"abbr" : "RI",
-		"pillX" : 930,
-		"pillY" : 220
+		"pillX" : 910,
+		"pillY" : 210
 	},
 	// "VT": {
 	// 	"name" : "Vermont",

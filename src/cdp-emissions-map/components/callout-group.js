@@ -30,7 +30,7 @@ export function setupCallouts(calloutsGroup, data, abbr, centroid){
 
 
 	pill.append("text")
-	.text(data.name)
+	.text(data.abbr)
 	.attr("text-anchor", "middle")
 	.attr("font-size", `${fontSize}px`)
 	.attr("dy", "4")

@@ -76,8 +76,8 @@ var currentZoomLevel = 0;
 var currentZoomLabel = zoomLevels[currentZoomLevel]; 
 
 //D3 canvas dimensions
-const width = 1000;
-const height = 650;
+const width = 960;
+const height = 600;
 
 //Ranges - stored in Range class that includes direct, supplier + w and w/o Texas
 var stateRange;

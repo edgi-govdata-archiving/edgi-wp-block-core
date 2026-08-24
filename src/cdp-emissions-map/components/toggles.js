@@ -1,6 +1,6 @@
 export default `
 	<div id="toggles">
-		<div class="toggle-group">
+		<div id="emission-toggle-group" class="toggle-group">
 			<div class="toggle">
 			    <input id="emission-toggle" type="checkbox" class="checkbox">
 			    <label for="checkbox" class="hidden-label">
@@ -12,7 +12,7 @@ export default `
 				<label>Suppliers</label>
 			</div>
 		</div>
-		<div class="toggle-group">
+		<div id="texas-toggle-group" class="toggle-group">
 			<div class="toggle">
 			    <input id="texas-toggle" type="checkbox" class="checkbox">
 			    <label for="checkbox" class="hidden-label">
