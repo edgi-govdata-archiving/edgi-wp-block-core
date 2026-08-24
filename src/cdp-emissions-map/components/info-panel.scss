@@ -1,6 +1,5 @@
 .info-panel {
-	width: 300px;
-	height: 400px;
+	width: 400px;
 	display: block;
 	background-color: #ffffff;
 	padding: 50px;
@@ -34,5 +33,34 @@
 
 	&.facility-view{
 		background-color: #54CDBC88;
+		padding-top: 70px;
+		padding-right: 70px;
+		border-radius: 10px;
+
+
+		#info-header{
+			font-weight: 15px;
+		}
+
+		h3{
+			font-weight: 800;
+			margin-bottom: .2rem;
+		}
+
+		h4{
+			font-weight: 400;
+			padding: 0;
+			margin: 0;
+		}
+	}
+
+	img{
+		//position: absolute;
+		display: inline-block;
+		float: right;
+		margin-right: -50px;
+		margin-top: -50px;
+		width: 50px;
+		height: 50px;
 	}
 }

@@ -64,16 +64,18 @@ var stateInfoPanel = `
 
  var facilityInfoPanel = `
 	<section class="info-panel facility-view">
+		<img src="../assets/icons/close-icon.svg" />
 		<h1 id="info-header">Facility Name</h1>
+
 		<h3 id="info-subheader">2000 Supplier Emissions</h3>
 		<section class="info-emissions">
 			<h1 id="emissions-total">12,345</h1>
 			<label class=>tCO₂e</label>
 		</section>
  		<h3 class="ownership-header">Parent Companies</h3>
- 		<h5 id="parent-companies">Current Parent Companies</h5>
+ 		<h4 id="parent-companies">Current Parent Companies</h4>
  		<h3 class="frsid-header">FRSID</h3>
- 		<h5 id="frsid">0000000</h5>
+ 		<h4 id="frsid">0000000</h4>
 
     </section>`
 
@@ -124,7 +126,7 @@ export function loadCountyInfo(container, currentCounty, year, emissionType, cou
 
 	var emissions = data.emissions[year][emissionType];
 	var topFacilities = getTopEmitters(countyFacilities, year, emissionType, 5);
-	console.log("top facilities: " + topFacilities);
+	//console.log("top facilities: " + topFacilities);
 
 	container.innerHTML = countyInfoPanel;
 	container.querySelector("#info-header").innerHTML = header;
