@@ -9,6 +9,7 @@
 @import url("./components/state-labels.scss");
 @import url("./components/callout-group.scss");
 @import url("./components/hover-label.scss");
+@import url("./components/back-button.scss");
 
 
 #cdp-emissions-map {
@@ -47,8 +48,8 @@
 
 	.back-button-wrapper {
 		position: absolute;
-		top: 16px;
-		left: 16px;
+		top: 0px;
+		left: 0px;
 		z-index: 10;
 	}
 
@@ -63,29 +64,6 @@
 		#toggles{
 			display: inline-block;
 			
-		}
-	}
-
-
-	.back-button {
-		background: #edf2f7;
-		color: #4a5568;
-		border: 1px solid #cbd5e0;
-		padding: 8px 16px;
-		border-radius: 8px;
-		font-family: 'Mona Sans', sans-serif;
-		font-size: 14px;
-		font-weight: 500;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		display: flex;
-		align-items: center;
-		gap: 8px;
-
-		&:hover {
-			background: #e2e8f0;
-			color: #2d3748;
-			border-color: #cbd5e0;
 		}
 	}
 

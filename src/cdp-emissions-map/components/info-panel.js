@@ -5,7 +5,6 @@ export default `
     </div>
 `; 
 
-
 var defaultInfoPanel = `
 	<section class="info-panel country-view">
 		<h5">loading...</h5>
@@ -64,7 +63,9 @@ var stateInfoPanel = `
 
  var facilityInfoPanel = `
 	<section class="info-panel facility-view">
-		<img src="../assets/icons/close-icon.svg" />
+		<button id="close-button">
+			<img src="../assets/icons/close-icon.svg" />
+		</button>
 		<h1 id="info-header">Facility Name</h1>
 
 		<h3 id="info-subheader">2000 Supplier Emissions</h3>
@@ -137,7 +138,7 @@ export function loadCountyInfo(container, currentCounty, year, emissionType, cou
 	return container;
 } 
 
-export function loadFacilityInfo(container, currentFacility, year, emissionType){
+export function loadFacilityInfo(container, currentFacility, year, emissionType, goBack){
 	var header = currentFacility.facility_name;
 	var subheader = getSubheader(year, emissionType);
 
@@ -149,6 +150,13 @@ export function loadFacilityInfo(container, currentFacility, year, emissionType)
 	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
 	container.querySelector("#parent-companies").innerHTML = currentFacility.latest_parent;
 	container.querySelector("#frsid").innerHTML = currentFacility.facility_id;
+
+	var closeButton = container.querySelector("#close-button");
+
+	closeButton.addEventListener("click", () => {
+    goBack();
+
+  });
 
 	return container;
 } 

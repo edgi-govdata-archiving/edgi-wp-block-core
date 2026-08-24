@@ -24,6 +24,7 @@ import { zoomToFeature, resetZoom} from './components/map-zoom.js';
 import { setupStateLabels, showStateLabels, hideStateLabels, hideTexasLabel } from './components/state-labels.js';
 import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetCallouts } from './components/callout-group.js';
 import { showLabel, hideLabel } from './components/hover-label.js';
+import { setupBackButton, hideBackButton, showBackButton } from './components/back-button.js';
 
 import Locale from "./utilities/locale.js"
 import Range from "./utilities/range.js"
@@ -226,7 +227,7 @@ function updateInfoPanel() {
     infoPanelContainer = loadCountyInfo(infoPanelContainer, currentCounty, currentYear, emissionType, countyFacilities);
   }
   else if (currentZoomLevel == 3){
-    infoPanelContainer = loadFacilityInfo(infoPanelContainer, currentFacility, currentYear, emissionType);
+    infoPanelContainer = loadFacilityInfo(infoPanelContainer, currentFacility, currentYear, emissionType, closeFacility);
   }
 }
 
@@ -393,7 +394,7 @@ function zoomToState() {
   updateTitle();
   updateInfoPanel();
 
-  backButton.style.display = "flex";
+  showBackButton(backButton);
 }
 
 //zooms map to current county, hides callouts + updates viz to current county info
@@ -409,8 +410,6 @@ function zoomToCounty() {
   updateTitle();
   updateInfoPanel();
   updateFacilities();
-
-  backButton.style.display = "flex";
   
 }
 
@@ -423,7 +422,6 @@ function zoomToFacility() {
   //updateTitle(); //should title update?
   updateInfoPanel();
 
-  backButton.style.display = "flex";
 }
 
 //zooms out from current state view, deselect states + resets map
@@ -449,7 +447,7 @@ function zoomOutState() {
   showCallouts(calloutsGroup);
   //showStateLabels(stateLabels, includeTexas);
 
-  backButton.style.display = "none";
+  hideBackButton(backButton);
   //tooltip.style.display = "none";
 }
 
@@ -481,6 +479,8 @@ function zoomOutFacility() {
   deselectFacility(facilityPath, emissionType);
 }
 
+var backButtonContainer;
+
 
 //loads core html containers
 function loadComponents(){
@@ -493,7 +493,6 @@ function loadComponents(){
   baseContainer = dashboard.querySelector(".dashboard");
 
   canvasContainer = dashboard.querySelector(".map");
-  backButton = dashboard.querySelector(".back-button");
   const wrapper = dashboard.querySelector(".map-wrapper");
 
   titleContainer = document.createElement("div");
@@ -503,6 +502,9 @@ function loadComponents(){
   infoPanelContainer = document.createElement("div");
   infoPanelContainer.innerHTML = loadDefaultInfo();
   wrapper.appendChild(infoPanelContainer);
+
+  backButtonContainer = dashboard.querySelector(".back-button-wrapper");
+  backButton = setupBackButton(backButtonContainer, goBack);
 
   let controlContainer = document.createElement("div");
   controlContainer.setAttribute("id", "map-controls");
@@ -609,9 +611,13 @@ function loadMap(){
     setupPillInteraction(pill, feature, statesGroup, setCurrentState, stateHover, exitStateHover);
   };
 
-  // Reset Zoom action
-  backButton.addEventListener("click", () => {
-    if (currentZoomLevel == 1){ //if zoomed to state
+  // svg.on("click", () => {
+  //   zoomOutState();
+  // });
+}
+
+function goBack(){
+      if (currentZoomLevel == 1){ //if zoomed to state
       zoomOutState();
     }
     else if (currentZoomLevel == 2){ //if zoomed to county
@@ -619,13 +625,12 @@ function loadMap(){
     }    
     else if (currentZoomLevel == 3){ //if zoomed to facility
       zoomOutFacility();
+      zoomOutCounty();
     }
+}
 
-  });
-
-  // svg.on("click", () => {
-  //   zoomOutState();
-  // });
+function closeFacility(){
+  setTimeout(zoomOutFacility, 200);
 }
 
 //processes base data files once files are loaded 
