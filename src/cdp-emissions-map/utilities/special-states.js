@@ -3,50 +3,59 @@
 //will create pill at this offset
 const SMALL_STATES = {
 	"DC": {
+		"name" : "DC",
 		"abbr" : "DC",
-		"pillX" : 870,
-		"pillY" : 340
+		"pillX" : 880,
+		"pillY" : 370
 	},
 	"DE": {
+		"name" : "Delaware",
 		"abbr" : "DE",
-		"pillX" : 880,
-		"pillY" : 290
+		"pillX" : 895,
+		"pillY" : 320
 	},
 	"CT": {
+		"name" : "Connecticut",
 		"abbr" : "CT",
-		"pillX" : 885,
-		"pillY" : 240
+		"pillX" : 920,
+		"pillY" : 270
 	},
-	"MA": {
-		"abbr" : "MA",
-		"pillX" : 915,
-		"pillY" : 190
-	},
-	"MD": {
-		"abbr" : "MD",
-		"pillX" : 880,
-		"pillY" : 315
-	},
-	"NH": {
-		"abbr" : "NH",
-		"pillX" : 900,
-		"pillY" : 165
-	},
-	"NJ": {
-		"abbr" : "NJ",
-		"pillX" : 900,
-		"pillY" : 265
-	},
+	// "MA": {
+	// 	"name" : "Massachusetts",
+	// 	"abbr" : "MA",
+	// 	"pillX" : 915,
+	// 	"pillY" : 190
+	// },
+	// "MD": {
+	// 	"name" : "Maryland",
+	// 	"abbr" : "MD",
+	// 	"pillX" : 880,
+	// 	"pillY" : 315
+	// },
+	// "NH": {
+	// 	"name" : "New Hampshire",
+	// 	"abbr" : "NH",
+	// 	"pillX" : 900,
+	// 	"pillY" : 165
+	// },
+	// "NJ": {
+	// 	"name" : "New Jersey",
+	// 	"abbr" : "NJ",
+	// 	"pillX" : 900,
+	// 	"pillY" : 265
+	// },
 	"RI": {
+		"name" : "RI",
 		"abbr" : "RI",
-		"pillX" : 915,
-		"pillY" : 215
+		"pillX" : 930,
+		"pillY" : 220
 	},
-	"VT": {
-		"abbr" : "VT",
-		"pillX" : 915,
-		"pillY" : 135
-	}
+	// "VT": {
+	// 	"name" : "Vermont",
+	// 	"abbr" : "VT",
+	// 	"pillX" : 915,
+	// 	"pillY" : 135
+	// }
 };
 
 //offsets state label that would otherwise be at centroid 0,0

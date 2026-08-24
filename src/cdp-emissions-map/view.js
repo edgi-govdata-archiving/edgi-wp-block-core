@@ -76,8 +76,8 @@ var currentZoomLevel = 0;
 var currentZoomLabel = zoomLevels[currentZoomLevel]; 
 
 //D3 canvas dimensions
-const width = 960;
-const height = 600;
+const width = 1000;
+const height = 650;
 
 //Ranges - stored in Range class that includes direct, supplier + w and w/o Texas
 var stateRange;
@@ -315,10 +315,21 @@ function toggleEmissionsType(){
   updateChoropleth();
 }
 
+function isSmallState(name){
+  for (const [key, value] of Object.entries(smallStates)) {
+    if (value.name == name){
+      return true;
+    }
+  }
+  return false;
+}
+
 function mapHover(elementGroup, path, target, text){
   if (!isZooming){
     if (currentZoomLevel == 0 && elementGroup == statesGroup){
-      showLabel(elementGroup, path, target, text, scale, 170);
+      if (!isSmallState(text)){
+        showLabel(elementGroup, path, target, text, scale, 170);
+      }
     }
     else if (currentZoomLevel == 1 && elementGroup == countiesGroup){
       showLabel(elementGroup, path, target, text, scale, 250);
