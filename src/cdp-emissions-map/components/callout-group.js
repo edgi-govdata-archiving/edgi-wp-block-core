@@ -6,8 +6,6 @@ export function setupCallouts(calloutsGroup, data, abbr, centroid){
 	.attr("x2", data.pillX - 18)
 	.attr("y2", data.pillY);
 
-	console.log(data);
-
 	var fontSize = 20;
 	var pillWidth = 100;
 	var pillHeight = 60;
