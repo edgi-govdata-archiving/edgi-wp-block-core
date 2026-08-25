@@ -74,5 +74,14 @@
 	.checkbox:checked ~ .hidden-label { 
 	    background: #C97C08; 
 	}
+}
 
+#texas-toggle-group{
+	.hidden-label { 
+	    background: #000; 
+	}
+
+	.checkbox:checked ~ .hidden-label { 
+	    background: #AAA; 
+	}
 }

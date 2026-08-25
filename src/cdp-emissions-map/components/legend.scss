@@ -2,24 +2,23 @@
 	position: absolute;
 	width: 60%;
 	height: 100%;
-	border: 1px solid red;
 	left: 0;
 	pointer-events: none;
 }
 
 .legend{
 	position: absolute;
-	right: 2rem;
+	right: -2rem;
 	bottom: 4rem;
 
 	&.gradient-legend{
 		display: inline-flex;
-		width: 5rem;
+		width: 8rem;
 		height: 5rem;
 
 		.labels{
 			display: inline-grid;
-			width: 4rem;
+			width: 8rem;
 
 			label{
 				display: grid;
@@ -30,10 +29,10 @@
 			}
 		}
 
-		.unit-label{
+		#unit-label{
 			display: inline-flex;
+			font-weight: 900;
 		}
-
 
 		#low-label{
 			
@@ -44,10 +43,46 @@
 		#high-label{
 			
 		}
-		.gradient{
-			background-image: linear-gradient(to bottom, #e8eff5, #19649f, #0a283f);
+		#gradient{
 			width: 1rem;
 			height: 100%;
+
+			&.total_direct{
+				background-image: linear-gradient(to bottom, #e8eff5, #19649f, #0a283f);
+			}
+			&.total_supplier{
+				background-image: linear-gradient(to bottom, #f9f1e6, #c97c08, #503103);
+			}
 		}
+	}
+
+	&.facility-legend{
+		display: inline-flex;
+		align-items: center;
+		right: 1rem;
+		bottom: 2rem;
+
+
+		#facility-icon{
+			width: 2rem;
+			height: 2rem;
+			opacity: .5;
+			border-radius: 1rem;
+
+			&.total_direct{
+				background-color: #19649f;
+			}
+			&.total_supplier{
+				background-color: #c97c08;
+			}
+		}
+
+		label{
+			width: 3rem;
+			margin-left: 1rem;
+			vertical-align: center;
+		}
+
+
 	}
 }

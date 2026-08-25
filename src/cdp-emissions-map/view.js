@@ -25,7 +25,7 @@ import { setupStateLabels, showStateLabels, hideStateLabels, hideTexasLabel } fr
 import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetCallouts } from './components/callout-group.js';
 import { showLabel, hideLabel } from './components/hover-label.js';
 import { setupBackButton, hideBackButton, showBackButton } from './components/back-button.js';
-import { setupLegend } from './components/legend.js';
+import { loadGradientLegend, loadFacilityLegend } from './components/legend.js';
 
 import Locale from "./utilities/locale.js"
 import Range from "./utilities/range.js"
@@ -116,7 +116,7 @@ function toggleTexas(){
 
   updateChoropleth();
   updateInfoPanel();
-
+  updateLegend();
 }
 
 //precalculates ranges that are used in scaling choropleth + facility bubbles
@@ -206,7 +206,7 @@ function updateYear(year){
   updateInfoPanel()
   updateChoropleth();
 
-  if (currentZoomLevel == 2){
+  if (currentZoomLevel == 2 || currentZoomLevel == 3){
     updateFacilities();
   }
 }
@@ -245,6 +245,25 @@ function updateTitle() {
   }
 }
 
+
+function updateLegend(){
+  var rangeArray;
+
+  if (currentZoomLevel == 0){
+    rangeArray = stateRange.getRange(emissionType, includeTexas);
+    legend = loadGradientLegend(legendContainer, rangeArray, emissionType);
+  }
+  else if (currentZoomLevel == 1){
+    rangeArray = countyRange.getRange(emissionType, includeTexas);
+    legend = loadGradientLegend(legendContainer, rangeArray, emissionType);
+  }
+  else if (currentZoomLevel == 2 || currentZoomLevel == 3){
+     rangeArray = facilityRange.getRange(emissionType, includeTexas);
+     legend = loadFacilityLegend(legendContainer, emissionType);
+  }
+
+}
+
 //updates map choropleth depending on zoom level
 function updateChoropleth(){
   if (currentZoomLevel == 0){
@@ -276,7 +295,7 @@ function updateFacilities(){
     if (facilityData[currentCounty.id]){
     var currentFacilities = Object.values(facilityData[currentCounty.id]);
     facilityPath = loadFacilityPaths(facilityGroup, currentFacilities, path, projection, currentYear, 
-                                     facilityRange, emissionType, includeTexas, 
+                                     facilityRange, emissionType, includeTexas, currentFacility,
                                      setCurrentFacility, mapHover, mapExitHover);
     }
 
@@ -314,6 +333,7 @@ function toggleEmissionsType(){
   updateTitle();
   updateInfoPanel();
   updateChoropleth();
+  updateLegend();
 }
 
 function isSmallState(name){
@@ -405,6 +425,7 @@ function zoomToState() {
   renderCountiesForState(currentState.abbr, scale);
   updateTitle();
   updateInfoPanel();
+  updateLegend();
 
   showBackButton(backButton);
 }
@@ -422,6 +443,7 @@ function zoomToCounty() {
   updateTitle();
   updateInfoPanel();
   updateFacilities();
+  updateLegend();
   
 }
 
@@ -433,6 +455,8 @@ function zoomToFacility() {
   
   //updateTitle(); //should title update?
   updateInfoPanel();
+  updateLegend();
+
 
 }
 
@@ -457,6 +481,7 @@ function zoomOutState() {
   countyPaths.innerHTML = null;
 
   showCallouts(calloutsGroup);
+  updateLegend();
   //showStateLabels(stateLabels, includeTexas);
 
   hideBackButton(backButton);
@@ -472,6 +497,7 @@ function zoomOutCounty() {
   selectState(statePaths, scale, currentState.abbr);
   updateTitle();
   updateInfoPanel();
+  updateLegend();
 
   updateCountyChoropleth();
 
@@ -487,6 +513,7 @@ function zoomOutFacility() {
 
   //updateTitle();
   updateInfoPanel();
+  updateLegend();
 
   deselectFacility(facilityPath, emissionType);
 }
@@ -520,9 +547,6 @@ function loadComponents(){
 
   backButtonContainer = dashboard.querySelector(".back-button-wrapper");
   backButton = setupBackButton(backButtonContainer, goBack);
-
-  legendContainer = dashboard.querySelector(".legend-wrapper");
-  legend = setupLegend(legendContainer, 0);
 
   let controlContainer = document.createElement("div");
   controlContainer.setAttribute("id", "map-controls");
@@ -628,6 +652,9 @@ function loadMap(){
     let pill = setupCallouts(calloutsGroup, smallData, smallAbbr, centroid);
     setupPillInteraction(pill, feature, statesGroup, setCurrentState, stateHover, exitStateHover);
   };
+
+    legendContainer = dashboard.querySelector(".legend-wrapper");
+    updateLegend();
 
   // svg.on("click", () => {
   //   zoomOutState();

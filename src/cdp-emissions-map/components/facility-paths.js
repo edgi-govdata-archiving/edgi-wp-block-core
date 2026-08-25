@@ -1,5 +1,8 @@
 export function loadFacilityPaths(facilityGroup, facilityData, path, projection, year, range, emissionType, includeTexas, 
-								  setCurrentFacility, mapHover, mapExitHover){
+								  currentFacility, setCurrentFacility, mapHover, mapExitHover){
+
+	resetFacilityPaths(facilityGroup);
+
 	let facilityPaths = facilityGroup
 		.append("g")
 		.selectAll("facility-path")
@@ -20,15 +23,7 @@ export function loadFacilityPaths(facilityGroup, facilityData, path, projection,
 			return 0; //no data for this year / emission type
 		})
 		.attr("class", function(d) {
-			if (emissionType == "total_direct" && d.is_direct_emitter){
-				return "direct-facility";
-			}
-			else if (emissionType == "total_supplier" && d.is_supplier){
-				return "supplier-facility";
-			}
-			else{
-				return "hide-facility";
-			}
+			return getFacilityClass(d, currentFacility, emissionType);
 		})
 		.on("click", (event, d) => {
 			event.stopPropagation();
@@ -47,9 +42,14 @@ export function loadFacilityPaths(facilityGroup, facilityData, path, projection,
 }
 
 export function resetFacilityPaths(facilityGroup){
-	//countiesGroup.innerHTML = "";
+	//this is silly, plz fix. select all children function was not working :(
 	facilityGroup.selectAll(".direct-facility").remove();
 	facilityGroup.selectAll(".supplier-facility").remove();
+	facilityGroup.selectAll(".direct-facility-selected").remove();
+	facilityGroup.selectAll(".supplier-facility-selected").remove();
+	facilityGroup.selectAll(".direct-facility-faded").remove();
+	facilityGroup.selectAll(".supplier-facility-faded").remove();
+	facilityGroup.selectAll(".hide-facility").remove();
 	// facilityGroup.transition()
 	// .duration(200)
 	// .style("opacity", 0);
@@ -77,23 +77,7 @@ function scale(value, range){
 export function selectFacility(facilityPaths, currentFacility, emissionType){
 	facilityPaths
 	.attr("class", (d) =>{
-		var status = "";
-		if (d.facility_id == currentFacility.facility_id){
-			status = "-selected";
-		}
-		else{
-			status = "-faded";
-		}
-		if (emissionType == "total_direct" && d.is_direct_emitter){
-			return "direct-facility" + status;
-		}
-		else if (emissionType == "total_supplier" && d.is_supplier){
-			return "supplier-facility" + status;
-		}
-		else{
-			return "hide-facility";
-		}
-
+		return getFacilityClass(d, currentFacility, emissionType);
 	});
 
 }
@@ -112,3 +96,37 @@ export function deselectFacility(facilityPaths, emissionType){
 		}
 	});
 }
+
+function getFacilityClass(thisFacility, currentFacility, emissionType){
+	var status;
+	
+	if (!currentFacility){
+		status = "";
+	}
+	else if (thisFacility.facility_id == currentFacility.facility_id){
+		status = "-selected";
+	}
+	else{
+		status = "-faded";
+	}
+	
+	if (emissionType == "total_direct" && thisFacility.is_direct_emitter){
+		return "direct-facility" + status;
+	}
+	else if (emissionType == "total_supplier" && thisFacility.is_supplier){
+		return "supplier-facility" + status;
+	}
+	else{
+		return "hide-facility";
+	}
+}
+
+			// if (emissionType == "total_direct" && d.is_direct_emitter){
+			// 	return "direct-facility";
+			// }
+			// else if (emissionType == "total_supplier" && d.is_supplier){
+			// 	return "supplier-facility";
+			// }
+			// else{
+			// 	return "hide-facility";
+			// }
