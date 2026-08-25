@@ -25,6 +25,7 @@ import { setupStateLabels, showStateLabels, hideStateLabels, hideTexasLabel } fr
 import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetCallouts } from './components/callout-group.js';
 import { showLabel, hideLabel } from './components/hover-label.js';
 import { setupBackButton, hideBackButton, showBackButton } from './components/back-button.js';
+import { setupLegend } from './components/legend.js';
 
 import Locale from "./utilities/locale.js"
 import Range from "./utilities/range.js"
@@ -492,6 +493,9 @@ function zoomOutFacility() {
 
 var backButtonContainer;
 
+var legendContainer;
+var legend;
+
 
 //loads core html containers
 function loadComponents(){
@@ -516,6 +520,9 @@ function loadComponents(){
 
   backButtonContainer = dashboard.querySelector(".back-button-wrapper");
   backButton = setupBackButton(backButtonContainer, goBack);
+
+  legendContainer = dashboard.querySelector(".legend-wrapper");
+  legend = setupLegend(legendContainer, 0);
 
   let controlContainer = document.createElement("div");
   controlContainer.setAttribute("id", "map-controls");
