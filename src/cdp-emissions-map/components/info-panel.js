@@ -16,11 +16,6 @@ var countryInfoPanel = `
 		<h3 id="info-subheader">2000 Supplier Emissions</h3>
 		<h3 class="list-header">Top Emitting States</h3>
 		<ol id="top-emitters">
-			<li>Alabama</li>
-			<li>Alaska</li>
-			<li>Arizona</li>
-			<li>California</li>
-			<li>Colorado</li>
 		</ol>
     </section>`
 
@@ -84,7 +79,7 @@ export function loadDefaultInfo(){
 	return defaultInfoPanel;
 }
 
-export function loadCountryInfo(container, stateData, year, emissionType){
+export function loadCountryInfo(container, stateData, year, emissionType, setCurrentState){
 	var subheader = getSubheader(year, emissionType);
 
 	var stateList = [];
@@ -97,7 +92,9 @@ export function loadCountryInfo(container, stateData, year, emissionType){
 
 	container.innerHTML = countryInfoPanel;
 	container.querySelector("#info-subheader").innerHTML = subheader;
-	container.querySelector("#top-emitters").innerHTML = makeOrderedList(topStates, "name");
+	//container.querySelector("#top-emitters").innerHTML = makeOrderedList(topStates, "name");
+
+    makeClickableList(container.querySelector("#top-emitters"), topStates, "name", "abbr", setCurrentState)
 
 	return container;
 } 
@@ -154,9 +151,8 @@ export function loadFacilityInfo(container, currentFacility, year, emissionType,
 	var closeButton = container.querySelector("#close-button");
 
 	closeButton.addEventListener("click", () => {
-    goBack();
-
-  });
+	    goBack();
+	  });
 
 	return container;
 } 
@@ -192,9 +188,25 @@ function getTopEmitters(fullList, year, emissionType, listLength){
 function makeOrderedList(list, selector){
 	var html = "";
 	for (var i in list){
-		html += "<li>" + list[i][selector] + "</li>";
+		html += "<li><button>" + list[i][selector] + "</button></li>";
 	}
 	return html;
+}
+
+export function makeClickableList(container, list, nameSelector, idSelector, setCurrentLocale){
+	for (var i in list){
+		var data = list[i];
+		var id = data[idSelector];
+
+		var buttonId = "button-" + id; 
+		var template = "<li><button id='" + id + "'>" + data[nameSelector] + "</button></li>";
+		container.insertAdjacentHTML("beforeend", template);
+		var listButton = container.querySelector("#" + id);
+
+		listButton.addEventListener("click", () => {
+		    setCurrentLocale(event.srcElement.id);
+		});
+	}
 }
 
 function formatEmissions(emissions){

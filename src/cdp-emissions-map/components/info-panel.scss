@@ -28,14 +28,43 @@
 		padding-top: 1rem;
 	}
 
+	ol {
+		list-style: none;
+	 	counter-reset: olCounter;
+	 	padding-left: 1rem;
+	}
+
+	li {
+	 	counter-increment: olCounter;
+	}
+
+	li button::before {
+		content: counter(olCounter) ". ";
+		font-family: 'Crimson Text', serif;
+		font-size: 1em;
+	}
+
+
+	button {
+		font-family: 'Crimson Text', serif;
+		font-size: 1.5em;
+		background: transparent;
+		border: none;
+		padding: .2rem;
+		width: 70%;
+		text-align: left;
+
+		&:hover {
+			background: #54CDBC88;
+		}
+	}
+
 
 	&.facility-view{
 		background-color: #54CDBC88;
 		border-radius: 10px;
 		width: 380px;
 		padding-right: 70px;
-
-
 
 		#info-header{
 			font-weight: 15px;

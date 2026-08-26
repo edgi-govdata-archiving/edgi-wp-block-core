@@ -49,6 +49,7 @@ var currentYear = 2016;
 var currentStateAbbr = "";
 var emissionType = "total_direct" //or "total_supplier"
 
+var statesFeatures;
 var stateData = {};
 var stateDataNoTexas = {};
 var countyData = {};
@@ -215,7 +216,7 @@ function updateYear(year){
 //updates info panel with text depending on zoom level
 function updateInfoPanel() {
   if (currentZoomLevel == 0){
-    infoPanelContainer = loadCountryInfo(infoPanelContainer, includeTexas ? stateData : stateDataNoTexas, currentYear, emissionType);
+    infoPanelContainer = loadCountryInfo(infoPanelContainer, includeTexas ? stateData : stateDataNoTexas, currentYear, emissionType, setCurrentStateFromList);
   }
   else if (currentZoomLevel == 1){
     infoPanelContainer = loadStateInfo(infoPanelContainer, currentState, currentYear, emissionType);
@@ -366,6 +367,7 @@ function mapExitHover(elementGroup){
   hideLabel(elementGroup);
 }
 
+
 //sets current state, loads critical info, zooms to that state. called when state is clicked
 function setCurrentState(feature, stateAbbr){
   if (currentZoomLevel == 0){ //can only select state from country view
@@ -376,6 +378,19 @@ function setCurrentState(feature, stateAbbr){
     currentState.data = stateData[stateAbbr];
     zoomToState();
   }
+}
+
+function setCurrentStateFromList(stateAbbr){
+   const feature = statesFeatures.find(
+        (f) => {
+          // console.log(f.properties.name);
+          // console.log(getNameToAbbr(f.properties.name))
+          return getNameToAbbr(f.properties.name) == stateAbbr
+        }
+
+    );
+
+   setCurrentState(feature, stateAbbr); 
 }
 
 //sets current county, loads critical info, zooms to that county. called when county is clicked
@@ -618,7 +633,7 @@ function loadMap(){
   path = d3.geoPath().projection(projection).pointRadius(.5);
 
   // Extract GeoJSON features
-  const statesFeatures = topojson.feature(
+  statesFeatures = topojson.feature(
     statesTopo,
     statesTopo.objects.states,
   ).features;
