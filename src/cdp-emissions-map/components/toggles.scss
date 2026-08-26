@@ -1,5 +1,6 @@
 #toggles{
 	margin-left: 2rem;
+	transition: all 0.2s ease;
 }
 .toggle-group{
 	display : inline-flex;
@@ -14,7 +15,6 @@
 		display : grid;
   		align-self: center;
   		padding-left: 1rem;
-
 
 		label{
 			font-size: 20px;

@@ -1,4 +1,4 @@
-export default `
+var toggleTemplate = `
 	<div id="toggles">
 		<div id="emission-toggle-group" class="toggle-group">
 			<div class="toggle">
@@ -25,3 +25,40 @@ export default `
 		</div>
 	</div>
 `;  
+
+export function loadToggles(controlContainer, toggleEmissionsType, toggleTexas){
+	controlContainer.insertAdjacentHTML("beforeend", toggleTemplate);
+
+	controlContainer.querySelector("#emission-toggle").addEventListener("change", function() {
+  		toggleEmissionsType();
+  	});
+
+  	controlContainer.querySelector("#texas-toggle").addEventListener("change", function() {
+	  	toggleTexas();
+	  });
+
+  	return controlContainer.querySelector("#toggles");
+}
+
+export function lockToggles(toggles){
+	toggles.style.opacity = .3;
+	toggles.style.pointerEvents = "none";
+}
+
+export function unlockToggles(toggles){
+	toggles.style.opacity = 1;
+	toggles.style.pointerEvents = "auto";
+}
+
+
+export function lockTexasToggle(toggles){
+	var texasToggle = toggles.querySelector("#texas-toggle-group");
+	texasToggle.style.opacity = .3;
+	texasToggle.style.pointerEvents = "none";
+}
+
+export function unlockTexasToggle(toggles){
+	var texasToggle = toggles.querySelector("#texas-toggle-group");
+	texasToggle.style.opacity = 1;
+	texasToggle.style.pointerEvents = "auto";
+}

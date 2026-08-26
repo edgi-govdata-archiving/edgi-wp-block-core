@@ -14,7 +14,7 @@ const irregularStates = IRREGULAR_STATES["IRREGULAR_STATES"];
 import timeline from './components/timeline.js';
 import { loadDefaultTitle, loadCountryTitle, loadStateTitle, loadCountyTitle } from './components/title.js';
 import { loadDefaultInfo, loadCountryInfo, loadStateInfo, loadCountyInfo, loadFacilityInfo } from './components/info-panel.js';
-import toggles from './components/toggles.js';
+import { loadToggles, lockToggles, unlockToggles, lockTexasToggle, unlockTexasToggle } from './components/toggles.js';
 import callout from './components/callout-group.js';
 import { setupStatePaths, stateHover, exitStateHover, selectState, deselectState, hideTexas, showTexas} from './components/state-paths.js';
 import { setupCountyPaths, resetCountyPaths, selectCounty, deselectCounty} from './components/county-paths.js';
@@ -38,6 +38,7 @@ var baseContainer;
 var statesTopo;
 var countiesTopo;
 
+var toggles;
 var titleContainer;
 var infoPanelContainer;
 var statePaths;
@@ -428,6 +429,10 @@ function zoomToState() {
   updateLegend();
 
   showBackButton(backButton);
+
+  if (currentState.abbr == "TX"){
+    lockTexasToggle(toggles);
+  }
 }
 
 //zooms map to current county, hides callouts + updates viz to current county info
@@ -457,7 +462,7 @@ function zoomToFacility() {
   updateInfoPanel();
   updateLegend();
 
-
+  lockToggles(toggles);
 }
 
 //zooms out from current state view, deselect states + resets map
@@ -485,6 +490,7 @@ function zoomOutState() {
   //showStateLabels(stateLabels, includeTexas);
 
   hideBackButton(backButton);
+  unlockTexasToggle(toggles);
   //tooltip.style.display = "none";
 }
 
@@ -504,6 +510,7 @@ function zoomOutCounty() {
   deselectCounty(countyPaths);
   resetFacilityPaths(facilityGroup);
   
+  unlockToggles(toggles);
 }
 
 //does not literally zoom out, just resets to county level view
@@ -516,6 +523,8 @@ function zoomOutFacility() {
   updateLegend();
 
   deselectFacility(facilityPath, emissionType);
+
+  unlockToggles(toggles);
 }
 
 var backButtonContainer;
@@ -557,15 +566,8 @@ function loadComponents(){
     updateYear(this.value)
   });
 
-  controlContainer.insertAdjacentHTML("beforeend", toggles);
 
-  document.querySelector("#emission-toggle").addEventListener("change", function() {
-  toggleEmissionsType();
-  });
-
-  document.querySelector("#texas-toggle").addEventListener("change", function() {
-  toggleTexas();
-  });
+  toggles = loadToggles(controlContainer, toggleEmissionsType, toggleTexas);
 
   canvasContainer.innerHTML =
   '<div style="padding: 20px; font-weight:300; color:#afe0d7;">Loading environmental data and maps...</div>';

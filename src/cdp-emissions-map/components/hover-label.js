@@ -17,7 +17,7 @@ export function showLabel(elementGroup, path, target, text, scale, width){
 	elementGroup.selectAll(".hover-label").remove();
 
 	var centroid = getCentroid(target);
-	var fontSize = 20 / scale;
+	var fontSize = 25 / scale;
 	const pill = elementGroup.append("g")
 	//.datum(countyData)
 	.attr("class", "hover-label")
@@ -26,7 +26,7 @@ export function showLabel(elementGroup, path, target, text, scale, width){
 	pill.append("line")
 	.attr("class", "hover-label-line")
 	.attr("x1", 0)
-	.attr("y1", -40 / scale)
+	.attr("y1", -50 / scale)
 	.attr("x2", 0)
 	.attr("y2", 10 / scale);
 

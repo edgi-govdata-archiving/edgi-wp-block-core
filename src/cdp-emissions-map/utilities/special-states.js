@@ -6,13 +6,13 @@ const SMALL_STATES = {
 		"name" : "DC",
 		"abbr" : "DC",
 		"pillX" : 860,
-		"pillY" : 340
+		"pillY" : 320
 	},
 	"DE": {
 		"name" : "Delaware",
 		"abbr" : "DE",
-		"pillX" : 850,
-		"pillY" : 290
+		"pillX" : 860,
+		"pillY" : 280
 	},
 	"CT": {
 		"name" : "Connecticut",
@@ -20,42 +20,13 @@ const SMALL_STATES = {
 		"pillX" : 865,
 		"pillY" : 240
 	},
-	// "MA": {
-	// 	"name" : "Massachusetts",
-	// 	"abbr" : "MA",
-	// 	"pillX" : 915,
-	// 	"pillY" : 190
-	// },
-	// "MD": {
-	// 	"name" : "Maryland",
-	// 	"abbr" : "MD",
-	// 	"pillX" : 880,
-	// 	"pillY" : 315
-	// },
-	// "NH": {
-	// 	"name" : "New Hampshire",
-	// 	"abbr" : "NH",
-	// 	"pillX" : 900,
-	// 	"pillY" : 165
-	// },
-	// "NJ": {
-	// 	"name" : "New Jersey",
-	// 	"abbr" : "NJ",
-	// 	"pillX" : 900,
-	// 	"pillY" : 265
-	// },
+
 	"RI": {
 		"name" : "Rhode Island",
 		"abbr" : "RI",
 		"pillX" : 910,
-		"pillY" : 210
+		"pillY" : 205
 	},
-	// "VT": {
-	// 	"name" : "Vermont",
-	// 	"abbr" : "VT",
-	// 	"pillX" : 915,
-	// 	"pillY" : 135
-	// }
 };
 
 //offsets state label that would otherwise be at centroid 0,0

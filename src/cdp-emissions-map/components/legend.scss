@@ -14,7 +14,7 @@
 	&.gradient-legend{
 		display: inline-flex;
 		width: 10rem;
-		height: 5rem;
+		height: 6rem;
 
 		.labels{
 			display: inline-grid;
@@ -22,8 +22,8 @@
 
 			label{
 				display: grid;
-				height: 2rem;
-				vertical-align: baseline;
+				height: 2.3rem;
+				vertical-align: text-top;
 				padding: 0;
 				margin-left: .5rem;
 			}
@@ -32,17 +32,9 @@
 		#unit-label{
 			display: inline-flex;
 			font-weight: 900;
+			padding-top: .2rem;
 		}
 
-		#low-label{
-			
-		}
-		#middle-label{
-			
-		}
-		#high-label{
-			
-		}
 		#gradient{
 			width: 1rem;
 			height: 100%;
