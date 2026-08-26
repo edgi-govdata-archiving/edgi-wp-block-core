@@ -216,10 +216,10 @@ function updateYear(year){
 //updates info panel with text depending on zoom level
 function updateInfoPanel() {
   if (currentZoomLevel == 0){
-    infoPanelContainer = loadCountryInfo(infoPanelContainer, includeTexas ? stateData : stateDataNoTexas, currentYear, emissionType, setCurrentStateFromList);
+    infoPanelContainer = loadCountryInfo(infoPanelContainer, includeTexas ? stateData : stateDataNoTexas, currentYear, emissionType, setCurrentStateFromId);
   }
   else if (currentZoomLevel == 1){
-    infoPanelContainer = loadStateInfo(infoPanelContainer, currentState, currentYear, emissionType);
+    infoPanelContainer = loadStateInfo(infoPanelContainer, currentState, currentYear, emissionType, setCurrentCountyFromId);
   }
   else if (currentZoomLevel == 2){
     var countyFacilities = [];
@@ -227,7 +227,7 @@ function updateInfoPanel() {
       countyFacilities = Object.values(facilityData[currentCounty.id]);
     }
 
-    infoPanelContainer = loadCountyInfo(infoPanelContainer, currentCounty, currentYear, emissionType, countyFacilities);
+    infoPanelContainer = loadCountyInfo(infoPanelContainer, currentCounty, currentYear, emissionType, countyFacilities, setCurrentFacilityFromId);
   }
   else if (currentZoomLevel == 3){
     infoPanelContainer = loadFacilityInfo(infoPanelContainer, currentFacility, currentYear, emissionType, closeFacility);
@@ -380,14 +380,10 @@ function setCurrentState(feature, stateAbbr){
   }
 }
 
-function setCurrentStateFromList(stateAbbr){
+//calls setCurrentState but only requires id (used for selecting from top emitters list)
+function setCurrentStateFromId(stateAbbr){
    const feature = statesFeatures.find(
-        (f) => {
-          // console.log(f.properties.name);
-          // console.log(getNameToAbbr(f.properties.name))
-          return getNameToAbbr(f.properties.name) == stateAbbr
-        }
-
+        (f) => getNameToAbbr(f.properties.name) == stateAbbr
     );
 
    setCurrentState(feature, stateAbbr); 
@@ -405,12 +401,37 @@ function setCurrentCounty(feature, countyId){
   }
 }
 
+function setCurrentCountyFromId(countyId){
+  console.log("setCurrentCountyFromId()...");
+  console.log(countyId);
+   console.log(countiesFeatures);
+   const feature = countiesFeatures.find(
+        (f) => f.id == countyId
+    );
+
+   setCurrentCounty(feature, countyId); 
+}
+
+
 //sets current facility, loads critical info, zooms to that state. called when facility is clicked
 function setCurrentFacility(facilityProperties){
   if (currentZoomLevel == 2 || currentZoomLevel == 3){ //can only select facility from county view or facility view
     currentFacility = facilityProperties;
     zoomToFacility();
   }
+}
+
+function setCurrentFacilityFromId(facilityId){
+  console.log("setCurrentFacilityFromId()...");
+  console.log(facilityId);
+  var facility = facilityData[currentCounty.id][facilityId];
+  console.log(facility);
+
+   // const feature = countiesFeatures.find(
+   //      (f) => f.id == countyId
+   //  );
+
+  setCurrentFacility(facility); 
 }
 
 function doneWithZoom(){

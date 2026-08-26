@@ -80,10 +80,12 @@
 	}
 
 	#map-controls {
+		position: absolute;
+		top: 700px;
 		width: 100%;
 
 		#timelineSlider{
-			width: 65%;
+			width: 60%;
 			display: inline-block;
 		}
 

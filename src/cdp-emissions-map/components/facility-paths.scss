@@ -2,6 +2,7 @@
 .direct-facility{
 	vector-effect: non-scaling-stroke;
 	fill: #19649F88;
+	transition: all 0.2s ease;
 
 	&:hover, &.hover {
 		fill: #54CDBC;
@@ -14,10 +15,12 @@
 	fill: #54CDBC;
 	stroke: #000000;
 	stroke-width: 3px;
+	transition: all 0.2s ease;
 }
 
 .direct-facility-faded{
 	fill: #19649F33;
+	transition: all 0.2s ease;
 }
 
 .supplier-facility{

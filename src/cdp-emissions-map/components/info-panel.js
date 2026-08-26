@@ -29,11 +29,6 @@ var stateInfoPanel = `
 		</section>
 		<h3 class="list-header">Top Emitting Counties</h3>
 		<ol id="top-emitters">
-			<li>Anderson</li>
-			<li>Andrews</li>
-			<li>Angelina</li>
-			<li>Aransas</li>
-			<li>Archer</li>
 		</ol>
     </section>`
 
@@ -47,11 +42,6 @@ var stateInfoPanel = `
 		</section>
  		<h3 class="list-header">Top Emitting Facilities</h3>
 		<ol id="top-emitters">
-			<li>Facility</li>
-			<li>Facility</li>
-			<li>Facility</li>
-			<li>Facility</li>
-			<li>Facility</li>
 		</ol>
 
     </section>`
@@ -79,7 +69,7 @@ export function loadDefaultInfo(){
 	return defaultInfoPanel;
 }
 
-export function loadCountryInfo(container, stateData, year, emissionType, setCurrentState){
+export function loadCountryInfo(container, stateData, year, emissionType, setCurrentLocale){
 	var subheader = getSubheader(year, emissionType);
 
 	var stateList = [];
@@ -94,12 +84,12 @@ export function loadCountryInfo(container, stateData, year, emissionType, setCur
 	container.querySelector("#info-subheader").innerHTML = subheader;
 	//container.querySelector("#top-emitters").innerHTML = makeOrderedList(topStates, "name");
 
-    makeClickableList(container.querySelector("#top-emitters"), topStates, "name", "abbr", setCurrentState)
+    makeClickableList(container.querySelector("#top-emitters"), topStates, "name", "abbr", setCurrentLocale)
 
 	return container;
 } 
 
-export function loadStateInfo(container, currentState, year, emissionType){
+export function loadStateInfo(container, currentState, year, emissionType, setCurrentLocale){
 	var header = currentState.name;
 	var subheader = getSubheader(year, emissionType);
 
@@ -111,12 +101,14 @@ export function loadStateInfo(container, currentState, year, emissionType){
 	container.querySelector("#info-header").innerHTML = header;
 	container.querySelector("#info-subheader").innerHTML = subheader;
 	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
-	container.querySelector("#top-emitters").innerHTML = makeOrderedList(topCounties, "county_name");
+	//container.querySelector("#top-emitters").innerHTML = makeOrderedList(topCounties, "county_name");
+
+	makeClickableList(container.querySelector("#top-emitters"), topCounties, "county_name", "county_fips", setCurrentLocale)
 
 	return container;
 } 
 
-export function loadCountyInfo(container, currentCounty, year, emissionType, countyFacilities){
+export function loadCountyInfo(container, currentCounty, year, emissionType, countyFacilities, setCurrentLocale){
 	var header = currentCounty.name;
 	var subheader = getSubheader(year, emissionType);
 
@@ -130,7 +122,9 @@ export function loadCountyInfo(container, currentCounty, year, emissionType, cou
 	container.querySelector("#info-header").innerHTML = header;
 	container.querySelector("#info-subheader").innerHTML = subheader;
 	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
-	container.querySelector("#top-emitters").innerHTML = makeOrderedList(topFacilities, "facility_name");
+	//container.querySelector("#top-emitters").innerHTML = makeOrderedList(topFacilities, "facility_name");
+
+	makeClickableList(container.querySelector("#top-emitters"), topFacilities, "facility_name", "facility_id", setCurrentLocale)
 
 	return container;
 } 
@@ -197,14 +191,18 @@ export function makeClickableList(container, list, nameSelector, idSelector, set
 	for (var i in list){
 		var data = list[i];
 		var id = data[idSelector];
+		console.log(id)
+		console.log(data);
+		console.log(data[nameSelector]);
 
-		var buttonId = "button-" + id; 
-		var template = "<li><button id='" + id + "'>" + data[nameSelector] + "</button></li>";
+		var template = "<li><button data-id='" + id + "'>" + data[nameSelector] + "</button></li>";
 		container.insertAdjacentHTML("beforeend", template);
-		var listButton = container.querySelector("#" + id);
+		var listButton = container.lastElementChild.querySelector("button"); 
+		//var listButton = container.querySelector("#" + id);
 
 		listButton.addEventListener("click", () => {
-		    setCurrentLocale(event.srcElement.id);
+			console.log(event.srcElement.dataset.id);
+		    setCurrentLocale(event.srcElement.dataset.id);
 		});
 	}
 }
