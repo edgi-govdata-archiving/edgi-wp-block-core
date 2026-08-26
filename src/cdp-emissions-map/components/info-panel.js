@@ -12,7 +12,7 @@ var defaultInfoPanel = `
 
 var countryInfoPanel = `
 	<section class="info-panel country-view">
-		<h1 id="info-header">United States</h1>
+		<h2 id="info-header">United States</h2>
 		<h3 id="info-subheader">2000 Supplier Emissions</h3>
 		<h3 class="list-header">Top Emitting States</h3>
 		<ol id="top-emitters">
@@ -26,7 +26,7 @@ var countryInfoPanel = `
 
 var stateInfoPanel = `
 	<section class="info-panel state-view">
-		<h1 id="info-header">Texas</h1>
+		<h2 id="info-header">Texas</h2>
 		<h3 id="info-subheader">2000 Supplier Emissions</h3>
 		<section class="info-emissions">
 			<h1 id="emissions-total">12,345</h1>
@@ -44,7 +44,7 @@ var stateInfoPanel = `
 
  var countyInfoPanel = `
 	<section class="info-panel county-view">
-		<h1 id="info-header">Texas</h1>
+		<h2 id="info-header">Texas</h2>
 		<h3 id="info-subheader">2000 Supplier Emissions</h3>
 		<section class="info-emissions">
 			<h1 id="emissions-total">12,345</h1>
@@ -66,7 +66,7 @@ var stateInfoPanel = `
 		<button id="close-button">
 			<img src="../assets/icons/close-icon.svg" />
 		</button>
-		<h1 id="info-header">Facility Name</h1>
+		<h2 id="info-header">Facility Name</h2>
 
 		<h3 id="info-subheader">2000 Supplier Emissions</h3>
 		<section class="info-emissions">

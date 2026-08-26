@@ -18,13 +18,44 @@
 	padding: 24px;
 	position: relative;
 
+	h1{
+		font-size: 2.5em;
+	}
+	h2{
+		font-size: 2em;
+	}
+	h3{
+		font-size: 1.5em;
+		font-weight: 800;
+	}
+	h4{
+		font-size: 1.2em;
+	}
+	h5{
+		font-size: 1em;
+	}
+
+	li{
+		font-family: 'Crimson Text', serif;
+		font-size: 1.5em;
+	}
+
+	label{
+		font-family: 'Crimson Text', serif;
+		font-size: 1.4em;
+	}
+
+	option{
+		font-family: 'Crimson Text', serif;
+		font-size: 1.2em;
+	}
+
 	.map-header {
 		text-align: center;
 		border-bottom: 1px solid #edf2f7;
 		padding-bottom: 20px;
 
 		.map-title {
-			font-size: 30px;
 			font-weight: 600;
 			margin: 0 0 8px 0;
 			color: #1a202c;
@@ -82,125 +113,3 @@
 		}
 	}
 }
-
-/* Tooltip styling */
-.edgi-map-tooltip {
-	position: absolute;
-	pointer-events: none;
-	background: #ffffff;
-	border: 1px solid #cbd5e0;
-	border-radius: 8px;
-	padding: 12px;
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-	color: #2d3748;
-	font-family: 'Mona Sans', sans-serif;
-	font-size: 13px;
-	//z-index: 10;
-	display: none;
-	min-width: 180px;
-
-	.tooltip-title {
-		font-weight: 600;
-		color: #1a202c;
-		margin-bottom: 4px;
-	}
-
-	.tooltip-rep {
-		font-size: 14px;
-		margin-bottom: 8px;
-		font-weight: 500;
-		color: #4a5568;
-	}
-
-	.tooltip-cta {
-		font-size: 11px;
-		color: #3182ce;
-		border-top: 1px solid #edf2f7;
-		padding-top: 6px;
-		margin: 0;
-	}
-}
-
-/* Small Districts Helper Panel */
-.edgi-small-districts-helper {
-	position: absolute;
-	bottom: 16px;
-	left: 16px;
-	right: 16px;
-	background: rgba(255, 255, 255, 0.95);
-	border: 1px solid #cbd5e0;
-	border-radius: 10px;
-	padding: 10px 16px;
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-	display: none;
-	align-items: center;
-	gap: 16px;
-	z-index: 10;
-	backdrop-filter: blur(8px);
-	flex-wrap: nowrap;
-	overflow: hidden;
-
-	@media (max-width: 768px) {
-		position: relative;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		margin: 12px 0 0 0;
-		background: #ffffff;
-	}
-
-	.edgi-helper-title {
-		font-size: 11px;
-		font-weight: 700;
-		color: #718096;
-		text-transform: uppercase;
-		letter-spacing: 0.5px;
-		white-space: nowrap;
-	}
-
-	.edgi-helper-pills-list {
-		display: flex;
-		flex-wrap: nowrap;
-		gap: 8px;
-		flex: 1;
-		overflow-x: auto;
-		padding: 4px 0;
-
-		&::-webkit-scrollbar {
-			height: 4px;
-		}
-		&::-webkit-scrollbar-track {
-			background: rgba(0, 0, 0, 0.05);
-			border-radius: 2px;
-		}
-		&::-webkit-scrollbar-thumb {
-			background: rgba(0, 0, 0, 0.15);
-			border-radius: 2px;
-			&:hover {
-				background: rgba(0, 0, 0, 0.3);
-			}
-		}
-	}
-
-	.edgi-helper-pill {
-		font-family: 'Mona Sans', sans-serif;
-		font-size: 12px;
-		font-weight: 600;
-		padding: 6px 12px;
-		border-radius: 6px;
-		border: 1px solid #cbd5e0;
-		background: #ffffff;
-		color: #4a5568;
-		cursor: pointer;
-		transition: all 0.2s ease;
-
-		&:hover {
-			background: #edf2f7;
-			color: #2d3748;
-			border-color: #a0aec0;
-			transform: translateY(-1px);
-		}
-
-	}
-}
-

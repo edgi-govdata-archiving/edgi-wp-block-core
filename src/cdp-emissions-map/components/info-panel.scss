@@ -28,9 +28,6 @@
 		padding-top: 1rem;
 	}
 
-	h3{
-		font-weight: 500;
-	}
 
 	&.facility-view{
 		background-color: #54CDBC88;
@@ -42,6 +39,11 @@
 
 		#info-header{
 			font-weight: 15px;
+		}
+
+		h2{
+			font-size: 1.5em;
+			width: 95%;
 		}
 
 		h3{
