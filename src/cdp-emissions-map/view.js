@@ -35,13 +35,20 @@ import Range from "./utilities/range.js"
 var dashboard;
 var canvasContainer;
 var baseContainer;
+var mapWrapper;
 
+//maps
 var statesTopo;
 var countiesTopo;
 
+//components
 var toggles;
 var titleContainer;
 var infoPanelContainer;
+var legendContainer;
+var legend;
+var dataMessage;
+
 var statePaths;
 var statePathsNoTexas;
 var currentStateLabel;
@@ -97,6 +104,8 @@ var isZooming = false; //true during zoom transition state
 var currentState;
 var currentCounty;
 var currentFacility; //not in locale class, just obj of facility data
+
+
 
 //toggles texas from map + refreshes vizualizations to use ranges w/o texas
 function toggleTexas(){
@@ -571,16 +580,6 @@ function zoomOutFacility() {
   unlockToggles(toggles);
 }
 
-var backButtonContainer;
-
-var legendContainer;
-var legend;
-
-var mapWrapper;
-
-var dataMessage;
-
-
 //loads core html containers
 function loadComponents(){
   let tooltip = document.querySelector(".edgi-map-tooltip");
@@ -602,7 +601,7 @@ function loadComponents(){
   infoPanelContainer.innerHTML = loadDefaultInfo();
   mapWrapper.appendChild(infoPanelContainer);
 
-  backButtonContainer = dashboard.querySelector(".back-button-wrapper");
+  var backButtonContainer = dashboard.querySelector(".back-button-wrapper");
   backButton = setupBackButton(backButtonContainer, goBack);
 
   var messageWrapper = dashboard.querySelector(".message-wrapper");

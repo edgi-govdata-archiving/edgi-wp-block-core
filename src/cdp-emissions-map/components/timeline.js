@@ -1,5 +1,3 @@
-
-
 export default `
     <div id="timelineSlider" class="timeline">
 
