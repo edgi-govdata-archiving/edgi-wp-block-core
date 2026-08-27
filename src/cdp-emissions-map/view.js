@@ -395,13 +395,15 @@ function mapExitHover(elementGroup){
 
 //sets current state, loads critical info, zooms to that state. called when state is clicked
 function setCurrentState(feature, stateAbbr){
-  if (currentZoomLevel == 0){ //can only select state from country view
-    currentState = new Locale(feature.id);
-    currentState.abbr = stateAbbr;
-    currentState.name = feature.properties.name;
-    currentState.feature = feature;
-    currentState.data = stateData[stateAbbr];
-    zoomToState();
+  if (stateAbbr != "AK" && stateAbbr != "CT" ){
+    if (currentZoomLevel == 0){ //can only select state from country view
+      currentState = new Locale(feature.id);
+      currentState.abbr = stateAbbr;
+      currentState.name = feature.properties.name;
+      currentState.feature = feature;
+      currentState.data = stateData[stateAbbr];
+      zoomToState();
+    }
   }
 }
 
@@ -644,18 +646,6 @@ function loadMap(){
     .attr("viewBox", `0 0 ${width} ${height}`)
     .attr("width", "100%")
     .attr("height", "100%");
-
-    // svg.append("svg:defs").append("svg:filter")
-    //     .attr("id", "solid")
-    //     .attr("x", 0)
-    //     .attr("y", 0)
-    //     .attr("width", 1)
-    //     .attr("height", 1)
-    //     .append("f")
-    //     .attr("markerUnits","userSpaceOnUse")
-    //     .append("path")
-    //     .attr("d", "M 0 1 1 0 2 1")
-    //     .style("fill", "#00000088");
 
   canvasContainer.appendChild(svg.node());
 

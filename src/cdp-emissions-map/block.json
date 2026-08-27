@@ -5,12 +5,8 @@
   "title": "Emissions Map",
   "category": "widgets",
   "icon": "location-alt",
-  "description": "Interactive map of US emissions over time, based on report 1 for the Climate Data Project.",
+  "description": "Interactive map of US emissions over time, based on Report 1 for the Climate Data Project.",
   "attributes": {
-    "csvUrl": {
-      "type": "string",
-      "default": ""
-    }
   },
   "editorScript": "file:./index.js",
   "viewScript": "file:./view.js",
