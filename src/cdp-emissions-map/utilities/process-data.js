@@ -80,7 +80,7 @@ export function removeTexasFacilityData(facilityData, countyData){
         }
     }
 
-    console.log("mismatched county fips count: " + mismatchedFipsCount)
+    //console.log("mismatched county fips count: " + mismatchedFipsCount)
 
     return output;
 }

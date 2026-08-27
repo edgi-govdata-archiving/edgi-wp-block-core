@@ -82,7 +82,6 @@ export function loadCountryInfo(container, stateData, year, emissionType, setCur
 
 	container.innerHTML = countryInfoPanel;
 	container.querySelector("#info-subheader").innerHTML = subheader;
-	//container.querySelector("#top-emitters").innerHTML = makeOrderedList(topStates, "name");
 
     makeClickableList(container.querySelector("#top-emitters"), topStates, "name", "abbr", setCurrentLocale)
 
@@ -101,7 +100,6 @@ export function loadStateInfo(container, currentState, year, emissionType, setCu
 	container.querySelector("#info-header").innerHTML = header;
 	container.querySelector("#info-subheader").innerHTML = subheader;
 	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
-	//container.querySelector("#top-emitters").innerHTML = makeOrderedList(topCounties, "county_name");
 
 	makeClickableList(container.querySelector("#top-emitters"), topCounties, "county_name", "county_fips", setCurrentLocale)
 
@@ -116,15 +114,18 @@ export function loadCountyInfo(container, currentCounty, year, emissionType, cou
 
 	var emissions = data.emissions[year][emissionType];
 	var topFacilities = getTopEmitters(countyFacilities, year, emissionType, 5);
-	//console.log("top facilities: " + topFacilities);
 
 	container.innerHTML = countyInfoPanel;
 	container.querySelector("#info-header").innerHTML = header;
 	container.querySelector("#info-subheader").innerHTML = subheader;
 	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
-	//container.querySelector("#top-emitters").innerHTML = makeOrderedList(topFacilities, "facility_name");
 
-	makeClickableList(container.querySelector("#top-emitters"), topFacilities, "facility_name", "facility_id", setCurrentLocale)
+	if (topFacilities.length == 0){
+		container.querySelector("#top-emitters").innerHTML = "<label>- no data available -</label>";
+	}
+	else{
+		makeClickableList(container.querySelector("#top-emitters"), topFacilities, "facility_name", "facility_id", setCurrentLocale);
+	}
 
 	return container;
 } 
@@ -167,9 +168,6 @@ function getSubheader(year, emissionType){
 }
 
 function getTopEmitters(fullList, year, emissionType, listLength){
-	// console.log(fullList[0].emissions[year])
-	// console.log(fullList[1].emissions[year])
-
 	//only include emitters with data from current year + emission type
 	var filtered = fullList.filter((a) => a.emissions[year] && a.emissions[year][emissionType]); 
 
@@ -191,17 +189,12 @@ export function makeClickableList(container, list, nameSelector, idSelector, set
 	for (var i in list){
 		var data = list[i];
 		var id = data[idSelector];
-		console.log(id)
-		console.log(data);
-		console.log(data[nameSelector]);
 
 		var template = "<li><button data-id='" + id + "'>" + data[nameSelector] + "</button></li>";
 		container.insertAdjacentHTML("beforeend", template);
 		var listButton = container.lastElementChild.querySelector("button"); 
-		//var listButton = container.querySelector("#" + id);
 
 		listButton.addEventListener("click", () => {
-			console.log(event.srcElement.dataset.id);
 		    setCurrentLocale(event.srcElement.dataset.id);
 		});
 	}

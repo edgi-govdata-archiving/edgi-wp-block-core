@@ -6,10 +6,7 @@ var backButton =
 
 export function setupBackButton(container, goBack){
 	container.innerHTML = backButton;
-
 	var button = container.querySelector("#back-button");
-
-	console.log(button);
 
 	button.addEventListener("click", () => {
 	    	goBack();

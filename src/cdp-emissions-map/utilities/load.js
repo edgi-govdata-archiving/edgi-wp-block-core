@@ -38,7 +38,6 @@ export function loadBaseFiles(dashboard, promisedFunction){
 }
 
 export function loadFacilityFiles(dashboard, promisedFunction){
-	console.log("loading facility files...");
 	const facilityFileName = dashboard.getAttribute("data-facilities-name");
 	const facilityFileType = dashboard.getAttribute("data-facilities-file-type");
 	const facilityStartYear = dashboard.getAttribute("facilities-start-year");

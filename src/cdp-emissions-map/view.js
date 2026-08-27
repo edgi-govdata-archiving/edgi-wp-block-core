@@ -401,10 +401,8 @@ function setCurrentCounty(feature, countyId){
   }
 }
 
+//calls setCurrentCounty but only requires id (used for selecting from top emitters list)
 function setCurrentCountyFromId(countyId){
-  console.log("setCurrentCountyFromId()...");
-  console.log(countyId);
-   console.log(countiesFeatures);
    const feature = countiesFeatures.find(
         (f) => f.id == countyId
     );
@@ -421,19 +419,13 @@ function setCurrentFacility(facilityProperties){
   }
 }
 
+//calls setCurrentFacility but only requires id (used for selecting from top emitters list)
 function setCurrentFacilityFromId(facilityId){
-  console.log("setCurrentFacilityFromId()...");
-  console.log(facilityId);
   var facility = facilityData[currentCounty.id][facilityId];
-  console.log(facility);
-
-   // const feature = countiesFeatures.find(
-   //      (f) => f.id == countyId
-   //  );
-
   setCurrentFacility(facility); 
 }
 
+//timer functions for waiting during zoom, used to turn over hover label during animation
 function doneWithZoom(){
   isZooming = false;
 }
