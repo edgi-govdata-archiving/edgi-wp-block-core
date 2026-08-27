@@ -26,6 +26,7 @@ import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetC
 import { showLabel, hideLabel } from './components/hover-label.js';
 import { setupBackButton, hideBackButton, showBackButton } from './components/back-button.js';
 import { loadGradientLegend, loadFacilityLegend } from './components/legend.js';
+import { loadDataMessage, showDataMessage, hideDataMessage } from './components/data-message.js';
 
 import Locale from "./utilities/locale.js"
 import Range from "./utilities/range.js"
@@ -203,13 +204,28 @@ function getCountyColor(countyFips){
 
 //updates current year of data
 function updateYear(year){
-  currentYear = year;
+  //only data years available
+  if (year < 2024){
+    currentYear = year;
 
-  updateInfoPanel()
-  updateChoropleth();
+    updateInfoPanel()
+    updateChoropleth();
 
-  if (currentZoomLevel == 2 || currentZoomLevel == 3){
+    if (currentZoomLevel == 2 || currentZoomLevel == 3){
     updateFacilities();
+    }
+
+    hideDataMessage(dataMessage, mapWrapper);
+
+    //toggles have their separate logic for locking on facility level
+    if (currentZoomLevel != 3){
+      unlockToggles(toggles);
+    }
+  }
+  //shows "data unavailable" message if timeline is past certain year
+  else{
+    showDataMessage(dataMessage, mapWrapper);
+    lockToggles(toggles);
   }
 }
 
@@ -560,6 +576,10 @@ var backButtonContainer;
 var legendContainer;
 var legend;
 
+var mapWrapper;
+
+var dataMessage;
+
 
 //loads core html containers
 function loadComponents(){
@@ -572,7 +592,7 @@ function loadComponents(){
   baseContainer = dashboard.querySelector(".dashboard");
 
   canvasContainer = dashboard.querySelector(".map");
-  const wrapper = dashboard.querySelector(".map-wrapper");
+  mapWrapper = dashboard.querySelector(".map-wrapper");
 
   titleContainer = document.createElement("div");
   titleContainer.innerHTML = loadDefaultTitle();
@@ -580,10 +600,13 @@ function loadComponents(){
 
   infoPanelContainer = document.createElement("div");
   infoPanelContainer.innerHTML = loadDefaultInfo();
-  wrapper.appendChild(infoPanelContainer);
+  mapWrapper.appendChild(infoPanelContainer);
 
   backButtonContainer = dashboard.querySelector(".back-button-wrapper");
   backButton = setupBackButton(backButtonContainer, goBack);
+
+  var messageWrapper = dashboard.querySelector(".message-wrapper");
+  dataMessage = loadDataMessage(messageWrapper);
 
   let controlContainer = document.createElement("div");
   controlContainer.setAttribute("id", "map-controls");
