@@ -71,4 +71,4 @@ function edgi_render_us_state_map_block( $attributes ) {
 	</div>
 	<?php
 	return ob_get_clean();
-}
+}

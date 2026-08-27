@@ -1,26 +1,24 @@
 import * as d3 from "d3";
 
 export function loadBaseFiles(dashboard, promisedFunction){
-	const csvUrl = dashboard.getAttribute("data-csv-url");
 	const statesJsonUrl = dashboard.getAttribute("data-states-json-url");
 	const countiesJsonUrl = dashboard.getAttribute("data-counties-json-url");
 	const stateGHGUrl = dashboard.getAttribute("data-states-ghg-json-url"); 
 	const countyGHGUrl = dashboard.getAttribute("data-counties-ghg-url");
 
-	if (!csvUrl || !statesJsonUrl || !countiesJsonUrl || !stateGHGUrl || !countyGHGUrl) {
+	if (!statesJsonUrl || !countiesJsonUrl || !stateGHGUrl || !countyGHGUrl) {
 		console.error("CDP Map Dashboard: Missing required data attributes!");
 		return;
 	}
 
 	Promise.all([
-		d3.csv(csvUrl),
 		d3.json(statesJsonUrl),
 		d3.json(countiesJsonUrl),
 		d3.json(stateGHGUrl),
 		d3.json(countyGHGUrl)
 	])
-    .then(([csvData, statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl]) => { 
-		promisedFunction(csvData, statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl);
+    .then(([statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl]) => { 
+		promisedFunction(statesTopo, countiesTopo, stateGHGUrl, countyGHGUrl);
 	})
 	.catch((err) => {
 	console.error(
@@ -34,7 +32,6 @@ export function loadBaseFiles(dashboard, promisedFunction){
 		// 		</div>
 		// 	`;
 	});
-
 }
 
 export function loadFacilityFiles(dashboard, promisedFunction){
@@ -56,7 +53,6 @@ export function loadFacilityFiles(dashboard, promisedFunction){
 		facilityPromises.push(d3.json(file));
 		facilityFilesLoaded.push("facilities_" + year);
 	}
-
 
 	Promise.all(facilityPromises)
     .then((facilityFilesLoaded) => { 
