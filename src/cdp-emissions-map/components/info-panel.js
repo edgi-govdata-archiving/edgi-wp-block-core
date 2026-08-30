@@ -49,7 +49,7 @@ var stateInfoPanel = `
  var facilityInfoPanel = `
 	<section class="info-panel facility-view">
 		<button id="close-button">
-			<img src="../assets/icons/close-icon.svg" />
+			<img />
 		</button>
 		<h2 id="info-header">Facility Name</h2>
 
@@ -144,6 +144,13 @@ export function loadFacilityInfo(container, currentFacility, year, emissionType,
 	container.querySelector("#frsid").innerHTML = currentFacility.facility_id;
 
 	var closeButton = container.querySelector("#close-button");
+
+	var dashboard = document.querySelector("#cdp-emissions-map");
+	const closeIconUrl = dashboard.getAttribute("close-icon-url");
+	var icon = closeButton.querySelector("img");
+	console.log(closeIconUrl);
+	console.log(icon);
+	icon.src = closeIconUrl;
 
 	closeButton.addEventListener("click", () => {
 	    goBack();

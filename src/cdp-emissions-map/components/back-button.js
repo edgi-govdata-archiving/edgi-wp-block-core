@@ -1,12 +1,16 @@
 var backButton = 
 	`<button id="back-button">
-		<img src="../assets/icons/back-icon.svg" />
+		<img/>
 	</button>`
 
 
-export function setupBackButton(container, goBack){
+export function setupBackButton(dashboard, container, goBack){
 	container.innerHTML = backButton;
 	var button = container.querySelector("#back-button");
+
+	const backIconUrl = dashboard.getAttribute("back-icon-url");
+	var icon = button.querySelector("img");
+	icon.src = backIconUrl;
 
 	button.addEventListener("click", () => {
 	    	goBack();

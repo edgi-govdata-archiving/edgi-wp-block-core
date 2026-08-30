@@ -87,6 +87,9 @@ function edgi_render_cdp_emissions_map_block( $attributes ) {
 
 	$test_facility_url = plugins_url( 'assets/data/facilities/ghg_facilities_2010.geojson', __FILE__ );
 	$facilities_ghg_url = plugins_url( 'assets/data/facilities/ghg_facilities_', __FILE__);
+
+	$back_icon_url = plugins_url( 'assets/icons/back-icon.svg', __FILE__);
+	$close_icon_url = plugins_url( 'assets/icons/close-icon.svg', __FILE__);
 	
 	ob_start();
 	?>
@@ -99,7 +102,10 @@ function edgi_render_cdp_emissions_map_block( $attributes ) {
          data-facilities-name="<?php echo esc_url( $facilities_ghg_url ); ?>"
          data-facilities-file-type="geojson"
          facilities-start-year="2016"
-         facilities-end-year="2023">
+         facilities-end-year="2023"
+         back-icon-url="<?php echo esc_url( $back_icon_url ); ?>"
+         close-icon-url="<?php echo esc_url( $close_icon_url ); ?>"
+         >
 
         <div class="dashboard">
             <div class="map-wrapper">

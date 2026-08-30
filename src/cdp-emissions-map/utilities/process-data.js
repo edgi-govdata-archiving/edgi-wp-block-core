@@ -1,6 +1,4 @@
 export function processStateData(rawData){
-    console.log("ProcessData::processStateData() - raw state data:");
-    console.log(JSON.stringify(rawData));
     var output = {};
     const stateDataArray = rawData["objects"]["data"]["geometries"];
 
@@ -15,15 +13,10 @@ export function processStateData(rawData){
         }
     }
 
-    console.log("ProcessData::processStateData() - processed state data:");
-    console.log(JSON.stringify(output));
-
     return output;
 }
 
 export function processCountyData(rawData){
-    console.log("ProcessData::processCountyData() - raw county data:");
-    console.log(JSON.stringify(rawData));
     var output = {};
     const countyDataArray = rawData["objects"]["data"]["geometries"];
 
@@ -40,8 +33,6 @@ export function processCountyData(rawData){
         }
     }
 
-    console.log("ProcessData::processCountyData() - processed county data:");
-    console.log(JSON.stringify(output));
     return output;
 }
 
