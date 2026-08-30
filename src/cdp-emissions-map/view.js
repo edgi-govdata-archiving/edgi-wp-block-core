@@ -636,6 +636,7 @@ var hoverLabelContainer;
 
 //loads svg map and labels, sets up event triggers
 function loadMap(){
+  console.log("View::loadMap() -- starting...");
   canvasContainer.innerHTML = "";
 
   calculateRanges();
@@ -657,16 +658,36 @@ function loadMap(){
 
   path = d3.geoPath().projection(projection).pointRadius(.5);
 
+  console.log("View::loadMap() -- extracting state features...");
+
   // Extract GeoJSON features
   statesFeatures = topojson.feature(
     statesTopo,
     statesTopo.objects.states,
   ).features;
 
+  console.log("View::loadMap() -- stateFeatures: ");
+  console.log(JSON.stringify(statesFeatures))
+
+  console.log("View::loadMap() -- extracting county features...");
+
+  console.log("View::loadMap() -- countiesTopo:");
+  console.log(JSON.stringify(countiesTopo));
+
+  console.log("View::loadMap() -- countiesTopo.objects:");
+  console.log(JSON.stringify(countiesTopo.objects));
+
+  console.log("View::loadMap() -- countiesTopo.objects.counties:");
+  console.log(JSON.stringify(countiesTopo.objects.counties));
+
+
   countiesFeatures = topojson.feature(
     countiesTopo,
     countiesTopo.objects.counties,
   ).features;
+
+  console.log("View::loadMap() -- countiesFeatures: ");
+  console.log(JSON.stringify(countiesFeatures));
 
   // Base map group
   mapGroup = svg.append("g").attr("class", "map-group");
@@ -677,6 +698,8 @@ function loadMap(){
 
   // Callouts group (rendered outside mapGroup so it doesn't scale/zoom)
   calloutsGroup = svg.append("g").attr("class", "callouts-group");
+
+  console.log("View::loadMap() -- setting states paths...");
 
   statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState, mapHover, mapExitHover);
   //stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
@@ -721,7 +744,15 @@ function closeFacility(){
 }
 
 //processes base data files once files are loaded 
-function loadBaseData(statesTopoData, countiesTopoData, stateGHGUrl, countyGHGUrl){
+function loadBaseData(statesTopoData, countiesTopoData, stateGHGUrl, countyGHGUrl){ //facilitiesTestUrl
+  console.log("View::loadBaseData() -- starting...");
+  
+  console.log("View::loadBaseData() -- statesTopoData: ");
+  console.log(JSON.stringify(statesTopoData));
+  
+  console.log("View::loadBaseData() -- countiesTopo: ");
+  console.log(JSON.stringify(countiesTopoData));
+  
   statesTopo = statesTopoData;
   countiesTopo = countiesTopoData;
   stateData = processStateData(stateGHGUrl);
@@ -731,7 +762,10 @@ function loadBaseData(statesTopoData, countiesTopoData, stateGHGUrl, countyGHGUr
   stateDataNoTexas = removeTexasStateData(stateData);
   countyDataNoTexas = removeTexasCountyData(countyData);
 
-  loadFacilityFiles(dashboard, loadFacilities);
+  console.log("View::loadBaseData() - successfully loaded all files!")
+
+  //loadFacilityFiles(dashboard, loadFacilities);
+  loadMap();
 }
 
 //processes facility files into single obj facilityData -- files are split by year

@@ -1,4 +1,6 @@
 export function processStateData(rawData){
+    console.log("ProcessData::processStateData() - raw state data:");
+    console.log(JSON.stringify(rawData));
     var output = {};
     const stateDataArray = rawData["objects"]["data"]["geometries"];
 
@@ -13,10 +15,15 @@ export function processStateData(rawData){
         }
     }
 
+    console.log("ProcessData::processStateData() - processed state data:");
+    console.log(JSON.stringify(output));
+
     return output;
 }
 
 export function processCountyData(rawData){
+    console.log("ProcessData::processCountyData() - raw county data:");
+    console.log(JSON.stringify(rawData));
     var output = {};
     const countyDataArray = rawData["objects"]["data"]["geometries"];
 
@@ -32,10 +39,14 @@ export function processCountyData(rawData){
             facility_geometry: [],
         }
     }
+
+    console.log("ProcessData::processCountyData() - processed county data:");
+    console.log(JSON.stringify(output));
     return output;
 }
 
 export function sortCountiesIntoStates(stateData, countyData){
+
     for (var countyFips in countyData){
         var county = countyData[countyFips];
         if (county.state_abbr && stateData[county.state_abbr]){
@@ -95,15 +106,7 @@ export function processFacilitiesYear(facilityData, rawData, year){
 
         var entry = facilitiesArray[key];
         var properties = entry["properties"];
-        var countyFips = Math.floor(properties["County_FIPS"]).toString(); //value is float in dataset;
-
-        // if (countyFips == "NaN"){
-        //  console.log("null fips: " + JSON.stringify(properties));
-        // }
-
-        if (countyFips.length < 5){
-            countyFips = "0" + countyFips;
-        }
+        var countyFips = properties["County_FIPS"];
         var facilityId = properties["Facility Id"];
 
 

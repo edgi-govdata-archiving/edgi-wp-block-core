@@ -81,18 +81,21 @@ function edgi_render_us_state_map_block( $attributes ) {
  */
 function edgi_render_cdp_emissions_map_block( $attributes ) {
 	$states_json_url = plugins_url( 'assets/maps/us-states.json', __FILE__ );
-	$counties_json_url = plugins_url( 'assets/data/ghg_state.topojson', __FILE__ );
-	$states_ghg_json_url = plugins_url( 'assets/data/ghg_county.topojson', __FILE__ );
+	$counties_json_url = plugins_url( 'assets/maps/us-counties.json', __FILE__ );
+	$states_ghg_json_url = plugins_url( 'assets/data/ghg_state.topojson', __FILE__ );
 	$counties_ghg_url = plugins_url( 'assets/data/ghg_county.topojson', __FILE__ );
+
+	$test_facility_url = plugins_url( 'assets/data/facilities/ghg_facilities_2010.geojson', __FILE__ );
 	$facilities_ghg_url = plugins_url( 'assets/data/facilities/ghg_facilities_', __FILE__);
 	
 	ob_start();
 	?>
     <div id="cdp-emissions-map"
          data-states-json-url="<?php echo esc_url( $states_json_url ); ?>"
-         data-counties-json-url="<?php echo esc_url( $states_json_url ); ?>"
+         data-counties-json-url="<?php echo esc_url( $counties_json_url ); ?>"
          data-states-ghg-json-url="<?php echo esc_url( $states_ghg_json_url ); ?>"
          data-counties-ghg-url="<?php echo esc_url( $counties_ghg_url ); ?>"
+         data-facilities-test="<?php echo esc_url( $test_facility_url ); ?>"
          data-facilities-name="<?php echo esc_url( $facilities_ghg_url ); ?>"
          data-facilities-file-type="geojson"
          facilities-start-year="2016"
