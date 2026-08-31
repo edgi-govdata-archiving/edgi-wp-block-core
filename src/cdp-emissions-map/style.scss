@@ -48,9 +48,14 @@
 		font-size: 1em;
 	}
 
+	button{
+		font-family: 'Crimson Text', serif;
+		font-size: 1em;
+		font-weight: 200;
+	}
+
 	.map-header {
 		text-align: center;
-		padding-bottom: 1rem;
 
 		.map-title {
 			font-weight: 600;
@@ -119,13 +124,13 @@
 
 		#timelineSlider{
 			min-width: 480px;
-			width: 60%;
+			width: 65%;
 			display: inline-block;
 		}
 
 		#toggles{
 			display: inline-block;
-			margin-left: 2rem;
+			margin-left: 3rem;
 			
 		}
 	}

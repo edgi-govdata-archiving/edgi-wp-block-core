@@ -50,10 +50,10 @@
 
 
 		#facility-icon{
-			width: 2rem;
-			height: 2rem;
+			width: 30px;
+			height: 30px;
 			opacity: .5;
-			border-radius: 1rem;
+			border-radius: 30px;
 
 			&.total_direct{
 				background-color: #19649f;
@@ -64,7 +64,7 @@
 		}
 
 		label{
-			width: 3rem;
+			width: 5rem;
 			margin-left: 1rem;
 			vertical-align: center;
 		}
