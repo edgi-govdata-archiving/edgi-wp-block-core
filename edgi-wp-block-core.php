@@ -109,9 +109,12 @@ function edgi_render_cdp_emissions_map_block( $attributes ) {
 
         <div class="dashboard">
             <div class="map-wrapper">
-                <div class="back-button-wrapper"></div>
-                <div class="legend-wrapper"></div>
-                <div class="map"></div>
+                <div class="map-group">
+                    <div class="map"></div>
+                    <div class="back-button-wrapper"></div>
+                    <div class="legend-wrapper"></div>
+                </div>
+                
             </div>
             <div class="message-wrapper"></div>
         </div>

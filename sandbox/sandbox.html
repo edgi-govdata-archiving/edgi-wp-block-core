@@ -12,7 +12,6 @@
         body {
             background: #f7fafc;
             margin: 0;
-            padding: 40px 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -22,7 +21,7 @@
 
         .sandbox-container {
             width: 100%;
-            max-width: 1400px;
+            max-width: 1200px;
         }
     </style>
 </head>
@@ -45,9 +44,12 @@
 
             <div class="dashboard">
                 <div class="map-wrapper">
-                    <div class="back-button-wrapper"></div>
-                    <div class="legend-wrapper"></div>
-                    <div class="map"></div>
+                    <div class="map-group">
+                        <div class="map"></div>
+                        <div class="back-button-wrapper"></div>
+                        <div class="legend-wrapper"></div>
+                    </div>
+                    
                 </div>
                 <div class="message-wrapper"></div>
             </div>

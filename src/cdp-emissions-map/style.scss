@@ -20,36 +20,37 @@
 	position: relative;
 
 	h1{
-		font-size: 2.5em;
-	}
-	h2{
 		font-size: 2em;
 	}
-	h3{
+
+	h2{
 		font-size: 1.5em;
+	
+	}
+	h3{
+		font-size: 1.2em;
 		font-weight: 800;
 	}
 	h4{
-		font-size: 1.2em;
+		font-size: 1em;
 	}
 	h5{
-		font-size: 1em;
+		font-size: .8em;
 	}
 
 	label{
 		font-family: 'Crimson Text', serif;
-		font-size: 1.4em;
+		font-size: 1em;
 	}
 
 	option{
 		font-family: 'Crimson Text', serif;
-		font-size: 1.2em;
+		font-size: 1em;
 	}
 
 	.map-header {
 		text-align: center;
-		border-bottom: 1px solid #edf2f7;
-		padding-bottom: 20px;
+		padding-bottom: 1rem;
 
 		.map-title {
 			font-weight: 600;
@@ -60,18 +61,51 @@
 	}
 
 	.map-wrapper {
-		flex: 1;
+		background: #ffffff;
+		
+		display: flex;
+		flex-wrap: wrap;
 		position: relative;
 
-		background: #ffffff;
-		border-radius: 12px;
-		border: none;
-		//overflow: hidden;
-		/* max-width: 1400px; */
-		display: flex;
-		align-items: center;
-		justify-content: center;
+		//align-items: top;
+		//justify-content: center;
+		//border: solid blue 2px;
 	}
+
+	.map-group {
+		min-width: 480px;
+		height: 400px;
+		flex: 1;
+		position: relative;
+		//border: solid magenta 2px;
+
+		.map{
+			width: 100%;
+			height: 100%;
+		}
+
+		svg {
+			width: 100%;
+			height: 100%;
+		}
+	}
+
+	.info-panel {
+		flex: 2;
+		//border: solid magenta 2px;
+	}
+
+	@media (max-width: 768px) {
+
+	}
+
+	.legend-wrapper{
+		position: absolute;
+		right: -3rem;
+		bottom: 1rem;
+		z-index: 10;
+	}
+
 
 	.back-button-wrapper {
 		position: absolute;
@@ -81,33 +115,20 @@
 	}
 
 	#map-controls {
-		position: absolute;
-		top: 700px;
 		width: 100%;
 
 		#timelineSlider{
+			min-width: 480px;
 			width: 60%;
 			display: inline-block;
 		}
 
 		#toggles{
 			display: inline-block;
+			margin-left: 2rem;
 			
 		}
 	}
 
-	.map {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		padding-bottom: 50px;
-		box-sizing: border-box;
 
-		svg {
-			width: 100%;
-			height: auto;
-		}
-	}
 }

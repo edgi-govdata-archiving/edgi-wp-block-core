@@ -722,6 +722,7 @@ function closeFacility(){
 
 //processes base data files once files are loaded 
 function loadBaseData(statesTopoData, countiesTopoData, stateGHGUrl, countyGHGUrl){ //facilitiesTestUrl
+  
   statesTopo = statesTopoData;
   countiesTopo = countiesTopoData;
   stateData = processStateData(stateGHGUrl);
