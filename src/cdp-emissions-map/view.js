@@ -658,10 +658,17 @@ function loadMap(){
   path = d3.geoPath().projection(projection).pointRadius(.5);
 
   // Extract GeoJSON features
-  statesFeatures = topojson.feature(
+  // statesFeatures = topojson.feature(
+  //   statesTopo,
+  //   statesTopo.features,
+  // ).features;
+
+    statesFeatures = topojson.feature(
     statesTopo,
-    statesTopo.objects.states,
-  ).features;
+    statesTopo.features,
+  ).features
+
+  //statesFeatures = statesTopo.features;
 
   countiesFeatures = topojson.feature(
     countiesTopo,
