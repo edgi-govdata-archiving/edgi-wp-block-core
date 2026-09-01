@@ -732,7 +732,10 @@ function loadBaseData(statesTopoData, countiesTopoData, stateGHGUrl, countyGHGUr
   stateDataNoTexas = removeTexasStateData(stateData);
   countyDataNoTexas = removeTexasCountyData(countyData);
 
-  loadFacilityFiles(dashboard, loadFacilities);
+  //console.log("View::loadBaseData() - successfully loaded all files!")
+  loadMap();
+
+  //loadFacilityFiles(dashboard, loadFacilities);
 }
 
 //processes facility files into single obj facilityData -- files are split by year
