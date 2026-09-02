@@ -13,7 +13,7 @@ var defaultInfoPanel = `
 var countryInfoPanel = `
 	<section class="info-panel country-view">
 		<h2 id="info-header">United States</h2>
-		<h3 id="info-subheader">2000 Supplier Emissions</h3>
+		<h4 id="info-subheader">2000 Supplier Emissions</h4>
 		<h3 class="list-header">Top Emitting States</h3>
 		<ol id="top-emitters">
 		</ol>
@@ -22,7 +22,7 @@ var countryInfoPanel = `
 var stateInfoPanel = `
 	<section class="info-panel state-view">
 		<h2 id="info-header">Texas</h2>
-		<h3 id="info-subheader">2000 Supplier Emissions</h3>
+		<h4 id="info-subheader">2000 Supplier Emissions</h4>
 		<section class="info-emissions">
 			<h1 id="emissions-total">12,345</h1>
 			<label class=>tCO₂e</label>
@@ -35,7 +35,7 @@ var stateInfoPanel = `
  var countyInfoPanel = `
 	<section class="info-panel county-view">
 		<h2 id="info-header">Texas</h2>
-		<h3 id="info-subheader">2000 Supplier Emissions</h3>
+		<h4 id="info-subheader">2000 Supplier Emissions</h4>
 		<section class="info-emissions">
 			<h1 id="emissions-total">12,345</h1>
 			<label class=>tCO₂e</label>
@@ -53,7 +53,7 @@ var stateInfoPanel = `
 		</button>
 		<h2 id="info-header">Facility Name</h2>
 
-		<h3 id="info-subheader">2000 Supplier Emissions</h3>
+		<h4 id="info-subheader">2000 Supplier Emissions</h4>
 		<section class="info-emissions">
 			<h1 id="emissions-total">12,345</h1>
 			<label class=>tCO₂e</label>
