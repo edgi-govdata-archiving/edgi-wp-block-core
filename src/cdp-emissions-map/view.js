@@ -395,7 +395,7 @@ function mapExitHover(elementGroup){
 
 //sets current state, loads critical info, zooms to that state. called when state is clicked
 function setCurrentState(feature, stateAbbr){
-  if (stateAbbr != "AK" && stateAbbr != "CT" ){
+  // if (stateAbbr != "AK" && stateAbbr != "CT" ){
     if (currentZoomLevel == 0){ //can only select state from country view
       currentState = new Locale(feature.id);
       currentState.abbr = stateAbbr;
@@ -404,7 +404,6 @@ function setCurrentState(feature, stateAbbr){
       currentState.data = stateData[stateAbbr];
       zoomToState();
     }
-  }
 }
 
 //calls setCurrentState but only requires id (used for selecting from top emitters list)
@@ -658,17 +657,11 @@ function loadMap(){
   path = d3.geoPath().projection(projection).pointRadius(.5);
 
   // Extract GeoJSON features
-  // statesFeatures = topojson.feature(
-  //   statesTopo,
-  //   statesTopo.features,
-  // ).features;
-
-    statesFeatures = topojson.feature(
+  statesFeatures = topojson.feature(
     statesTopo,
-    statesTopo.features,
-  ).features
+    statesTopo.objects.states,
+  ).features;
 
-  //statesFeatures = statesTopo.features;
 
   countiesFeatures = topojson.feature(
     countiesTopo,
@@ -739,10 +732,7 @@ function loadBaseData(statesTopoData, countiesTopoData, stateGHGUrl, countyGHGUr
   stateDataNoTexas = removeTexasStateData(stateData);
   countyDataNoTexas = removeTexasCountyData(countyData);
 
-  //console.log("View::loadBaseData() - successfully loaded all files!")
-  loadMap();
-
-  //loadFacilityFiles(dashboard, loadFacilities);
+  loadFacilityFiles(dashboard, loadFacilities);
 }
 
 //processes facility files into single obj facilityData -- files are split by year

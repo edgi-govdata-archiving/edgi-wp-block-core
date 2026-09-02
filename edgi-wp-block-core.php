@@ -80,8 +80,8 @@ function edgi_render_us_state_map_block( $attributes ) {
  * Render callback for the CDP Emissions 
  */
 function edgi_render_cdp_emissions_map_block( $attributes ) {
-	$states_json_url = plugins_url( 'assets/maps/us-states.json', __FILE__ );
-	$counties_json_url = plugins_url( 'assets/maps/us-counties.json', __FILE__ );
+	$states_json_url = plugins_url( 'assets/maps/states-10m.json', __FILE__ );
+	$counties_json_url = plugins_url( 'assets/maps/counties-10m.json', __FILE__ );
 	$states_ghg_json_url = plugins_url( 'assets/data/ghg_state.topojson', __FILE__ );
 	$counties_ghg_url = plugins_url( 'assets/data/ghg_county.topojson', __FILE__ );
 
