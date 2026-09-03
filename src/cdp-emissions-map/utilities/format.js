@@ -20,3 +20,18 @@ function round(value){
 function addCommas(value){
 	return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+export function splitInHalf(string){
+	var middle = Math.floor(string.length / 2);
+	var before = string.lastIndexOf(' ', middle);
+	var after = string.indexOf(' ', middle + 1);
+
+	if (middle - before < after - middle) {
+	    middle = before;
+	} 
+	else {
+	    middle = after;
+	}
+
+	return [string.substr(0, middle), string.substr(middle + 1)]
+}

@@ -1,4 +1,4 @@
-import { formatEmissions } from "../utilities/format.js"
+import { formatEmissions, splitInHalf } from "../utilities/format.js"
 
 var hoverLabel = `
 	<svg width="100%" height="100%">
@@ -44,23 +44,24 @@ export function showLabel(elementGroup, path, target, name, emissions, scale){
 	.attr("id", "hover-label-bg")
 	.attr("class", "hover-label-bg");
 
-	pill.append("text")
+	var textElement = pill.append("text")
 	.attr("text-anchor", "middle")
 	.attr("font-size", `${fontSize}px`)
 	.attr("dy", -fontSize - pillHeight * .5)
 	.attr("class", "hover-label-text")
-	.attr("id", "hover-label-text")
-	.append("tspan")
-	.text(formatEmissions(emissions) + " tCO₂e")
-	.attr("x", 0)
-	.attr("dy", -fontSize)
-	.attr("font-size", `${emissionsFontSize}px`)
-	.append("tspan")
-	.text(name)
-	.attr("x", 0)
-	.attr("dy", -fontSize)
-	.attr("font-size", `${fontSize}px`)
-	.attr("font-weight", "bolder");
+	.attr("id", "hover-label-text");
+
+	addTextLine(textElement, formatEmissions(emissions) + " tCO₂e", emissionsFontSize, "normal");
+
+	if (name.length < 20){
+		addTextLine(textElement, name, fontSize, "bolder");
+	}
+	else{
+		var splitName = splitInHalf(name);
+		addTextLine(textElement, splitName[1], fontSize, "bolder");
+		addTextLine(textElement, splitName[0], fontSize, "bolder");
+	}
+
 
 	let textBox = document.querySelector('#hover-label-text');
 	let svg = document.querySelector('svg');
@@ -75,6 +76,15 @@ export function showLabel(elementGroup, path, target, name, emissions, scale){
 	rect.style = "fill:none;stroke-width:0;stroke:rgb(0,0,0)";
 
 	makeBG(textBox, scale);
+}
+
+function addTextLine(element, text, fontSize, fontWeight){
+	element.append("tspan")
+	.text(text)
+	.attr("x", 0)
+	.attr("dy", -fontSize)
+	.attr("font-size", `${fontSize}px`)
+	.attr("font-weight", fontWeight);
 }
 
 
