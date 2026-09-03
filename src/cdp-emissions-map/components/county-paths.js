@@ -15,7 +15,7 @@ export function setupCountyPaths(countiesGroup, path, stateCounties, countyData,
 	countyPaths.on("mouseover", (event, d) => {
 			event.stopPropagation();
 			//showLabel(countiesGroup, path, event.target, d, scale);
-			mapHover(countiesGroup, path, event.target, d.properties.name + " County");
+			mapHover(countiesGroup, path, event.target, d.id);
 		})
 	countyPaths.on("mouseout", (event, d) => {
 			event.stopPropagation();

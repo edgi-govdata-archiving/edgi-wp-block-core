@@ -1,3 +1,5 @@
+import { formatEmissions } from "../utilities/format.js"
+
 var hoverLabel = `
 	<svg width="100%" height="100%">
 	<defs>
@@ -13,11 +15,12 @@ var hoverLabel = `
 	</svg>`
 
 
-export function showLabel(elementGroup, path, target, text, scale, width){
+export function showLabel(elementGroup, path, target, name, emissions, scale){
 	elementGroup.selectAll(".hover-label").remove();
 
 	var centroid = getCentroid(target);
 	var fontSize = 25 / scale;
+	var emissionsFontSize = 20 / scale;
 	const pill = elementGroup.append("g")
 	//.datum(countyData)
 	.attr("class", "hover-label")
@@ -30,7 +33,7 @@ export function showLabel(elementGroup, path, target, text, scale, width){
 	.attr("x2", 0)
 	.attr("y2", 10 / scale);
 
-	var pillWidth = width / scale;
+	var pillWidth = 150 / scale;
 	var pillHeight = 60 / scale;
 
 	pill.append("rect")
@@ -38,18 +41,26 @@ export function showLabel(elementGroup, path, target, text, scale, width){
 	.attr("ry", 0)
 	.attr("x", -pillWidth * .5)
 	.attr("y", -pillHeight * 1.5)
-	// .attr("width", pillWidth)
-	// .attr("height", pillHeight)
 	.attr("id", "hover-label-bg")
 	.attr("class", "hover-label-bg");
 
 	pill.append("text")
-	.text(text)
 	.attr("text-anchor", "middle")
 	.attr("font-size", `${fontSize}px`)
 	.attr("dy", -fontSize - pillHeight * .5)
 	.attr("class", "hover-label-text")
-	.attr("id", "hover-label-text");
+	.attr("id", "hover-label-text")
+	.append("tspan")
+	.text(formatEmissions(emissions) + " tCO₂e")
+	.attr("x", 0)
+	.attr("dy", -fontSize)
+	.attr("font-size", `${emissionsFontSize}px`)
+	.append("tspan")
+	.text(name)
+	.attr("x", 0)
+	.attr("dy", -fontSize)
+	.attr("font-size", `${fontSize}px`)
+	.attr("font-weight", "bolder");
 
 	let textBox = document.querySelector('#hover-label-text');
 	let svg = document.querySelector('svg');
@@ -64,7 +75,6 @@ export function showLabel(elementGroup, path, target, text, scale, width){
 	rect.style = "fill:none;stroke-width:0;stroke:rgb(0,0,0)";
 
 	makeBG(textBox, scale);
-
 }
 
 

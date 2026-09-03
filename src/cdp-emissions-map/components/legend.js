@@ -1,3 +1,4 @@
+import { formatEmissions } from "../utilities/format.js"
 
 var gradientLegend = `
 	<section class="legend gradient-legend">
@@ -43,23 +44,4 @@ export function loadFacilityLegend(container, emissionType){
     container.querySelector("#facility-icon").className = emissionType;
 
     return container;
-}
-
-function formatEmissions(emissions){
-	var billion = 1000000000;
-	var million = 1000000;
-
-	if (emissions > billion){
-		return round(emissions / billion) + " billion";
-	}
-	else if (emissions > million){
-		return round(emissions / million) + " million";
-	}
-	else{
-		return round(emissions);
-	}
-}
-
-function round(value){
-	return Math.round(value * 100) / 100;
 }

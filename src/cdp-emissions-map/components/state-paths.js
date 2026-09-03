@@ -19,7 +19,10 @@ export function setupStatePaths(statesGroup, stateData, path, getStateColor, set
 		})
 		.on("mouseover", (event, d) => {
 			event.stopPropagation();
-			mapHover(statesGroup, path, event.target, d.properties.name);
+			const abbr = getNameToAbbr(d.properties.name);
+			if (abbr){
+				mapHover(statesGroup, path, event.target, abbr);
+			}
 		})
 		.on("mouseout", (event, d) => {
 			event.stopPropagation();

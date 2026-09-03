@@ -1,11 +1,12 @@
 
 .hover-label {
+	transition: all 0.2s ease-in-out;
 	z-index: 100;
 	
 	.hover-label-line{
 		vector-effect: non-scaling-stroke;
-		stroke-width: 2px;
-		stroke: #000000;
+		stroke-width: 1px;
+		stroke: #888888;
 	}
 
 	.hover-label-bg {
@@ -22,8 +23,9 @@
 
 		background: #ffffff;
 		border-radius: 15px;
-		border: 2px solid #888888;
+		border: 1px solid #888888;
 		padding: 2px 20px 2px 20px;
 		vertical-align: center;
 	}
+
 }

@@ -31,7 +31,7 @@ export function loadFacilityPaths(facilityGroup, facilityData, path, projection,
 		})
 		.on("mouseover", (event, d) => {
 			event.stopPropagation();
-			mapHover(facilityGroup, path, event.target, d.facility_name);
+			mapHover(facilityGroup, path, event.target, d.facility_id);
 		})
 		.on("mouseout", (event, d) => {
 			event.stopPropagation();

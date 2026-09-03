@@ -372,24 +372,36 @@ function isSmallState(name){
   return false;
 }
 
-function mapHover(elementGroup, path, target, text){
-  if (!isZooming){
+function mapHover(elementGroup, path, target, id){
+  if (!isZooming || !isExitingHover || !isEnteringHover){
     if (currentZoomLevel == 0 && elementGroup == statesGroup){
-      if (!isSmallState(text)){
-        showLabel(elementGroup, path, target, text, scale, 170);
+      if (!isSmallState(id)){
+        var data = stateData[id];
+        showLabel(elementGroup, path, target, data.name, getCurrentEmissions(data), scale);
       }
     }
     else if (currentZoomLevel == 1 && elementGroup == countiesGroup){
-      showLabel(elementGroup, path, target, text, scale, 250);
+      var data = countyData[id];
+      showLabel(elementGroup, path, target, data.county_name + " County", getCurrentEmissions(data), scale);
     }
     else if ((currentZoomLevel == 2 || currentZoomLevel == 3) && elementGroup == facilityGroup){
-      showLabel(elementGroup, path, target, text, scale, 250);
+      var data = facilityData[currentCounty.id][id];
+      showLabel(elementGroup, path, target, data.facility_name, getCurrentEmissions(data), scale);
     }
+
+    waitforHoverEnter();
   }
 }
 
+function getCurrentEmissions(data){
+    return data["emissions"][currentYear][emissionType];
+}
+
 function mapExitHover(elementGroup){
-  hideLabel(elementGroup);
+  if (!isEnteringHover){
+    hideLabel(elementGroup);
+    waitforHoverExit();
+  }
 }
 
 
@@ -460,6 +472,29 @@ function waitForZoom(){
   isZooming = true;
   setTimeout(doneWithZoom, 500);
 }
+
+var isEnteringHover = false;
+var isExitingHover = false;
+
+function doneWithHoverEnter(){
+  isEnteringHover = false;
+}
+
+function waitforHoverEnter(){
+  isEnteringHover = true;
+  setTimeout(doneWithHoverEnter, 10);
+}
+
+function doneWithHoverExit(){
+  isExitingHover = false;
+}
+
+function waitforHoverExit(){
+  isExitingHover = true;
+  setTimeout(doneWithHoverExit, 10);
+}
+
+
 
 //zooms map to current state, hides callouts + updates viz to current state info
 function zoomToState() {
