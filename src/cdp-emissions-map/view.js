@@ -377,7 +377,7 @@ function mapHover(elementGroup, path, target, id){
     if (currentZoomLevel == 0 && elementGroup == statesGroup){
       if (!isSmallState(id)){
         var data = stateData[id];
-        showLabel(elementGroup, path, target, data.name, getCurrentEmissions(data), scale);
+        showLabel(calloutsGroup, path, target, data.name, getCurrentEmissions(data), scale);
       }
     }
     else if (currentZoomLevel == 1 && elementGroup == countiesGroup){
@@ -399,7 +399,7 @@ function getCurrentEmissions(data){
 
 function mapExitHover(elementGroup){
   if (!isEnteringHover){
-    hideLabel(elementGroup);
+    hideLabel(calloutsGroup);
     waitforHoverExit();
   }
 }
