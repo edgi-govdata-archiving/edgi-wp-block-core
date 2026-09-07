@@ -1,6 +1,6 @@
 import { setupLocationLabel } from "./location-label.js"
 
-export function showLabel(elementGroup, path, target, name, emissions, scale){
+export function showLabel(elementGroup, target, name, emissions, scale){
 	elementGroup.selectAll(".hover-label").remove();
 
 	var centroid = getCentroid(target);

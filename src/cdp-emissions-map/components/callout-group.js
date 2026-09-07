@@ -12,26 +12,44 @@ export function setupCallouts(calloutsGroup, data, abbr, centroid){
 	var pillWidth = 100;
 	var pillHeight = 60;
 
+	// Draw interactive pill group
 	var pill = calloutsGroup.append("g")
+	.datum(data)
 	.attr("class", "state-callout-pill")
 	.attr("transform", `translate(${data.pillX}, ${data.pillY + 30})`)
 
 	pill = setupLocationLabel(pill, data.abbr, null, 1, "state-callout", "-" + data.abbr);
 
+
 	return pill; 
 }
 
-export function setupPillInteraction(pill, feature, statesGroup, zoomToState, stateHover, exitStateHover){
+export function setupPillInteraction(pill, feature, statesGroup, calloutsGroup,
+																		zoomToState, stateHover, exitStateHover, mapHover, mapExitHover){
 	pill.on("click", (event, data) => {
 		event.stopPropagation();
 		zoomToState(feature, data.abbr);
 	})
-	.on("mouseover", (data) => {
-		stateHover(statesGroup, data.abbr)
+	.on("mouseover", (event, data) => {
+		stateHover(statesGroup, data.abbr);
+		mapHover(calloutsGroup, event.target, data.abbr);
 	})
 	.on("mouseout", () => {
 		exitStateHover(statesGroup);
-	});
+		mapExitHover(calloutsGroup);
+	})
+	// 	countyPaths.on("mouseover", (event, d) => {
+	// 		event.stopPropagation();
+	// 		//showLabel(countiesGroup, path, event.target, d, scale);
+	// 		mapHover(countiesGroup, path, event.target, d.id);
+	// 	})
+	// countyPaths.on("mouseout", (event, d) => {
+	// 		event.stopPropagation();
+	// 		//hideLabel(countiesGroup);
+	// 		mapExitHover(countiesGroup);
+	// 	})
+
+
 }
 
 export function showCallouts(calloutsGroup){

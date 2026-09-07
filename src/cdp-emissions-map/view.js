@@ -372,21 +372,25 @@ function isSmallState(name){
   return false;
 }
 
-function mapHover(elementGroup, path, target, id){
-  if (!isZooming || !isExitingHover || !isEnteringHover){
+function mapHover(elementGroup, target, id){
+  if (!isZooming){
     if (currentZoomLevel == 0 && elementGroup == statesGroup){
       if (!isSmallState(id)){
         var data = stateData[id];
-        showLabel(calloutsGroup, path, target, data.name, getCurrentEmissions(data), scale);
+        showLabel(calloutsGroup, target, data.name, getCurrentEmissions(data), scale);
       }
     }
+    // else if (currentZoomLevel == 0 && elementGroup == calloutsGroup){
+    //   var data = stateData[id];
+    //   showLabel(calloutsGroup, target, data.name, getCurrentEmissions(data), scale, "-test");
+    // }
     else if (currentZoomLevel == 1 && elementGroup == countiesGroup){
       var data = countyData[id];
-      showLabel(elementGroup, path, target, data.county_name + " County", getCurrentEmissions(data), scale);
+      showLabel(elementGroup, target, data.county_name + " County", getCurrentEmissions(data), scale);
     }
     else if ((currentZoomLevel == 2 || currentZoomLevel == 3) && elementGroup == facilityGroup){
       var data = facilityData[currentCounty.id][id];
-      showLabel(elementGroup, path, target, data.facility_name, getCurrentEmissions(data), scale);
+      showLabel(elementGroup, target, data.facility_name, getCurrentEmissions(data), scale);
     }
 
     waitforHoverEnter();
@@ -398,8 +402,13 @@ function getCurrentEmissions(data){
 }
 
 function mapExitHover(elementGroup){
-  if (!isEnteringHover){
-    hideLabel(calloutsGroup);
+  if (!isExitingHover){
+    if (elementGroup == statesGroup){
+      hideLabel(calloutsGroup); //state hover labels are on the callloutGroup element, to avoid odd z-ordering in northeast
+    }
+    else{
+      hideLabel(elementGroup);
+    }
     waitforHoverExit();
   }
 }
@@ -494,17 +503,12 @@ function waitforHoverExit(){
   setTimeout(doneWithHoverExit, 10);
 }
 
-
-
 //zooms map to current state, hides callouts + updates viz to current state info
 function zoomToState() {
   waitForZoom();
   currentZoomLevel = 1;
 
-  calloutsGroup
-    .selectAll(".state-callout-pill")
-    .classed("active", (d) => d.abbr === currentState.abbr);
-
+  hideCallouts(calloutsGroup);
   hideLabel(statesGroup);
 
   scale = zoomToFeature(mapGroup, path, width, height, currentState.feature);
@@ -566,6 +570,7 @@ function zoomOutState() {
   resetCallouts(calloutsGroup);
   resetZoom(mapGroup);
   deselectState(statePaths, includeTexas);
+  mapExitHover(statesGroup);
 
   countiesGroup.transition()
     .duration(200)
@@ -598,6 +603,7 @@ function zoomOutCounty() {
 
   deselectCounty(countyPaths);
   resetFacilityPaths(facilityGroup);
+  mapExitHover(countiesGroup);
   
   unlockToggles(toggles);
 }
@@ -612,6 +618,7 @@ function zoomOutFacility() {
   updateLegend();
 
   deselectFacility(facilityPath, emissionType);
+  mapExitHover(facilityGroup);
 
   unlockToggles(toggles);
 }
@@ -727,7 +734,8 @@ function loadMap(){
 
 
     let pill = setupCallouts(calloutsGroup, smallData, smallAbbr, centroid);
-    setupPillInteraction(pill, feature, statesGroup, setCurrentState, stateHover, exitStateHover);
+    setupPillInteraction(pill, feature, statesGroup, calloutsGroup, 
+                          setCurrentState, stateHover, exitStateHover, mapHover, mapExitHover);
   };
 
     legendContainer = dashboard.querySelector(".legend-wrapper");

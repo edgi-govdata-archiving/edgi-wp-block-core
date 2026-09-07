@@ -21,7 +21,7 @@ export function setupStatePaths(statesGroup, stateData, path, getStateColor, set
 			event.stopPropagation();
 			const abbr = getNameToAbbr(d.properties.name);
 			if (abbr){
-				mapHover(statesGroup, path, event.target, abbr);
+				mapHover(statesGroup, event.target, abbr);
 			}
 		})
 		.on("mouseout", (event, d) => {
