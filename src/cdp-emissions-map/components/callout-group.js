@@ -31,7 +31,11 @@ export function setupPillInteraction(pill, feature, statesGroup, calloutsGroup,
 		zoomToState(feature, data.abbr);
 	})
 	.on("mouseover", (event, data) => {
-		stateHover(statesGroup, data.abbr);
+		var statePath = stateHover(statesGroup, data.abbr);
+		//console.log("statePath: " + JSON.stringify(statePath));
+		// console.log("feature: " + feature);
+		// console.log("pill: " + pill);
+		// console.log("pill: " + pill);
 		mapHover(calloutsGroup, event.target, data.abbr);
 	})
 	.on("mouseout", () => {

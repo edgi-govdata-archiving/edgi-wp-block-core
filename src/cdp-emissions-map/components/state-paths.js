@@ -7,6 +7,9 @@ export function setupStatePaths(statesGroup, stateData, path, getStateColor, set
 		.enter()
 		.append("path")
 		.attr("class", "state-boundary")
+		.attr("id", (d) => {
+			return "state-boundary-" + getNameToAbbr(d.properties.name)
+		})
 		.attr("d", path)
 		.style("fill", (d) => {
 			const abbr = getNameToAbbr(d.properties.name);
@@ -49,10 +52,12 @@ export function showTexas(statePaths){
 }
 
 export function stateHover(statesGroup, abbr){
-	statesGroup
+	var statePath = statesGroup
 		.selectAll(".state-boundary")
 		.filter((f) => getNameToAbbr(f.properties.name) === abbr)
 		.classed("hover", true);
+
+	return statePath;
 }
 
 export function exitStateHover(statesGroup){

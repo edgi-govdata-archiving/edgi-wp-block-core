@@ -17,15 +17,15 @@ const SMALL_STATES = {
 	"CT": {
 		"name" : "Connecticut",
 		"abbr" : "CT",
-		"pillX" : 865,
+		"pillX" : 870,
 		"pillY" : 240
 	},
 
 	"RI": {
 		"name" : "Rhode Island",
 		"abbr" : "RI",
-		"pillX" : 910,
-		"pillY" : 205
+		"pillX" : 905,
+		"pillY" : 210
 	},
 };
 

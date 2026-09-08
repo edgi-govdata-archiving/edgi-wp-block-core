@@ -380,10 +380,13 @@ function mapHover(elementGroup, target, id){
         showLabel(calloutsGroup, target, data.name, getCurrentEmissions(data), scale);
       }
     }
-    // else if (currentZoomLevel == 0 && elementGroup == calloutsGroup){
-    //   var data = stateData[id];
-    //   showLabel(calloutsGroup, target, data.name, getCurrentEmissions(data), scale, "-test");
-    // }
+    else if (currentZoomLevel == 0 && elementGroup == calloutsGroup){
+      var data = stateData[id];
+
+      //hovering over callout label will call same hover label over state
+      var stateElement = canvasContainer.querySelector("#state-boundary-" + id) //looking up state outline
+      showLabel(calloutsGroup, stateElement, data.name, getCurrentEmissions(data), scale);
+    }
     else if (currentZoomLevel == 1 && elementGroup == countiesGroup){
       var data = countyData[id];
       showLabel(elementGroup, target, data.county_name + " County", getCurrentEmissions(data), scale);
