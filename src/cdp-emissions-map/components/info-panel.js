@@ -103,7 +103,7 @@ export function loadStateInfo(container, currentState, year, emissionType, setCu
 	container.querySelector("#info-subheader").innerHTML = subheader;
 	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
 
-	makeClickableList(container.querySelector("#top-emitters"), topCounties, "county_name", "county_fips", setCurrentLocale)
+	makeClickableList(container.querySelector("#top-emitters"), topCounties, "county_name", "county_fips", setCurrentLocale, " County")
 
 	return container;
 } 
@@ -194,12 +194,12 @@ function makeOrderedList(list, selector){
 	return html;
 }
 
-export function makeClickableList(container, list, nameSelector, idSelector, setCurrentLocale){
+export function makeClickableList(container, list, nameSelector, idSelector, setCurrentLocale, labelSuffix=""){
 	for (var i in list){
 		var data = list[i];
 		var id = data[idSelector];
 
-		var template = "<li><button data-id='" + id + "'>" + data[nameSelector] + "</button></li>";
+		var template = "<li><button data-id='" + id + "'>" + data[nameSelector] + labelSuffix + "</button></li>";
 		container.insertAdjacentHTML("beforeend", template);
 		var listButton = container.lastElementChild.querySelector("button"); 
 

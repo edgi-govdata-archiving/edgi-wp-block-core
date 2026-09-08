@@ -18,7 +18,7 @@ export function setupCallouts(calloutsGroup, data, abbr, centroid){
 	.attr("class", "state-callout-pill")
 	.attr("transform", `translate(${data.pillX}, ${data.pillY + 30})`)
 
-	pill = setupLocationLabel(pill, data.abbr, null, 1, "state-callout", "-" + data.abbr);
+	pill = setupLocationLabel(pill, data.abbr, null, 1, "state-callout", "-" + data.abbr, false);
 
 
 	return pill; 

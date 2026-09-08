@@ -1,6 +1,6 @@
 import { formatEmissions, splitInHalf } from "../utilities/format.js"
 
-export function setupLocationLabel(pill, name, emissions, scale, cssLabel, cssSuffix){
+export function setupLocationLabel(pill, name, emissions, scale, cssLabel, cssSuffix, showEmissions=true){
 	var pillWidth = 150 / scale;
 	var pillHeight = 60 / scale;
 	var fontSize = 25 / scale;
@@ -21,8 +21,13 @@ export function setupLocationLabel(pill, name, emissions, scale, cssLabel, cssSu
 	.attr("class", cssLabel + "-text")
 	.attr("id", cssLabel + "-text" + cssSuffix);
 
-	if (emissions){
-		addTextLine(textElement, formatEmissions(emissions) + " tCO₂e", emissionsFontSize, "normal");
+	if (showEmissions){
+		if (emissions){
+			addTextLine(textElement, formatEmissions(emissions) + " tCO₂e", emissionsFontSize, "normal");
+		}
+		else{
+			addTextLine(textElement, "-no data-", emissionsFontSize, "normal");
+		}
 	}
 
 	if (name.length < 20){
