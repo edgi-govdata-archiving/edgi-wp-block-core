@@ -150,8 +150,6 @@ export function loadFacilityInfo(container, currentFacility, year, emissionType,
 	var dashboard = document.querySelector("#cdp-emissions-map");
 	const closeIconUrl = dashboard.getAttribute("close-icon-url");
 	var icon = closeButton.querySelector("img");
-	console.log(closeIconUrl);
-	console.log(icon);
 	icon.src = closeIconUrl;
 
 	closeButton.addEventListener("click", () => {

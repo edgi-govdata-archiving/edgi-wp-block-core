@@ -1,10 +1,10 @@
-
+@import url("../utilities/colors.scss");
 
 .legend{
 	right: 0;
 	bottom: 0;
 	padding: .5rem;
-	background-color: #fff;
+	background-color: var(--color-white);
 	border-radius: 10px;
 
 	&.gradient-legend{
@@ -37,10 +37,10 @@
 			height: 100%;
 
 			&.total_direct{
-				background-image: linear-gradient(to bottom, #e8eff5, #19649f, #0a283f);
+				background-image: linear-gradient(to bottom, var(--color-light-blue), var(--color-medium-blue), var(--color-dark-blue));
 			}
 			&.total_supplier{
-				background-image: linear-gradient(to bottom, #f9f1e6, #c97c08, #503103);
+				background-image: linear-gradient(to bottom, var(--color-light-orange), var(--color-medium-orange), var(--color-dark-orange));
 			}
 		}
 	}
@@ -59,10 +59,10 @@
 			border-radius: 30px;
 
 			&.total_direct{
-				background-color: #19649f;
+				background-color: var(--color-medium-blue);
 			}
 			&.total_supplier{
-				background-color: #c97c08;
+				background-color: var(--color-medium-orange);
 			}
 		}
 
@@ -71,7 +71,5 @@
 			margin-left: 1rem;
 			vertical-align: center;
 		}
-
-
 	}
 }

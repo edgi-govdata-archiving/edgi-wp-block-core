@@ -1,47 +1,55 @@
+@import url("../utilities/colors.scss");
 
 .direct-facility{
 	vector-effect: non-scaling-stroke;
-	fill: #19649F88;
+	fill: var(--color-medium-blue);
+	opacity: 50%;
 	transition: all 0.2s ease;
 
 	&:hover, &.hover {
-		fill: #54CDBC;
+		fill: var(--color-teal);
+		opacity: 100%;
 		cursor: pointer;
 	}
 }
 
 .direct-facility-selected{
 	vector-effect: non-scaling-stroke;
-	fill: #54CDBC;
-	stroke: #000000;
+	fill: var(--color-teal);
+	stroke: var(--color-black);
 	stroke-width: 3px;
 	transition: all 0.2s ease;
 }
 
 .direct-facility-faded{
-	fill: #19649F33;
+	fill: var(--color-medium-blue);
+	opacity: 20%;
 	transition: all 0.2s ease;
 }
 
 .supplier-facility{
    vector-effect: non-scaling-stroke;
-	fill: #C97C0888;
+	fill: var(--color-medium-orange);
+	opacity: 50%;
+	transition: all 0.2s ease;
 
 	&:hover, &.hover {
-		fill: #54CDBC;
+		fill: var(--color-teal);
+		opacity: 100%;
 		cursor: pointer;
 	}
 }
 
 .supplier-facility-selected{
 	vector-effect: non-scaling-stroke;
-	fill: #54CDBC;
-	stroke: #000000;
+	fill: var(--color-teal);
+	stroke: var(--color-black);
 	stroke-width: 3px;
 }
 
 .supplier-facility-faded{
-	fill: #C97C0833;
+	fill: var(--color-medium-orange);
+	opacity: 20%;
 }
 
 .hide-facility{
@@ -49,5 +57,5 @@
 }
 
 .facility-center{
-	fill: #000;
+	fill: var(--color-black);
 }

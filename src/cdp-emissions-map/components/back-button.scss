@@ -1,20 +1,22 @@
+@import url("../utilities/colors.scss");
+
 #back-button {
 	width: 30px;
 	height: 30px;
 	transition: all 0.2s ease;
 	display: flex;
-	background-color: #fff;
+	background-color: var(--color-white);
 	border-radius: 30px;
 	padding: 0;
-	border: 0px solid white;
+	border: 0px solid var(--color-black);
 	opacity: 0;
 
 	&:hover {
-		background: #54CDBC;
+		background: var(--color-highlight-blue);
 	}
 
 	&:focus {
-		border: 3px solid white;
+		border: 3px solid var(--color-black);
 	}
 
 	img{

@@ -1,3 +1,4 @@
+@import url("../utilities/colors.scss");
 
 .hover-label {
 	transition: all 0.2s ease-in-out;
@@ -6,7 +7,7 @@
 	.hover-label-line{
 		vector-effect: non-scaling-stroke;
 		stroke-width: 1px;
-		stroke: #888888;
+		stroke: var(--color-dark-grey);
 	}
 
 	.hover-label-bg {
@@ -17,13 +18,13 @@
 		vector-effect: non-scaling-stroke;
 		font-family: 'Crimson Text', serif;
 		font-weight: 600;
-		fill: #000000;
+		fill: var(--color-black);
 		pointer-events: none;
         margin: 10px;
 
-		background: #ffffff;
+		background: var(--color-white);
 		border-radius: 15px;
-		border: 1px solid #888888;
+		border: 1px solid var(--color-dark-grey);
 		padding: 2px 20px 2px 20px;
 		vertical-align: center;
 	}

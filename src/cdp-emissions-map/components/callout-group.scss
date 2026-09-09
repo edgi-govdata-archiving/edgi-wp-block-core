@@ -1,12 +1,12 @@
-/* SVG Callout Styling */
+@import url("../utilities/colors.scss");
 
 .state-callout-line {
-	stroke: #000000;
+	stroke: var(--color-black);
 	pointer-events: none;
 }
 
 .district-tooltip-line {
-	stroke: #000000;
+	stroke: var(--color-black);
 	pointer-events: none;
 }
 
@@ -22,11 +22,11 @@
 		vector-effect: non-scaling-stroke;
 		font-family: 'Crimson Text', serif;
 		font-weight: 600;
-		fill: #888888;
+		fill: var(--color-dark-grey);
 		pointer-events: none;
         margin: 10px;
 
-		background: #ffffff;
+		background: var(--color-white);
 		padding: 2px 5px 2px 5px;
 		vertical-align: center;
 	}
@@ -34,7 +34,7 @@
 	&:hover, &.active {
 
 		.state-callout-text {
-			fill: #000000;
+			fill: var(--color-black);
 
 		}
 	}

@@ -1,3 +1,5 @@
+@import url("../utilities/colors.scss");
+
 #toggles{
 	transition: all 0.2s ease-in-out;
 }
@@ -44,7 +46,7 @@
 	.hidden-label {
 	    width: 30px;
 	    height: 60px;
-	    background: #222;
+	    background: var(--color-black);
 	    display: block;
 	    border-radius: 30px;
 	    position: relative;
@@ -53,7 +55,7 @@
 	}
 
 	.checkbox:checked ~ .hidden-label { 
-	    background: #000; 
+	    background: var(--color-black); 
 	}
 
 	.checkbox:checked ~ .hidden-label .switch {
@@ -70,20 +72,20 @@
 	}
 
 	.hidden-label { 
-	    background: #19649F; 
+	    background: var(--color-medium-blue); 
 	}
 
 	.checkbox:checked ~ .hidden-label { 
-	    background: #C97C08; 
+	    background: var(--color-medium-orange); 
 	}
 }
 
 #texas-toggle-group{
 	.hidden-label { 
-	    background: #000; 
+	    background: var(--color-black); 
 	}
 
 	.checkbox:checked ~ .hidden-label { 
-	    background: #AAA; 
+	    background: var(--color-dark-grey); 
 	}
 }

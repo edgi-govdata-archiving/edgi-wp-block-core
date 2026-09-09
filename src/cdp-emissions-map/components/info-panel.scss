@@ -1,3 +1,5 @@
+@import url("../utilities/colors.scss");
+
 .info-panel {
 	width: 300px;
 	padding: 30px;
@@ -44,9 +46,8 @@
 		content: counter(olCounter) ". ";
 		font-family: 'Crimson Text', serif;
 		font-size: 1em;
-		color: #000;
+		color: var(--color-black);;
 	}
-
 
 	button {
 		font-family: 'Crimson Text', serif;
@@ -55,17 +56,17 @@
 		border: none;
 		padding: .2rem;
 		text-align: left;
-		color: #000;
+		color: var(--color-black);
 
 		&:hover {
-			color: #000;
-			background: #54CDBC88;
+			color: var(--color-black);
+			background: var(--color-light-teal);
 		}
 	}
 
 
 	&.facility-view{
-		background-color: #54CDBC88;
+		background-color: var(--color-light-teal);
 		border-radius: 10px;
 		width: 280px;
 		padding-right: 30px;
@@ -99,7 +100,6 @@
 	}
 
 	#close-button{
-		//position: absolute;
 		display: inline-block;
 		float: right;
 		margin-right: -15px;
@@ -110,15 +110,15 @@
 		background-color: transparent;
 		border-radius: 30px;
 		padding: 0;
-		border: 0px solid white;
+		border: 0px solid var(--color-white);
 
 		&:hover {
-			background: white;
+			background: var(--color-white);
 		}
 
 		&:focus {
-			background: white;
-			border: 3px solid white;
+			background: var(--color-white);
+			border: 3px solid var(--color-white);
 		}
 
 		img{
