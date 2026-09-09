@@ -1,6 +1,6 @@
 .county-boundary {
 	stroke: var(--color-black);
-	stroke-width: 0.5px;
+	stroke-width: 0.5px !important;
 	vector-effect: non-scaling-stroke;
 	transition: all 0.2s ease;
 
@@ -10,7 +10,7 @@
 
 	&.active {
 		fill: none !important;
-		stroke-width: 1px;
+		stroke-width: 1px !important;
 		stroke: var(--color-dark-grey);
 	}
 }

@@ -19,6 +19,7 @@
 	color: var(--color-ink);
 	padding: 24px;
 	position: relative;
+	min-width: 1000px;
 
 	h1{
 		font-size: 2em;
@@ -123,7 +124,7 @@
 
 		#toggles{
 			display: inline-block;
-			margin-left: 3rem;
+			margin-left: 2rem;
 			
 		}
 	}
