@@ -50,21 +50,22 @@ var stateInfoPanel = `
 
  var facilityInfoPanel = `
 	<section class="info-panel facility-view">
-		<button id="close-button">
-			<img />
-		</button>
-		<h2 id="info-header">Facility Name</h2>
+		<div class="facility-background">
+			<button id="close-button">
+				<img />
+			</button>
+			<h2 id="info-header">Facility Name</h2>
 
-		<h4 id="info-subheader">2000 Supplier Emissions</h4>
-		<section class="info-emissions">
-			<h1 id="emissions-total">12,345</h1>
-			<label class=>tCO₂e</label>
-		</section>
- 		<h3 class="ownership-header">Parent Companies</h3>
- 		<h4 id="parent-companies">Current Parent Companies</h4>
- 		<h3 class="frsid-header">FRSID</h3>
- 		<h4 id="frsid">0000000</h4>
-
+			<h4 id="info-subheader">2000 Supplier Emissions</h4>
+			<section class="info-emissions">
+				<h1 id="emissions-total">12,345</h1>
+				<label class=>tCO₂e</label>
+			</section>
+	 		<h3 class="ownership-header">Parent Companies</h3>
+	 		<h4 id="parent-companies">Current Parent Companies</h4>
+	 		<h3 class="frsid-header">FRSID</h3>
+	 		<h4 id="frsid">0000000</h4>
+ 		</div>
     </section>`
 
 export function loadDefaultInfo(){

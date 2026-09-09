@@ -64,14 +64,14 @@
 		}
 	}
 
-
 	&.facility-view{
-		background-color: var(--color-light-teal);
-		border-radius: 10px;
-		width: 280px;
-		padding-right: 30px;
-		margin-right: 20px;
-		padding-top: 30px;
+		.facility-background{
+			background-color: var(--color-light-teal);
+			border-radius: 10px;
+			width: 280px;
+			padding: 30px;
+			vertical-align: middle;
+		}
 
 		#info-header{
 			font-size: 1.3em;
@@ -86,7 +86,7 @@
 		}
 
 		h3{
-			margin-top: .3rem;
+			margin-top: .8rem;
 			margin-bottom: .2rem;
 		}
 
@@ -94,16 +94,15 @@
 		h4{
 			font-weight: 400;
 			padding: 0;
-			margin-top: 0;
-			margin-bottom: 1rem;
+			margin: 0;
 		}
 	}
 
 	#close-button{
 		display: inline-block;
 		float: right;
-		margin-right: -15px;
-		margin-top: -15px;
+		margin-right: -20px;
+		margin-top: -20px;
 		width: 30px;
 		height: 30px;
 		transition: all 0.2s ease;

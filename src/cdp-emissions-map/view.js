@@ -389,8 +389,6 @@ function mapHover(elementGroup, target, id){
       var data = facilityData[currentCounty.id][id];
       showLabel(elementGroup, target, data.facility_name, getCurrentEmissions(data), scale);
     }
-
-    waitforHoverEnter();
   }
 }
 
@@ -399,17 +397,14 @@ function getCurrentEmissions(data){
 }
 
 function mapExitHover(elementGroup){
-  if (!isExitingHover){
     if (elementGroup == statesGroup){
+      hideLabel(elementGroup);
       hideLabel(calloutsGroup); //state hover labels are on the callloutGroup element, to avoid odd z-ordering in northeast
     }
     else{
       hideLabel(elementGroup);
     }
-    waitforHoverExit();
-  }
 }
-
 
 //sets current state, loads critical info, zooms to that state. called when state is clicked
 function setCurrentState(feature, stateAbbr){
@@ -477,27 +472,6 @@ function doneWithZoom(){
 function waitForZoom(){
   isZooming = true;
   setTimeout(doneWithZoom, 500);
-}
-
-var isEnteringHover = false;
-var isExitingHover = false;
-
-function doneWithHoverEnter(){
-  isEnteringHover = false;
-}
-
-function waitforHoverEnter(){
-  isEnteringHover = true;
-  setTimeout(doneWithHoverEnter, 10);
-}
-
-function doneWithHoverExit(){
-  isExitingHover = false;
-}
-
-function waitforHoverExit(){
-  isExitingHover = true;
-  setTimeout(doneWithHoverExit, 10);
 }
 
 //zooms map to current state, hides callouts + updates viz to current state info
@@ -607,7 +581,6 @@ function zoomOutFacility() {
   waitForZoom();
   currentZoomLevel = 2;
 
-  //updateTitle();
   updateInfoPanel();
   updateLegend();
 
@@ -666,8 +639,6 @@ document.addEventListener("DOMContentLoaded", () => {
   loadComponents();
   loadBaseFiles(dashboard, loadBaseData)
 });
-
-var hoverLabelContainer;
 
 //loads svg map and labels, sets up event triggers
 function loadMap(){
