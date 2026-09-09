@@ -7,35 +7,41 @@
 	margin-left: 50px;
 
 	#info-header{
-		margin-bottom: 0rem;
+		margin-bottom: 0;
 	}
 	#info-subheader{
 		font-weight: 500;
 		margin-top: 0;
-		margin-bottom: .5rem;
+		margin-bottom: 10px;
 	}
 
 	.info-emissions{
 		display: flex;
 		align-items: baseline;
-		padding-top: .5rem;
+		padding-top: 10px;
 
 		#emissions-total{
 			margin: 0;
-			padding-right: .5rem;
+			padding-right: 10px;
 		}
 	}
 
 	.list-header{
 		margin-bottom: 0;
+		margin-top: 20px;
+	}
+
+	h3{
+		color: var(--color-ink);
 	}
 
 	ol {
 		list-style: none;
 	 	counter-reset: olCounter;
-	 	margin-top: .5rem;
-	 	padding-left: 1rem;
+	 	margin-top: 10px;
+	 	padding-left: 20px;
 	 	margin-left: 0;
+	 	line-height: 10px !important;
 	}
 
 	li {
@@ -46,7 +52,7 @@
 		content: counter(olCounter) ". ";
 		font-family: 'Crimson Text', serif;
 		font-size: 1em;
-		color: var(--color-black);;
+		color: var(--color-ink);;
 	}
 
 	button {
@@ -54,12 +60,12 @@
 		font-size: 1em;
 		background: transparent;
 		border: none;
-		padding: .2rem;
+		padding: 1px;
 		text-align: left;
-		color: var(--color-black);
+		color: var(--color-ink);
 
 		&:hover {
-			color: var(--color-black);
+			color: var(--color-ink);
 			background: var(--color-light-teal);
 		}
 	}
@@ -74,7 +80,7 @@
 		}
 
 		#info-header{
-			font-size: 1.3em;
+			font-size: 20px;
 			font-weight: 400;
 			width: 90%;
 			margin-top: 0;
@@ -82,12 +88,13 @@
 
 		#info-subheader{
 			font-weight: 800;
-			margin-bottom: .2rem;
+			margin-bottom: 5px;
 		}
 
 		h3{
-			margin-top: .8rem;
-			margin-bottom: .2rem;
+			color: var(--color-ink);
+			margin-top: 10px;
+			margin-bottom: 5px;
 		}
 
 
