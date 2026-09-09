@@ -21,7 +21,6 @@ import { setupCountyPaths, resetCountyPaths, selectCounty, deselectCounty} from 
 import { loadFacilityPaths, resetFacilityPaths, selectFacility, deselectFacility } from './components/facility-paths.js';
 import { zoomToFeature, resetZoom} from './components/map-zoom.js';
 
-import { setupStateLabels, showStateLabels, hideStateLabels, hideTexasLabel } from './components/state-labels.js';
 import { setupCallouts, setupPillInteraction, showCallouts, hideCallouts, resetCallouts } from './components/callout-group.js';
 import { showLabel, hideLabel } from './components/hover-label.js';
 import { setupBackButton, hideBackButton, showBackButton } from './components/back-button.js';
@@ -51,8 +50,6 @@ var dataMessage;
 
 var statePaths;
 var statePathsNoTexas;
-var currentStateLabel;
-var currentEmissionsLabel;
 var currentYear = 2016;
 var currentStateAbbr = "";
 var emissionType = "total_direct" //or "total_supplier"
@@ -75,7 +72,6 @@ var facilityPath;
 var mapGroup;
 var statesGroup;
 var labelsGroup;
-var stateLabels;
 var calloutsGroup;
 var backButton;
 
@@ -114,11 +110,9 @@ function toggleTexas(){
   if (currentZoomLevel == 0){
     if (!includeTexas){
       hideTexas(statePaths);
-      //hideTexasLabel(stateLabels);
     }
     else {
       showTexas(statePaths);
-      //showStateLabels(stateLabels, true);
     }
   }
   else if (currentZoomLevel == 2){
@@ -517,7 +511,6 @@ function zoomToState() {
   scale = zoomToFeature(mapGroup, path, width, height, currentState.feature);
 
   selectState(statePaths, scale, currentState.abbr)
-  //hideStateLabels(stateLabels);
   hideCallouts(calloutsGroup);
   renderCountiesForState(currentState.abbr, scale);
   updateTitle();
@@ -584,11 +577,9 @@ function zoomOutState() {
 
   showCallouts(calloutsGroup);
   updateLegend();
-  //showStateLabels(stateLabels, includeTexas);
 
   hideBackButton(backButton);
   unlockTexasToggle(toggles);
-  //tooltip.style.display = "none";
 }
 
 //zooms out from current county view, reselects state + loads state level view
@@ -724,7 +715,6 @@ function loadMap(){
   calloutsGroup = svg.append("g").attr("class", "callouts-group");
 
   statePaths = setupStatePaths(statesGroup, statesFeatures, path, getStateColor, setCurrentState, mapHover, mapExitHover);
-  //stateLabels = setupStateLabels(labelsGroup, statesFeatures, path);
 
   for (const [smallAbbr, smallData] of Object.entries(smallStates)){ 
     const feature = statesFeatures.find(
@@ -743,10 +733,6 @@ function loadMap(){
 
     legendContainer = dashboard.querySelector(".legend-wrapper");
     updateLegend();
-
-  // svg.on("click", () => {
-  //   zoomOutState();
-  // });
 }
 
 function goBack(){
