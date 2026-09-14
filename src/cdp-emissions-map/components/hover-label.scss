@@ -3,6 +3,7 @@
 .hover-label {
 	transition: all 0.2s ease-in-out;
 	z-index: 100;
+	pointer-events: none;
 	
 	.hover-label-line{
 		vector-effect: non-scaling-stroke;
