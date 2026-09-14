@@ -1,4 +1,4 @@
-import { formatEmissions } from "../utilities/format.js"
+import { formatEmissions, formatFacilities, capitalizeFacility } from "../utilities/format.js"
 
 export default `
     <div class="info-panel">
@@ -134,16 +134,15 @@ export function loadCountyInfo(container, currentCounty, year, emissionType, cou
 } 
 
 export function loadFacilityInfo(container, currentFacility, year, emissionType, goBack){
-	var header = currentFacility.facility_name;
+	var header = capitalizeFacility(currentFacility.facility_name);
 	var subheader = getSubheader(year, emissionType);
-
 	var emissions = currentFacility.emissions[year][emissionType];
 
 	container.innerHTML = facilityInfoPanel;
 	container.querySelector("#info-header").innerHTML = header;
 	container.querySelector("#info-subheader").innerHTML = subheader;
 	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
-	container.querySelector("#parent-companies").innerHTML = currentFacility.latest_parent;
+	container.querySelector("#parent-companies").innerHTML = formatFacilities(currentFacility.latest_parent);
 	container.querySelector("#frsid").innerHTML = currentFacility.facility_id;
 
 	var closeButton = container.querySelector("#close-button");

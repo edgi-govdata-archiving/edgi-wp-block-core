@@ -32,28 +32,12 @@ export function setupPillInteraction(pill, feature, statesGroup, calloutsGroup,
 	})
 	.on("mouseover", (event, data) => {
 		var statePath = stateHover(statesGroup, data.abbr);
-		//console.log("statePath: " + JSON.stringify(statePath));
-		// console.log("feature: " + feature);
-		// console.log("pill: " + pill);
-		// console.log("pill: " + pill);
 		mapHover(calloutsGroup, event.target, data.abbr);
 	})
 	.on("mouseout", () => {
 		exitStateHover(statesGroup);
 		mapExitHover(calloutsGroup);
 	})
-	// 	countyPaths.on("mouseover", (event, d) => {
-	// 		event.stopPropagation();
-	// 		//showLabel(countiesGroup, path, event.target, d, scale);
-	// 		mapHover(countiesGroup, path, event.target, d.id);
-	// 	})
-	// countyPaths.on("mouseout", (event, d) => {
-	// 		event.stopPropagation();
-	// 		//hideLabel(countiesGroup);
-	// 		mapExitHover(countiesGroup);
-	// 	})
-
-
 }
 
 export function showCallouts(calloutsGroup){

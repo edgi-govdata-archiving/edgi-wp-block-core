@@ -5,6 +5,7 @@ import { loadBaseFiles, loadFacilityFiles } from "./utilities/load.js"
 import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData, processFacilitiesYear, removeTexasFacilityData } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
+import { capitalizeFacility } from "./utilities/format.js"
 import SMALL_STATES from "./utilities/special-states.js"
 const smallStates = SMALL_STATES["SMALL_STATES"];
 
@@ -387,7 +388,8 @@ function mapHover(elementGroup, target, id){
     }
     else if ((currentZoomLevel == 2 || currentZoomLevel == 3) && elementGroup == facilityGroup){
       var data = facilityData[currentCounty.id][id];
-      showLabel(elementGroup, target, data.facility_name, getCurrentEmissions(data), scale);
+      var facilityName = capitalizeFacility(data.facility_name)
+      showLabel(elementGroup, target, facilityName, getCurrentEmissions(data), scale);
     }
   }
 }
