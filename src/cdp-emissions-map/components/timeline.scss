@@ -74,6 +74,10 @@
 
   option {
     padding: 0;
+
+    &.disabled {
+      opacity: .2;
+    }
   }
 
   #yearslider {

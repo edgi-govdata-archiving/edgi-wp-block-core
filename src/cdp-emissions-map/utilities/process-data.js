@@ -154,3 +154,24 @@ export function processFacilitiesYear(facilityData, rawData, year){
     //console.log(output);
     return facilityData;
 }
+
+
+//returns 2 element array of [minYear, maxYear] of available emissions data
+//this will be used to limit range of timeline slider
+export function getFacilityYearRange(properties){
+    var range = [];
+    var emissions = properties.emissions;
+    var years = Object.keys(emissions);
+
+    range[0] = parseInt(years[0]);
+    range[1] = parseInt(years[years.length - 1]);
+
+    //special case -- data after 2023 is entirely unavailable, so we show "data unavailable" message instead
+    if (range[1] == 2023){
+        range[1] = 2025;
+    }
+
+    //console.log("facilityRange: " + range[0] + " to " + range[1]);
+
+    return range;
+}

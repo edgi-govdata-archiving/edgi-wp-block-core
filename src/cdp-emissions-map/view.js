@@ -2,7 +2,7 @@ import * as d3 from "d3";
 import * as topojson from "topojson-client";
 
 import { loadBaseFiles, loadFacilityFiles } from "./utilities/load.js"
-import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData, processFacilitiesYear, removeTexasFacilityData } from "./utilities/process-data.js"
+import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData, processFacilitiesYear, removeTexasFacilityData, getFacilityYearRange } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
 import { capitalizeFacility } from "./utilities/format.js"
@@ -12,7 +12,7 @@ const smallStates = SMALL_STATES["SMALL_STATES"];
 import IRREGULAR_STATES from "./utilities/special-states.js"
 const irregularStates = IRREGULAR_STATES["IRREGULAR_STATES"];
 
-import timeline from './components/timeline.js';
+import { setupTimeline, setTimelineRange, resetTimelineRange } from './components/timeline.js';
 import { loadDefaultTitle, loadCountryTitle, loadStateTitle, loadCountyTitle } from './components/title.js';
 import { loadDefaultInfo, loadCountryInfo, loadStateInfo, loadCountyInfo, loadFacilityInfo } from './components/info-panel.js';
 import { loadToggles, lockToggles, unlockToggles, lockTexasToggle, unlockTexasToggle } from './components/toggles.js';
@@ -456,6 +456,11 @@ function setCurrentCountyFromId(countyId){
 function setCurrentFacility(facilityProperties){
   if (currentZoomLevel == 2 || currentZoomLevel == 3){ //can only select facility from county view or facility view
     currentFacility = facilityProperties;
+
+    //sets timeline slider with range of available facility emissions data
+    var range = getFacilityYearRange(facilityProperties);
+    setTimelineRange(range);
+
     zoomToFacility();
   }
 }
@@ -585,6 +590,7 @@ function zoomOutFacility() {
 
   updateInfoPanel();
   updateLegend();
+  resetTimelineRange();
 
   deselectFacility(facilityPath, emissionType);
   mapExitHover(facilityGroup);
@@ -622,12 +628,9 @@ function loadComponents(){
   let controlContainer = document.createElement("div");
   controlContainer.setAttribute("id", "map-controls");
   dashboard.appendChild(controlContainer);
-  controlContainer.insertAdjacentHTML("afterbegin", timeline);
+  //controlContainer.insertAdjacentHTML("afterbegin", timeline);
 
-  document.querySelector("#yearslider").addEventListener("input", function() {
-    updateYear(this.value)
-  });
-
+  setupTimeline(controlContainer, updateYear);
 
   toggles = loadToggles(controlContainer, toggleEmissionsType, toggleTexas);
 
