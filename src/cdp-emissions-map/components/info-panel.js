@@ -150,8 +150,19 @@ export function loadFacilityInfo(container, currentFacility, year, emissionType,
 	container.querySelector("#info-header").innerHTML = header;
 	container.querySelector("#info-subheader").innerHTML = subheader;
 	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
-	container.querySelector("#parent-companies").innerHTML = formatFacilities(currentFacility.latest_parent);
+
+	var formattedFacilities = formatFacilities(currentFacility.latest_parent);
+	container.querySelector("#parent-companies").innerHTML = formattedFacilities;
+	
+	//if facility is unusually long, will use smaller text size
+	if (formattedFacilities.length > 100){
+		container.querySelector("#parent-companies").className = "small-text";
+	}
+	
 	container.querySelector("#frsid").innerHTML = currentFacility.facility_id;
+
+
+	container.querySelector("#parent-companies")
 
 	var closeButton = container.querySelector("#close-button");
 
