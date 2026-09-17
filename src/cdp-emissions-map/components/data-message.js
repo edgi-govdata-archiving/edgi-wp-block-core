@@ -2,7 +2,7 @@ var dataMessageTemplate =
 	`<section id="data-message">
 		<div>
 			<h1>Data not found.</h1>
-			<h3>GHGRP data is not available past 2023.</h3>
+			<h3>The EPA has not released GHGRP data past 2023 and currently plans to end the program. </h3>
 		</div>
 	</section>`
 
