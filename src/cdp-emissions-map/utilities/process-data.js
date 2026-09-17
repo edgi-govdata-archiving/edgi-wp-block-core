@@ -155,6 +155,19 @@ export function processFacilitiesYear(facilityData, rawData, year){
     return facilityData;
 }
 
+export function getTotalCountryEmissions(stateData, year, emissionType){
+    var total = 0;
+
+    for (var key in stateData) {
+        var state = stateData[key];
+        var yearEmissions = state["emissions"][year];
+        if (yearEmissions){
+            total += yearEmissions[emissionType]
+        }
+    }
+    return total;
+}
+
 
 //returns 2 element array of [minYear, maxYear] of available emissions data
 //this will be used to limit range of timeline slider

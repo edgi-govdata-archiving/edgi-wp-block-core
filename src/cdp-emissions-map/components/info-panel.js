@@ -1,4 +1,5 @@
 import { formatEmissions, formatFacilities, capitalizeFacility } from "../utilities/format.js"
+import { getTotalCountryEmissions } from "../utilities/process-data.js"
 
 export default `
     <div class="info-panel">
@@ -16,6 +17,10 @@ var countryInfoPanel = `
 	<section class="info-panel country-view">
 		<h2 id="info-header">United States</h2>
 		<h4 id="info-subheader">2000 Supplier Emissions</h4>
+		<section class="info-emissions">
+			<h1 id="emissions-total">12,345</h1>
+			<label class=>tCO₂e</label>
+		</section>
 		<h3 class="list-header">Top Emitting States</h3>
 		<ol id="top-emitters">
 		</ol>
@@ -75,6 +80,8 @@ export function loadDefaultInfo(){
 export function loadCountryInfo(container, stateData, year, emissionType, setCurrentLocale){
 	var subheader = getSubheader(year, emissionType);
 
+	var emissions = getTotalCountryEmissions(stateData, year, emissionType);
+
 	var stateList = [];
 
 	for (var key in stateData) {
@@ -85,6 +92,7 @@ export function loadCountryInfo(container, stateData, year, emissionType, setCur
 
 	container.innerHTML = countryInfoPanel;
 	container.querySelector("#info-subheader").innerHTML = subheader;
+	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
 
     makeClickableList(container.querySelector("#top-emitters"), topStates, "name", "abbr", setCurrentLocale)
 
