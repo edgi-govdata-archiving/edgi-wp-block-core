@@ -19,7 +19,7 @@ var countryInfoPanel = `
 		<h4 id="info-subheader">2000 Supplier Emissions</h4>
 		<section class="info-emissions">
 			<h1 id="emissions-total">12,345</h1>
-			<label class=>tCO₂e</label>
+			<label class=>mtCO₂e</label>
 		</section>
 		<h3 class="list-header">Top Emitting States</h3>
 		<ol id="top-emitters">
@@ -32,7 +32,7 @@ var stateInfoPanel = `
 		<h4 id="info-subheader">2000 Supplier Emissions</h4>
 		<section class="info-emissions">
 			<h1 id="emissions-total">12,345</h1>
-			<label class=>tCO₂e</label>
+			<label class=>mtCO₂e</label>
 		</section>
 		<h3 class="list-header">Top Emitting Counties</h3>
 		<ol id="top-emitters">
@@ -45,7 +45,7 @@ var stateInfoPanel = `
 		<h4 id="info-subheader">2000 Supplier Emissions</h4>
 		<section class="info-emissions">
 			<h1 id="emissions-total">12,345</h1>
-			<label class=>tCO₂e</label>
+			<label class=>mtCO₂e</label>
 		</section>
  		<h3 class="list-header">Top Emitting Facilities</h3>
 		<ol id="top-emitters">
@@ -64,7 +64,7 @@ var stateInfoPanel = `
 			<h4 id="info-subheader">2000 Supplier Emissions</h4>
 			<section class="info-emissions">
 				<h1 id="emissions-total">12,345</h1>
-				<label class=>tCO₂e</label>
+				<label class=>mtCO₂e</label>
 			</section>
 	 		<h3 class="ownership-header">Parent Companies</h3>
 	 		<h4 id="parent-companies">Current Parent Companies</h4>

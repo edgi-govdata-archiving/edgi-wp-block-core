@@ -23,7 +23,7 @@ export function setupLocationLabel(pill, name, emissions, scale, cssLabel, cssSu
 
 	if (showEmissions){
 		if (emissions){
-			addTextLine(textElement, formatEmissions(emissions) + " tCO₂e", emissionsFontSize, "normal");
+			addTextLine(textElement, formatEmissions(emissions) + " mtCO₂e", emissionsFontSize, "normal");
 		}
 		else{
 			addTextLine(textElement, "-no data-", emissionsFontSize, "normal");

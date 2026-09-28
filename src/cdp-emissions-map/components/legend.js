@@ -7,7 +7,7 @@ var gradientLegend = `
 			<label id="low-label">low</label>
 			<label id="middle-label">middle</label>
 			<label id="high-label">high</label>
-			<label id="unit-label">tCO₂e</label>
+			<label id="unit-label">mtCO₂e</label>
 		</div>
     </section>`
 
