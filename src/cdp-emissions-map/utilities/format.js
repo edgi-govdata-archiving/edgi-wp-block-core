@@ -101,3 +101,15 @@ function containsSymbols(string) {
     return /[0123456789&()]/.test(string);
 }
 
+//formats county labels, Connecticut and Louisiana have unique naming
+export function formatCounty(state, county){
+	if (state == "CT"){
+		return county + " Planning Region";
+	}
+	else if (state == "LA"){
+		return county + " Parish";
+	}
+	else {
+		return county + " County";
+	}
+}

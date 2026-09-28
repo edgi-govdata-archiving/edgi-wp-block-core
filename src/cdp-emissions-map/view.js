@@ -5,7 +5,7 @@ import { loadBaseFiles, loadFacilityFiles } from "./utilities/load.js"
 import { processStateData, processCountyData, sortCountiesIntoStates, removeTexasStateData, removeTexasCountyData, processFacilitiesYear, removeTexasFacilityData, getFacilityYearRange } from "./utilities/process-data.js"
 import { getNameToAbbr, getStateToFips } from "./utilities/convert.js"
 import { getScaledColor, getDirectColor, getSupplierColor } from "./utilities/colors.js"
-import { capitalizeFacility } from "./utilities/format.js"
+import { capitalizeFacility, formatCounty } from "./utilities/format.js"
 import SMALL_STATES from "./utilities/special-states.js"
 const smallStates = SMALL_STATES["SMALL_STATES"];
 
@@ -384,7 +384,7 @@ function mapHover(elementGroup, target, id){
     }
     else if (currentZoomLevel == 1 && elementGroup == countiesGroup){
       var data = countyData[id];
-      showLabel(elementGroup, target, data.county_name + " County", getCurrentEmissions(data), scale);
+      showLabel(elementGroup, target, formatCounty(currentState.abbr, data.county_name), getCurrentEmissions(data), scale);
     }
     else if ((currentZoomLevel == 2 || currentZoomLevel == 3) && elementGroup == facilityGroup){
       var data = facilityData[currentCounty.id][id];
@@ -434,7 +434,8 @@ function setCurrentStateFromId(stateAbbr){
 function setCurrentCounty(feature, countyId){
   if (currentZoomLevel == 1){ //can only select county from state view
     currentCounty = new Locale(countyId);
-    currentCounty.name = feature.properties.name + " County";
+    currentCounty.name = formatCounty(currentState.abbr, feature.properties.name);
+    console.log(currentCounty.name);
     currentCounty.feature = feature;
     currentCounty.data = countyData[countyId];
 

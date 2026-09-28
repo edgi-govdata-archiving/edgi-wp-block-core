@@ -1,4 +1,4 @@
-import { formatEmissions, formatFacilities, capitalizeFacility } from "../utilities/format.js"
+import { formatEmissions, formatFacilities, capitalizeFacility, formatCounty } from "../utilities/format.js"
 import { getTotalCountryEmissions } from "../utilities/process-data.js"
 
 export default `
@@ -112,7 +112,7 @@ export function loadStateInfo(container, currentState, year, emissionType, setCu
 	container.querySelector("#info-subheader").innerHTML = subheader;
 	container.querySelector("#emissions-total").innerHTML = formatEmissions(emissions);
 
-	makeClickableList(container.querySelector("#top-emitters"), topCounties, "county_name", "county_fips", setCurrentLocale, " County")
+	makeClickableList(container.querySelector("#top-emitters"), topCounties, "county_name", "county_fips", setCurrentLocale, true)
 
 	return container;
 } 
@@ -211,12 +211,20 @@ function makeOrderedList(list, selector){
 	return html;
 }
 
-export function makeClickableList(container, list, nameSelector, idSelector, setCurrentLocale, labelSuffix=""){
+export function makeClickableList(container, list, nameSelector, idSelector, setCurrentLocale, isCounty=false){
 	for (var i in list){
 		var data = list[i];
 		var id = data[idSelector];
+		var label = "";
 
-		var template = "<li><button data-id='" + id + "'>" + data[nameSelector] + labelSuffix + "</button></li>";
+		if (isCounty){
+			label = formatCounty(data["state_abbr"], data[nameSelector]);
+		}
+		else{
+			label = data[nameSelector];
+		}
+
+		var template = "<li><button data-id='" + id + "'>" + label + "</button></li>";
 		container.insertAdjacentHTML("beforeend", template);
 		var listButton = container.lastElementChild.querySelector("button"); 
 
